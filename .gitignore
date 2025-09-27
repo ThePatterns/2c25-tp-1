@@ -1,4 +1,10 @@
 datadog-widgets/
-.idea/
 dashboard.json
+
 .env
+
+node_modules/
+npm-debug.log
+
+.DS_Store
+.idea/

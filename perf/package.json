@@ -6,6 +6,10 @@
   "scripts": {
     "artillery": "artillery",
     "api": "artillery run rates.yaml -e api",
+    "load-test": "artillery run load-test.yaml -e api",
+    "stress-test": "artillery run stress-test.yaml -e api",
+    "spike-test": "artillery run spike-test.yaml -e api",
+    "volume-test": "artillery run volume-test.yaml -e api",
     "scenario": "./run-scenario.sh"
   },
   "author": "",

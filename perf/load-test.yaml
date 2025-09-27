@@ -1,0 +1,79 @@
+config:
+  plugins:
+    publish-metrics:
+      - type: datadog
+        host: localhost
+        port: 8125
+        prefix: "artillery.load_test"
+
+  environments:
+    api:
+      target: 'http://localhost:5555'
+      variables:
+        baseCurrencies: ['USD', 'EUR', 'ARS']
+        counterCurrencies: ['USD', 'EUR', 'ARS', 'BRL']
+        accountIds: ['account-1', 'account-2', 'account-3', 'account-4', 'account-5']
+  pool: 50
+
+  phases:
+    - name: "Ramp Up"
+      duration: 60
+      arrivalRate: 1
+      rampTo: 10
+    - name: "Sustained Load"
+      duration: 120
+      arrivalRate: 10
+    - name: "Peak Load"
+      duration: 60
+      arrivalRate: 20
+    - name: "Ramp Down"
+      duration: 30
+      arrivalRate: 20
+      rampTo: 1
+
+scenarios:
+  - name: "Get Rates"
+    weight: 30
+    flow:
+      - get:
+          url: '/rates'
+
+  - name: "Get Accounts"
+    weight: 20
+    flow:
+      - get:
+          url: '/accounts'
+
+  - name: "Update Account Balance"
+    weight: 15
+    flow:
+      - get:
+          url: '/accounts'
+      - put:
+          url: '/accounts/1/balance'
+          json:
+            balance: '{{ $randomInt(100, 10000) }}'
+
+  - name: "Update Exchange Rate"
+    weight: 10
+    flow:
+      - put:
+          url: '/rates'
+          json:
+            baseCurrency: '{{ $pick(baseCurrencies) }}'
+            counterCurrency: '{{ $pick(counterCurrencies) }}'
+            rate: '{{ $randomFloat(0.5, 2.0) }}'
+
+  - name: "Exchange Operation"
+    weight: 25
+    flow:
+      - get:
+          url: '/accounts'
+      - post:
+          url: '/exchange'
+          json:
+            baseCurrency: '{{ $pick(baseCurrencies) }}'
+            counterCurrency: '{{ $pick(counterCurrencies) }}'
+            baseAccountId: '1'
+            counterAccountId: '2'
+            baseAmount: '{{ $randomFloat(10, 1000) }}'

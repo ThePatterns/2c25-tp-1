@@ -1,0 +1,4 @@
+datadog-widgets/
+.idea/
+dashboard.json
+.env

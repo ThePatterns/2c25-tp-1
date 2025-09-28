@@ -31,9 +31,21 @@
 
 * Introducción
 
-* Arquitectura
+** Contexto (startup arVault).
 
-* Diagrama de Componentes y Conectores
+** Objetivos del TP.
+
+** Alcance del análisis.
+
+* QA identificados
+
+** Listado de atributos de calidad.
+
+** QA clave + justificación.
+
+* Arquitectura base
+
+** Diagrama C&C inicial.
 
 #+BEGIN_SRC plantuml :file assets/componentes.png :exports results
 @startuml
@@ -94,3 +106,51 @@ p_cadvisor_host --> p_cadvisor_docker
 
 #+RESULTS:
 [[file:assets/componentes.png]]
+
+** Análisis de decisiones del dev original y su impacto en QA.
+
+** Crítica.
+
+* Metodología de pruebas
+
+** Herramientas usadas (Artillery, Grafana, etc.).
+
+** Escenarios de carga diseñados.
+
+** Métricas recolectadas.
+
+* Resultados – Caso base
+
+** Screenshots de dashboards.
+
+** Interpretación de resultados.
+
+* Propuestas de mejora
+
+** Tácticas aplicadas.
+
+** Justificación de por qué se eligieron.
+
+** Diagramas C&C modificados.
+
+* Resultados – Casos mejorados
+
+** Screenshots comparativos.
+
+** Análisis de impacto sobre QA.
+
+** Trade-offs detectados.
+
+* Conclusiones
+
+** Resumen de hallazgos.
+
+** Beneficios y limitaciones de las mejoras.
+
+** Futuro (ej: pasar a DB externa en TP2).
+
+* Anexos
+
+** Configuraciones de escenarios de Artillery.
+
+** Configs modificadas de Nginx, Docker Compose, etc.

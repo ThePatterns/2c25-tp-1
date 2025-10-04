@@ -1,0 +1,386 @@
+{
+  "title": "arVault Exchange Service Dashboard",
+  "description": "Dashboard completo para monitorear métricas personalizadas del servicio de exchange arVault",
+  "widgets": [
+    {
+      "definition": {
+        "title": "API Response Time por Endpoint",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "avg:arvault.api.response_time{*} by {endpoint}",
+            "display_type": "line",
+            "style": {
+              "palette": "dog_classic",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Response Time (ms)",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Requests por Endpoint",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.api.requests{*} by {endpoint}",
+            "display_type": "bars",
+            "style": {
+              "palette": "dog_classic"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Requests",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Status Codes Distribution",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.api.requests{*} by {status_code}",
+            "display_type": "bars",
+            "style": {
+              "palette": "dog_classic"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Requests",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Exchange Transactions Success Rate",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.exchange.successful_transactions{*}.as_rate()",
+            "display_type": "line",
+            "style": {
+              "palette": "green",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          },
+          {
+            "q": "sum:arvault.exchange.failed_transactions{*}.as_rate()",
+            "display_type": "line",
+            "style": {
+              "palette": "red",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Success Rate",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Total Exchange Transactions",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.exchange.transactions{*}",
+            "display_type": "bars",
+            "style": {
+              "palette": "blue"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Transactions",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Volumen por Moneda",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.volume.by_currency{*} by {currency}",
+            "display_type": "bars",
+            "style": {
+              "palette": "dog_classic"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Volume",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Volumen Neto por Moneda",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.volume.net{*} by {currency}",
+            "display_type": "line",
+            "style": {
+              "palette": "dog_classic",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Net Volume",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Exchange Rates",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "avg:arvault.exchange.rate{*} by {base_currency,counter_currency}",
+            "display_type": "line",
+            "style": {
+              "palette": "dog_classic",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Exchange Rate",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Account Balances",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "avg:arvault.account.balance{*} by {currency}",
+            "display_type": "line",
+            "style": {
+              "palette": "dog_classic",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Balance",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Error Count por Tipo",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "sum:arvault.errors.count{*} by {error_type}",
+            "display_type": "bars",
+            "style": {
+              "palette": "red"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Errors",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "Exchange Amounts (Base vs Counter)",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "avg:arvault.exchange.base_amount{*} by {base_currency}",
+            "display_type": "line",
+            "style": {
+              "palette": "blue",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          },
+          {
+            "q": "avg:arvault.exchange.counter_amount{*} by {counter_currency}",
+            "display_type": "line",
+            "style": {
+              "palette": "orange",
+              "line_type": "solid",
+              "line_width": "normal"
+            }
+          }
+        ],
+        "yaxis": {
+          "label": "Amount",
+          "scale": "linear"
+        },
+        "show_legend": true,
+        "legend_size": "0",
+        "time": {}
+      }
+    },
+    {
+      "definition": {
+        "title": "API Performance Summary",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "query_value",
+        "requests": [
+          {
+            "q": "avg:arvault.api.response_time{*}",
+            "aggregator": "avg"
+          }
+        ],
+        "autoscale": true,
+        "precision": 2,
+        "text_align": "center"
+      }
+    },
+    {
+      "definition": {
+        "title": "Total Requests",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "query_value",
+        "requests": [
+          {
+            "q": "sum:arvault.api.requests{*}",
+            "aggregator": "sum"
+          }
+        ],
+        "autoscale": true,
+        "precision": 0,
+        "text_align": "center"
+      }
+    },
+    {
+      "definition": {
+        "title": "Total Exchange Transactions",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "query_value",
+        "requests": [
+          {
+            "q": "sum:arvault.exchange.transactions{*}",
+            "aggregator": "sum"
+          }
+        ],
+        "autoscale": true,
+        "precision": 0,
+        "text_align": "center"
+      }
+    },
+    {
+      "definition": {
+        "title": "Total Errors",
+        "title_size": "16",
+        "title_align": "left",
+        "type": "query_value",
+        "requests": [
+          {
+            "q": "sum:arvault.errors.count{*}",
+            "aggregator": "sum"
+          }
+        ],
+        "autoscale": true,
+        "precision": 0,
+        "text_align": "center"
+      }
+    }
+  ],
+  "template_variables": [
+    {
+      "name": "service",
+      "default": "exchange-service",
+      "prefix": "service"
+    },
+    {
+      "name": "env",
+      "default": "development",
+      "prefix": "env"
+    }
+  ],
+  "layout_type": "ordered",
+  "is_read_only": false,
+  "notify_list": [],
+  "tags": [
+    "team:backend"
+  ]
+}

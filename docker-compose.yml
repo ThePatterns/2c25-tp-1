@@ -1,6 +1,15 @@
 services:
+    valkey:
+      image: valkey/valkey:8.1.4-alpine
+      ports:
+        - "6379:6379"
+
     api:
       build: ./app
+      links:
+        - valkey
+      environment:
+        - VALKEY_URL=redis://valkey:6379
 
     nginx:
         image: nginx:1.27.4

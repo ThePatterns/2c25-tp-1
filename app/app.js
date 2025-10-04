@@ -17,32 +17,40 @@ const port = 3000;
 
 app.use(express.json());
 
-// ACCOUNT endpoints
-
-app.get("/accounts", (req, res) => {
-  res.json(getAccounts());
+app.use((req, res, next) => {
+  console.log(`API Request: ${req.method} ${req.url}`, {
+    query: req.query,
+    body: req.body
+  });
+  next();
 });
 
-app.put("/accounts/:id/balance", (req, res) => {
+// ACCOUNT endpoints
+
+app.get("/accounts", async (req, res) => {
+  res.json(await getAccounts());
+});
+
+app.put("/accounts/:id/balance", async (req, res) => {
   const accountId = req.params.id;
   const { balance } = req.body;
 
   if (!accountId || !balance) {
     return res.status(400).json({ error: "Malformed request" });
   } else {
-    setAccountBalance(accountId, balance);
+    await setAccountBalance(accountId, balance);
 
-    res.json(getAccounts());
+    res.json(await getAccounts());
   }
 });
 
 // RATE endpoints
 
-app.get("/rates", (req, res) => {
-  res.json(getRates());
+app.get("/rates", async (req, res) => {
+  res.json(await getRates());
 });
 
-app.put("/rates", (req, res) => {
+app.put("/rates", async (req, res) => {
   const { baseCurrency, counterCurrency, rate } = req.body;
 
   if (!baseCurrency || !counterCurrency || !rate) {
@@ -50,15 +58,15 @@ app.put("/rates", (req, res) => {
   }
 
   const newRateRequest = { ...req.body };
-  setRate(newRateRequest);
+  await setRate(newRateRequest);
 
-  res.json(getRates());
+  res.json(await getRates());
 });
 
 // LOG endpoint
 
-app.get("/log", (req, res) => {
-  res.json(getLog());
+app.get("/log", async (req, res) => {
+  res.json(await getLog());
 });
 
 // EXCHANGE endpoint

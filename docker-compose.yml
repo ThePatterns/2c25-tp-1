@@ -1,17 +1,28 @@
 services:
     valkey:
-      image: valkey/valkey:8.1.4-alpine
-      ports:
-        - "6379:6379"
-      volumes:
-        - valkey_data:/data
+        image: valkey/valkey:8.1.4-alpine
+        ports:
+          - "6379:6379"
+        volumes:
+          - valkey_data:/data
 
     api:
-      build: ./app
-      links:
-        - valkey
-      environment:
-        - VALKEY_URL=redis://valkey:6379
+        build: ./app
+        depends_on:
+          - valkey
+        environment:
+          - VALKEY_URL=redis://valkey:6379
+        deploy:
+          mode: replicated
+          replicas: 3
+
+    seeder:
+        build: ./app
+        depends_on:
+          - valkey
+        environment:
+          - VALKEY_URL=redis://valkey:6379
+        entrypoint: ["npm", "run", "seed"]
 
     nginx:
         image: nginx:1.27.4

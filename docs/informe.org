@@ -83,29 +83,29 @@ Es fundamental que el sistema sea seguro para evitar posibles ataques que puedan
 
 Analizando las decisiones de diseño tomadas por el desarollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
 1. **Backend (API)**
-    
+
     Se despliega una única instancia del servicio de API (según la configuración en docker-compose). De esta forma, la ausencia de réplicas y de un mecanismo efectivo de balanceo de carga (porque no hay múltiples nodos entre los cuales se balancee la carga) la caída de dicha instancia del backend causaría que el sistema completo deje de responder a solicitudes.
-    
+
 2. **Nginx (reverse proxy)**
-    
+
     Para este servicio también existe una sola instancia configurada como punto de entrada y aunque se define un bloque `upstream`, este solo redirige a una única API backend.
-    
+
     Por esto la arquitectura termina teniendo dos puntos críticos: tanto el proxy (nginx) como el backend, la indisponibilidad de cualquiera de ellos impacta directamente en la experiencia del usuario final.
-    
+
 3. **Persistencia de datos**
-    
+
     Actualmente la aplicación utiliza archivos JSON locales para la persistencia, este enfoque presenta múltiples limitaciones: falta de replicación, ausencia de mecanismos de recuperación ante fallas, y dependencia del almacenamiento local del contenedor/host. Una pérdida de datos o la caída del servicio implican tiempos de recuperación prolongados, degradando así directamente la disponibilidad.
 
 **** **Arquitectura monolítica y su impacto**
 
 Al analizar la estructura lógica del sistema, se observa que este responde a un patrón **monolítico**, en el cual toda la lógica de negocio, el manejo de estado y la persistencia de datos se concentran en un solo bloque sin separación clara de responsabilidades ni interfaces desacopladas. Este diseño acarrea consecuencias directas sobre la **Disponibilidad**, entre las que se destacan:
-1. **Arquitectura unificada**  
+1. **Arquitectura unificada**
    Toda la lógica de negocio (gestión de cuentas, tasas, transacciones) se encuentra contenida en un único módulo. La caída de cualquier componente interno afecta al sistema en su totalidad, ya que no existen mecanismos de aislamiento de fallos ni tolerancia a errores.
 
-2. **Alto acoplamiento entre módulos**  
+2. **Alto acoplamiento entre módulos**
    Los componentes del sistema tienen dependencias directas y requieren inicializaciones en un orden específico. Esto implica que la indisponibilidad de un módulo interno impide el correcto funcionamiento del resto, amplificando los riesgos de interrupción total.
 
-3. **Escalabilidad y resiliencia limitadas**  
+3. **Escalabilidad y resiliencia limitadas**
    Al no existir modularidad ni servicios independientes, no es posible escalar ni recuperar selectivamente partes del sistema. Cualquier estrategia de replicación debe aplicarse al monolito completo, lo cual incrementa la complejidad operativa y reduce la capacidad de respuesta frente a fallos.
 
 **En síntesis**, la naturaleza monolítica del sistema no solo **explica** la existencia de múltiples puntos únicos de falla en la infraestructura actual, sino que también **agrava su impacto**: ante un error en un módulo o en la persistencia de datos, la indisponibilidad afecta a toda la aplicación. Esto limita severamente la capacidad de mantener una operación continua y dificulta la incorporación de mecanismos de alta disponibilidad o recuperación automática.
@@ -114,7 +114,7 @@ Al analizar la estructura lógica del sistema, se observa que este responde a un
 
 Otro aspecto crítico identificado es la ausencia de un sistema de **transacciones confiables** para el manejo de operaciones financieras (por ejemplo, conversiones entre diferentes monedas). Actualmente, la persistencia de datos se basa en archivos JSON locales, sin soporte nativo para propiedades ACID.
 
-Esta limitación introduce riesgos importantes que afectan directamente el atributo de calidad **Disponibilidad**, principalmente se tiene un gran riesgo de **inconsistencias de datos e incremento del tiempo de recuperación**, pues, al no existir mecanismos transaccionales, fallas en medio de una operación (ej. caída del proceso, error de escritura en disco) pueden dejar el sistema en un estado inconsistente. Esto obliga a tareas manuales de verificación y corrección, aumentando el tiempo que el sistema permanece fuera de servicio o con datos inválidos.  
+Esta limitación introduce riesgos importantes que afectan directamente el atributo de calidad **Disponibilidad**, principalmente se tiene un gran riesgo de **inconsistencias de datos e incremento del tiempo de recuperación**, pues, al no existir mecanismos transaccionales, fallas en medio de una operación (ej. caída del proceso, error de escritura en disco) pueden dejar el sistema en un estado inconsistente. Esto obliga a tareas manuales de verificación y corrección, aumentando el tiempo que el sistema permanece fuera de servicio o con datos inválidos.
    En ausencia de transacciones, las operaciones incompletas no pueden deshacerse ni repetirse de forma segura. Frente a fallos, el sistema requiere procesos de recuperación manual o la restauración de copias de seguridad, en consecuencia, se disminuye la disponibilidad percibida.
 
 
@@ -124,9 +124,9 @@ En conclusión, la carencia de un sistema de transacciones robusto aumenta signi
 
 Existen además otras decisiones de diseño que, si bien no afectan a la **Disponibilidad** de manera directa, sí lo hacen de forma indirecta al influir en atributos de calidad relacionados:
 
-- **Monitoreo y métricas**: la toma de métricas y la incorporación de herramientas de observabilidad impactan directamente en el atributo de calidad **Visibilidad**. A su vez, una mayor visibilidad facilita la detección temprana de fallas y acelera los procesos de recuperación, contribuyendo indirectamente a la disponibilidad del sistema.  
+- **Monitoreo y métricas**: la toma de métricas y la incorporación de herramientas de observabilidad impactan directamente en el atributo de calidad **Visibilidad**. A su vez, una mayor visibilidad facilita la detección temprana de fallas y acelera los procesos de recuperación, contribuyendo indirectamente a la disponibilidad del sistema.
 
-- **Escalabilidad**: las limitaciones en la capacidad del sistema para crecer o adaptarse a aumentos de carga afectan principalmente al atributo de calidad **Escalabilidad**. Sin embargo, la incapacidad de manejar picos de demanda también puede llevar a interrupciones o caídas, degradando en consecuencia la disponibilidad.  
+- **Escalabilidad**: las limitaciones en la capacidad del sistema para crecer o adaptarse a aumentos de carga afectan principalmente al atributo de calidad **Escalabilidad**. Sin embargo, la incapacidad de manejar picos de demanda también puede llevar a interrupciones o caídas, degradando en consecuencia la disponibilidad.
 
 - **Mantenibilidad y evolución**: un diseño con alto acoplamiento o con dificultades para introducir cambios de manera segura impacta directamente en la **Mantenibilidad**. De forma indirecta, esto puede derivar en mayor riesgo de errores durante despliegues o en tiempos prolongados de indisponibilidad ante actualizaciones.
 
@@ -138,7 +138,7 @@ Actualmente hay un Nginx que actua como reverse proxy y potencialmente balancead
 
 *** Performance
 
-*** Visibilidad: 
+*** Visibilidad:
 
 Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas metricas en un dashboard creado por la catedra que permite visualizar algunas metricas como Scenarios launched, Request state, Response time y Resources. Faltarian metricas mas especificas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
 
@@ -243,9 +243,104 @@ p_cadvisor_host --> p_cadvisor_docker
 
 ** Tácticas aplicadas.
 
+Intentamos agregar una base de datos tipo Redis (específicamente Valkey, un fork de Redis) para tener persistencia real y poder escalar horizontalmente los nodos. Esta solución aborda los problemas de la persistencia basada en archivos JSON locales, que no permiten compartir estado entre instancias y carecen de atomicidad en las operaciones.
+
+*** Implementación de Valkey para persistencia
+
+La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Los datos se almacenan como claves en Redis:
+
+- ~accounts~: Almacena la lista de cuentas de usuario en formato JSON.
+- ~rates~: Contiene las tasas de cambio entre monedas.
+- ~log~: Registra el historial de transacciones realizadas.
+
+El módulo ~valkey.js~ proporciona funciones asíncronas para inicializar la conexión (~init()~), obtener datos (~getAccounts()~, ~getRates()~, ~getLog()~) y actualizarlos (~setAccounts()~, ~setRates()~, ~setLog()~). Estas funciones serializan/deserializan los datos a JSON para almacenarlos como strings en Redis.
+
+En ~exchange.js~, se importa y utiliza este módulo para todas las operaciones de persistencia, reemplazando las lecturas/escrituras directas a archivos. La inicialización se realiza al inicio de la aplicación con ~await valkeyInit()~.
+
+*** Configuración en Docker Compose
+
+Se agregó un servicio ~valkey~ en el ~docker-compose.yml~ utilizando la imagen ~valkey/valkey:8.1.4-alpine~, expuesto en el puerto 6379. La aplicación se conecta mediante la variable de entorno ~VALKEY_URL=redis://valkey:6379~.
+
+*** Beneficios para escalabilidad horizontal
+
+Al centralizar el estado en Valkey, múltiples instancias de la API pueden compartir el mismo almacén de datos. Esto elimina la dependencia de estado local en memoria o archivos, permitiendo:
+
+- Escalado horizontal sin pérdida de consistencia.
+- Persistencia real de los datos, sobreviviente a reinicios de contenedores.
+- Operaciones atómicas en Redis para transacciones financieras.
+
+Esta táctica mejora significativamente la Disponibilidad y Escalabilidad, mitigando los puntos únicos de falla relacionados con la persistencia local.
+
 ** Justificación de por qué se eligieron.
 
 ** Diagramas C&C modificados.
+
+#+BEGIN_SRC plantuml :file assets/componentes-modificados.png :exports results
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+component "Cliente" as Client
+
+component "Contenedores Docker" {
+ portin "5555" as p_nginx_host
+
+ portin "8090" as p_graphite_host
+ portin "8125" as p_graphite_statsd_host
+ portin "8126" as p_graphite_statsd_admin
+
+ portin "80" as p_grafana_host
+
+ portin "8080" as p_cadvisor_host
+
+ component "Nginx\n(Reverse Proxy)" as Nginx {
+   portin "80" as p_nginx_docker
+ }
+ component "API Node 1\n(Node.js)" as API1 {
+   portin "3000" as p_api1_docker
+ }
+ component "API Node 2\n(Node.js)" as API2 {
+   portin "3001" as p_api2_docker
+ }
+ component "API Node 3\n(Node.js)" as API3 {
+   portin "3002" as p_api3_docker
+ }
+ database "Valkey\n(Redis)" as Valkey {
+   portin "6379" as p_valkey_docker
+ }
+
+ component "cAdvisor\n(Monitoring)" as CAdvisor {
+   portin "8080" as p_cadvisor_docker
+ }
+ component "Graphite\n(Métricas)" as Graphite {
+   portin "80" as p_graphite_http_docker
+   portin "8125" as p_graphite_statsd_docker
+   portin "8126" as p_graphite_statds_admin_docker
+ }
+ component "Grafana\n(Dashboard)" as Grafana {
+   portin "3000" as p_grafana_docker
+ }
+}
+
+Client --> p_nginx_host : HTTP
+p_nginx_host --> p_nginx_docker : HTTP
+Nginx --> p_api1_docker : HTTP
+Nginx --> p_api2_docker : HTTP
+Nginx --> p_api3_docker : HTTP
+
+API1 --> p_valkey_docker : Redis
+API2 --> p_valkey_docker : Redis
+API3 --> p_valkey_docker : Redis
+
+p_graphite_host --> p_graphite_http_docker
+p_graphite_statsd_host --> p_graphite_statsd_docker
+p_graphite_statsd_admin --> p_graphite_statds_admin_docker
+p_grafana_host --> p_grafana_docker
+p_cadvisor_host --> p_cadvisor_docker
+#+END_SRC
+
+#+RESULTS:
+[[file:assets/componentes-modificados.png]]
 
 * Resultados – Casos mejorados
 

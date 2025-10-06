@@ -14,13 +14,14 @@ config:
     - name: Ramp
       duration: 30
       arrivalRate: 1
-      rampTo: 5
+      rampTo: 1000
     - name: Plain
       duration: 60
-      arrivalRate: 5
+      arrivalRate: 500
 
 scenarios:
-  - name: Update Rates PUT (/rates)
+  - name: USD to EUR
+    weight: 25
     flow:
       - put:
           url: '/rates'
@@ -32,16 +33,24 @@ scenarios:
             rate: 1.08
           expect:
             - statusCode: [200, 400]
+
+  - name: USD to ARS
+    weight: 25
+    flow:
       - put:
           url: '/rates'
           headers:
             Content-Type: 'application/json'
           json:
-            baseCurrency: "ARS"
-            counterCurrency: "USD"
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
             rate: 1000
           expect:
             - statusCode: [200, 400]
+
+  - name: EUR to BRL  
+    weight: 25
+    flow:
       - put:
           url: '/rates'
           headers:
@@ -50,5 +59,19 @@ scenarios:
             baseCurrency: "EUR"
             counterCurrency: "BRL"
             rate: 6.2
+          expect:
+            - statusCode: [200, 400]
+
+  - name: ARS to BRL
+    weight: 25
+    flow:
+      - put:
+          url: '/rates'
+          headers:
+            Content-Type: 'application/json'
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "BRL"
+            rate: 0.0036
           expect:
             - statusCode: [200, 400]

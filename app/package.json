@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
-    "nanoid": "^5.1.2"
+    "nanoid": "^5.1.2",
+    "node-statsd": "^0.1.1"
   }
 }

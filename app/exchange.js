@@ -5,14 +5,16 @@ import { init as stateInit, getAccounts as stateAccounts, getRates as stateRates
 let accounts;
 let rates;
 let log;
+let statsClient;
 
 //call to initialize the exchange service
-export async function init() {
+export async function init(statsdClient) {
   await stateInit();
 
   accounts = stateAccounts();
   rates = stateRates();
   log = stateLog();
+  statsClient = statsdClient;
 }
 
 //returns all internal accounts
@@ -90,6 +92,22 @@ export async function exchange(exchangeRequest) {
         counterAccount.balance -= counterAmount;
         exchangeResult.ok = true;
         exchangeResult.counterAmount = counterAmount;
+        
+        // Enviar métricas a StatsD si el cliente está disponible
+        if (statsClient) {
+          // Volumen total operado por moneda (siempre suma)
+          statsClient.increment(`volume.${baseCurrency}`, baseAmount);
+          statsClient.increment(`volume.${counterCurrency}`, counterAmount);
+          
+          // Neto por moneda (compras suman, ventas restan)
+          // Para la moneda base: restamos porque la "vendemos"
+          statsClient.increment(`net.${baseCurrency}`, -baseAmount);
+          // Para la moneda counter: sumamos porque la "compramos"
+          statsClient.increment(`net.${counterCurrency}`, counterAmount);
+          
+          // Contador de transacciones exitosas
+          statsClient.increment('transactions.successful');
+        }
       } else {
         //could not transfer to clients' counter account, return base amount to client
         await transfer(baseAccount.id, clientBaseAccountId, baseAmount);
@@ -106,6 +124,11 @@ export async function exchange(exchangeRequest) {
 
   //log the transaction and return it
   log.push(exchangeResult);
+  
+  // Enviar métrica de transacción fallida si no fue exitosa
+  if (statsClient && !exchangeResult.ok) {
+    statsClient.increment('transactions.failed');
+  }
 
   return exchangeResult;
 }

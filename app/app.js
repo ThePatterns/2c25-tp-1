@@ -1,4 +1,5 @@
 import express from "express";
+import StatsD from "node-statsd";
 
 import {
   init as exchangeInit,
@@ -10,7 +11,14 @@ import {
   exchange,
 } from "./exchange.js";
 
-await exchangeInit();
+// Configurar cliente StatsD
+const statsClient = new StatsD({
+  host: 'graphite',
+  port: 8125,
+  prefix: 'exchange-api.'
+});
+
+await exchangeInit(statsClient);
 
 const app = express();
 const port = 3000;

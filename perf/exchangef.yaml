@@ -20,7 +20,6 @@ config:
     - name: Plain
       duration: 60
       arrivalRate: 500
-    
 
 scenarios:
   - name: Exchange ARS to USD

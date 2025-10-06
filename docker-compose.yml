@@ -1,6 +1,36 @@
 services:
+    postgres:
+        image: postgres:15-alpine
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: exchange_db
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./db/init:/docker-entrypoint-initdb.d
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres -d exchange_db"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
     api:
-      build: ./app
+        build: 
+            context: ./app
+            dockerfile: Dockerfile
+        environment:
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_NAME=exchange_db
+            - DB_HOST=postgres
+            - DB_PORT=5432
+        depends_on:
+            postgres:
+                condition: service_healthy
+        ports:
+            - "3000:3000"
 
     nginx:
         image: nginx:1.27.4
@@ -44,4 +74,6 @@ services:
 
 volumes:
     grafana_config:
+        driver: local
+    postgres_data:
         driver: local

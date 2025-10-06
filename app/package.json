@@ -11,6 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
-    "nanoid": "^5.1.2"
+    "nanoid": "^5.1.2",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.37.0",
+    "eslint": "^9.37.0",
+    "eslint-plugin-node": "^11.1.0",
+    "globals": "^16.4.0"
   }
 }

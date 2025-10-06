@@ -1,54 +1,94 @@
 import { nanoid } from "nanoid";
+import { initDatabase } from "./utils/database/databaseAdapter.js";
+import Account from "./models/account.js";
+import ExchangeRate from "./models/exchangeRate.js";
+import Transaction from "./models/transaction.js";
 
-import { init as stateInit, getAccounts as stateAccounts, getRates as stateRates, getLog as stateLog } from "./state.js";
-
-let accounts;
-let rates;
-let log;
-
-//call to initialize the exchange service
+// Initialize the exchange service
 export async function init() {
-  await stateInit();
-
-  accounts = stateAccounts();
-  rates = stateRates();
-  log = stateLog();
-}
-
-//returns all internal accounts
-export function getAccounts() {
-  return accounts;
-}
-
-//sets balance for an account
-export function setAccountBalance(accountId, balance) {
-  const account = findAccountById(accountId);
-
-  if (account != null) {
-    account.balance = balance;
+  try {
+    await initDatabase();
+    console.log('Exchange service initialized with database');
+  } catch (error) {
+    console.error('Failed to initialize exchange service:', error);
+    throw error;
   }
 }
 
-//returns all current exchange rates
-export function getRates() {
-  return rates;
+// Returns all internal accounts
+export async function getAccounts() {
+  return Account.findAll();
 }
 
-//returns the whole transaction log
-export function getLog() {
-  return log;
+// Sets balance for an account
+export async function setAccountBalance(accountId, balance) {
+  return Account.updateBalance(accountId, balance);
 }
 
-//sets the exchange rate for a given pair of currencies, and the reciprocal rate as well
-export function setRate(rateRequest) {
+// Returns all current exchange rates
+export async function getRates() {
+  return ExchangeRate.findAll();
+}
+
+// Returns the whole transaction log
+export async function getLog() {
+  return Transaction.findAll();
+}
+/**
+ * @returns {Promise<boolean>} True if successful
+ * @throws {Error} If required parameters are missing or operation fails
+ */
+export async function setRate(rateRequest, client) {
   const { baseCurrency, counterCurrency, rate } = rateRequest;
 
-  rates[baseCurrency][counterCurrency] = rate;
-  rates[counterCurrency][baseCurrency] = Number((1 / rate).toFixed(5));
+  if (!baseCurrency || !counterCurrency || rate === undefined) {
+    throw new Error("Base currency, counter currency, and rate are required");
+  }
+
+  try {
+    // Check if the rate exists first, using FOR UPDATE lock if in transaction
+    const findMethod = client ? ExchangeRate.findByCurrenciesWithLock : ExchangeRate.findByCurrencies;
+    const existingRate = await findMethod(baseCurrency, counterCurrency, client);
+    
+    // Update or create the rate
+    if (existingRate) {
+      await ExchangeRate.updateRate(baseCurrency, counterCurrency, rate, client);
+    } else {
+      await ExchangeRate.createRate(baseCurrency, counterCurrency, rate, client);
+    }
+
+    // Update reciprocal rate if it's a different currency pair
+    if (baseCurrency !== counterCurrency) {
+      try {
+        const reciprocalRate = 1 / rate;
+        const reciprocalExists = await findMethod(counterCurrency, baseCurrency, client);
+        
+        if (reciprocalExists) {
+          await ExchangeRate.updateRate(counterCurrency, baseCurrency, reciprocalRate, client);
+        } else {
+          await ExchangeRate.createRate(counterCurrency, baseCurrency, reciprocalRate, client);
+        }
+      } catch (error) {
+        console.warn(`Could not update reciprocal rate for ${counterCurrency}/${baseCurrency}:`, error);
+        // Re-throw if we're in a transaction to ensure rollback
+        if (client) throw error;
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Error in setRate:', error);
+    throw error;
+  }
 }
 
-//executes an exchange operation
-export async function exchange(exchangeRequest) {
+/**
+ * Executes an atomic exchange operation between accounts
+ * @param {Object} exchangeRequest - The exchange request object
+ * @param {Object} [client] - Optional database client for transactions
+ * @returns {Promise<Object>} The exchange result
+ */
+export async function exchange(exchangeRequest, client) {
   const {
     baseCurrency,
     counterCurrency,
@@ -57,16 +97,28 @@ export async function exchange(exchangeRequest) {
     baseAmount,
   } = exchangeRequest;
 
-  //get the exchange rate
-  const exchangeRate = rates[baseCurrency][counterCurrency];
-  //compute the requested (counter) amount
-  const counterAmount = baseAmount * exchangeRate;
-  //find our account on the provided (base) currency
-  const baseAccount = findAccountByCurrency(baseCurrency);
-  //find our account on the counter currency
-  const counterAccount = findAccountByCurrency(counterCurrency);
+  if (!baseCurrency || !counterCurrency || !clientBaseAccountId || !clientCounterAccountId || baseAmount === undefined) {
+    throw new Error('Missing required fields in exchange request');
+  }
 
-  //construct the result object with defaults
+  if (baseAmount <= 0) {
+    throw new Error('Base amount must be positive');
+  }
+
+  // Get the exchange rate with lock if in transaction
+  const rate = await ExchangeRate.findByCurrenciesWithLock(baseCurrency, counterCurrency, client);
+  if (!rate) {
+    throw new Error(`No exchange rate available for ${baseCurrency} to ${counterCurrency}`);
+  }
+  
+  const exchangeRate = rate.rate;
+  const counterAmount = baseAmount * exchangeRate;
+
+  // Find our internal accounts for the currencies
+  const baseAccount = await Account.findByCurrencyWithLock(baseCurrency, client);
+  const counterAccount = await Account.findByCurrencyWithLock(counterCurrency, client);
+
+  // Construct the result object
   const exchangeResult = {
     id: nanoid(),
     ts: new Date(),
@@ -77,64 +129,75 @@ export async function exchange(exchangeRequest) {
     obs: null,
   };
 
-  //check if we have funds on the counter currency account
-  if (counterAccount.balance >= counterAmount) {
-    //try to transfer from clients' base account
-    if (await transfer(clientBaseAccountId, baseAccount.id, baseAmount)) {
-      //try to transfer to clients' counter account
-      if (
-        await transfer(counterAccount.id, clientCounterAccountId, counterAmount)
-      ) {
-        //all good, update balances
-        baseAccount.balance += baseAmount;
-        counterAccount.balance -= counterAmount;
-        exchangeResult.ok = true;
-        exchangeResult.counterAmount = counterAmount;
-      } else {
-        //could not transfer to clients' counter account, return base amount to client
-        await transfer(baseAccount.id, clientBaseAccountId, baseAmount);
-        exchangeResult.obs = "Could not transfer to clients' account";
-      }
-    } else {
-      //could not withdraw from clients' account
-      exchangeResult.obs = "Could not withdraw from clients' account";
+  try {
+    // Check if we have enough funds in the counter account
+    if (counterAccount.balance < counterAmount) {
+      exchangeResult.obs = "Not enough funds on counter currency account";
+      return exchangeResult;
     }
-  } else {
-    //not enough funds on internal counter account
-    exchangeResult.obs = "Not enough funds on counter currency account";
+
+    // Simulate both transfers
+    await simulateTransfer();
+    await simulateTransfer();
+    
+    // Perform the exchange in a single transaction
+    // 1. Transfer from client's account to our account (base currency)
+    if (clientBaseAccountId !== baseAccount.id) {
+      await Account.transferFunds(
+        clientBaseAccountId,  // from: client's account
+        baseAccount.id,       // to: our account
+        baseAmount,           // amount
+        client               // transaction client
+      );
+    }
+
+    // 2. Transfer from our account to client's account (counter currency)
+    if (counterAccount.id !== clientCounterAccountId) {
+      await Account.transferFunds(
+        counterAccount.id,      // from: our account
+        clientCounterAccountId, // to: client's account
+        counterAmount,          // amount
+        client                 // transaction client
+      );
+    }
+
+    // Record the transaction
+    await Transaction.recordTransaction(
+      clientBaseAccountId,
+      clientCounterAccountId,
+      baseAmount,
+      baseCurrency,
+      counterCurrency,
+      exchangeRate,
+      client
+    );
+
+    // Update the result for success
+    exchangeResult.ok = true;
+    exchangeResult.counterAmount = counterAmount;
+    
+    return exchangeResult;
+    
+  } catch (error) {
+    console.error('Exchange failed:', error);
+    exchangeResult.obs = error.message || 'Exchange operation failed';
+    return exchangeResult;
   }
-
-  //log the transaction and return it
-  log.push(exchangeResult);
-
-  return exchangeResult;
 }
 
-// internal - call transfer service to execute transfer between accounts
-async function transfer(fromAccountId, toAccountId, amount) {
-  const min = 200;
-  const max = 400;
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(true), Math.random() * (max - min + 1) + min)
-  );
-}
-
-function findAccountByCurrency(currency) {
-  for (let account of accounts) {
-    if (account.currency == currency) {
-      return account;
-    }
-  }
-
-  return null;
-}
-
-function findAccountById(id) {
-  for (let account of accounts) {
-    if (account.id == id) {
-      return account;
-    }
-  }
-
-  return null;
+/**
+ * Simulates a transfer with a random delay between 200-400ms
+ * @param {string} fromAccountId - Source account ID
+ * @param {string} toAccountId - Destination account ID
+ * @param {number} amount - Amount to transfer
+ * @returns {Promise<boolean>} Always resolves to true after delay
+ */
+async function simulateTransfer() {
+  const min = 200;  // Minimum delay in ms
+  const max = 400;   // Maximum delay in ms
+  const delay = Math.random() * (max - min) + min;
+  
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(true), delay);
+  });
 }

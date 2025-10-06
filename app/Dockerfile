@@ -1,7 +1,13 @@
 FROM node:22
-RUN mkdir /opt/app
 WORKDIR /opt/app
-COPY * ./
-COPY state ./state
+
+# Copy package files first for better layer caching
+COPY package*.json ./
 RUN npm install
-ENTRYPOINT [ "node", "app.js" ]
+
+COPY . .
+
+# Explicitly copy the utils directory
+COPY utils ./utils
+
+ENTRYPOINT ["node", "app.js"]

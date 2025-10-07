@@ -90,20 +90,12 @@ export async function exchange(exchangeRequest, client) {
     baseAmount,
   } = exchangeRequest;
 
-  if (!baseCurrency) {
-    throw new Error('Missing baseCurrency field in exchange request');
-  }
-  if (!counterCurrency) {
-    throw new Error('Missing counterCurrency field in exchange request');
-  }
-  if (!baseAccountId) {
-    throw new Error('Missing baseAccountId field in exchange request');
-  }
-  if (!counterAccountId) {
-    throw new Error('Missing counterAccountId field in exchange request');
-  }
-  if (baseAmount === undefined) {
-    throw new Error('Missing baseAmount field in exchange request');
+  const requiredFields = ['baseCurrency', 'counterCurrency', 'baseAccountId', 'counterAccountId', 'baseAmount'];
+  const missingFields = requiredFields.filter(field => !exchangeRequest[field]);
+
+  if (missingFields.length > 0) {
+    const errorMessage = `Missing required fields in exchange request: ${missingFields.join(', ')}`;
+    throw new Error(errorMessage);
   }
 
   if (baseAmount <= 0) {

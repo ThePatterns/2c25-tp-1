@@ -27,7 +27,7 @@ export async function setAccountBalance(accountId, balance) {
 
 // Returns all current exchange rates
 export async function getRates() {
-  return ExchangeRate.findAll();
+  return await ExchangeRate.findAll();
 }
 
 // Returns the whole transaction log

@@ -13,14 +13,16 @@
     \Large [75.73/TB034] Arquitectura del Software \\
     Segundo cuatrimestre de 2025\\
     \vfill
+    \begin{center}
     \begin{tabular}{ | l | l | l | }
       \hline
       Alumno & Padrón & Email \\ \hline
       CASTRO MARTINEZ, Jose Ignacio & 106957 & jcastrom@fi.uba.ar \\ \hline
       DEALBERA, Pablo Andres & 106858 & pdealbera@fi.uba.ar \\ \hline
-      FIGUEROA RODRIGUEZ, Andrea Emperatriz & 110450 & afigueroa@fi.uba.ar \\ \hline
+      FIGUEROA RODRIGUEZ, Andrea & 110450 & afigueroa@fi.uba.ar \\ \hline
       RICALDI REBATA, Brayan Alexander & 103344 & bricaldi@fi.uba.ar \\ \hline
     \end{tabular}
+    \end{center}
     \vfill
 \end{titlepage}
 \renewcommand{\contentsname}{Índice}
@@ -30,3 +32,239 @@
 #+END_EXPORT
 
 * Introducción
+
+** Contexto (startup arVault).
+
+** Objetivos del TP.
+
+** Alcance del análisis.
+
+* Atributos de calidad (QA) identificados
+
+
+** Disponibilidad
+
+Al ser un servicio de exchange de monedas, asumimos que es un servicio que se utiliza durante todos los dias habiles de la semana en horario cambiario. Por lo tanto, es importante que el servicio se encuentre disponible durante esos horarios para no perder clientes.
+
+Además, dado el contexto en el que queremos recuperar la confianza de los usuarios y remontar la reputación, el sistema debe ser altamente accesible para los usuarios y permitir realizar correctamente sus operaciones respetando tiempos razonables de respuesta.
+** Escalabilidad (Elasticidad)
+
+La escalabilidad, y en particular la elasticidad, constituyen un atributo de calidad crítico para el servicio de intercambios de arVault. Esto se debe a que la infraestructura del sistema debe ser capaz de adaptarse dinámicamente a variaciones en la demanda de usuarios.
+
+En el contexto del negocio, es esperable la aparición de picos significativos de demanda en momentos específicos (por ejemplo, en la apertura y cierre del horario cambiario), así como también períodos de baja o nula actividad. A ello se suma que, dado que el servicio busca captar rápidamente un gran volumen de nuevos usuarios, especialmente tras campañas de promoción destinadas a revertir percepciones negativas de experiencias pasadas, existe el riesgo de enfrentar aumentos inesperados de tráfico.
+
+Si el sistema careciera de elasticidad, estos picos de operaciones de cambio de moneda podrían derivar en saturación de recursos, lo que a su vez ocasionaría demoras, rechazos de transacciones o caídas del servicio. Dichos incidentes afectarían de manera directa la reputación de la empresa, un aspecto considerado prioritario en función de los objetivos actuales y de las expectativas de los stakeholders.
+
+** Performance
+
+El atributo de calidad Performance, y en particular el User-Perceived Performance, adquiere relevancia crítica en el servicio de intercambio de monedas de arVault, para sustentar esta afirmación nos basamos en el siguiente análisis del contexto y antecedentes brindados:
+
+Tras el lanzamiento de la funcionalidad, se registraron reclamos de usuarios relacionados con demoras y fallas en la ejecución de operaciones de cambio, lo que ha derivado en reseñas negativas y pérdida de confianza en la plataforma. En un contexto donde la empresa necesita con urgencia atraer nuevas rondas de inversión, estas deficiencias de rendimiento representan un riesgo directo, ya que los potenciales inversores han condicionado su apoyo a la realización de mejoras en la calidad del servicio.
+
+En una aplicación financiera, la percepción de agilidad y confiabilidad en la respuesta del sistema es esencial: tiempos de espera excesivos o transacciones fallidas afectan la experiencia de los usuarios y minan la credibilidad de la plataforma. Aunque el diferencial de arVault reside en ofrecer tasas de cambio más convenientes que la competencia, dicho valor se ve neutralizado si el servicio de intercambio no responde con la rapidez y estabilidad que los clientes esperan.
+
+Por ello, la mejora del User-Perceived Performance se presenta como un paso imprescindible no solo para recuperar la confianza de los usuarios actuales, sino también para restaurar la reputación de la empresa ante el mercado y viabilizar la captación de nuevos inversores, garantizando así la continuidad y evolución del negocio.
+
+** Visibilidad
+
+El valor de este atributo de calidad es más indirecto pero estratégico pues permite entender el comportamiento real del sistema, identificar cuellos de botella de performance, localizar errores en operaciones de cambio y detectar patrones de saturación que anticipen problemas de disponibilidad o escalabilidad. Es decir, la visibilidad no impacta de forma inmediata en la experiencia del usuario, pero habilita a los arquitectos y al equipo técnico a diagnosticar, mejorar y sostener los otros atributos de calidad prioritarios.
+
+** Seguridad
+
+Es fundamental que el sistema sea seguro para evitar posibles ataques que puedan comprometer la integridad del sistema, la privacidad de los datos de los clientes o perdida/robo de dinero. Incluso pensando que debemos tambien tener en cuenta marcos regulatorios sobre el manejo de datos personales y financieros. Tambien entendemos del enunciado que es importante la reputacion del sistema, y esto podria verse muy dañado en caso de que haya una brecha de seguridad.
+
+* Arquitectura base
+
+** Análisis de la influencia de decisiones de diseño en los QA's
+
+*** Disponibilidad
+
+**** **Puntos únicos de falla (únicas instancias de servicios) y su impacto**
+
+Analizando las decisiones de diseño tomadas por el desarollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
+1. **Backend (API)**
+    
+    Se despliega una única instancia del servicio de API (según la configuración en docker-compose). De esta forma, la ausencia de réplicas y de un mecanismo efectivo de balanceo de carga (porque no hay múltiples nodos entre los cuales se balancee la carga) la caída de dicha instancia del backend causaría que el sistema completo deje de responder a solicitudes.
+    
+2. **Nginx (reverse proxy)**
+    
+    Para este servicio también existe una sola instancia configurada como punto de entrada y aunque se define un bloque `upstream`, este solo redirige a una única API backend.
+    
+    Por esto la arquitectura termina teniendo dos puntos críticos: tanto el proxy (nginx) como el backend, la indisponibilidad de cualquiera de ellos impacta directamente en la experiencia del usuario final.
+    
+3. **Persistencia de datos**
+    
+    Actualmente la aplicación utiliza archivos JSON locales para la persistencia, este enfoque presenta múltiples limitaciones: falta de replicación, ausencia de mecanismos de recuperación ante fallas, y dependencia del almacenamiento local del contenedor/host. Una pérdida de datos o la caída del servicio implican tiempos de recuperación prolongados, degradando así directamente la disponibilidad.
+
+**** **Arquitectura monolítica y su impacto**
+
+Al analizar la estructura lógica del sistema, se observa que este responde a un patrón **monolítico**, en el cual toda la lógica de negocio, el manejo de estado y la persistencia de datos se concentran en un solo bloque sin separación clara de responsabilidades ni interfaces desacopladas. Este diseño acarrea consecuencias directas sobre la **Disponibilidad**, entre las que se destacan:
+1. **Arquitectura unificada**  
+   Toda la lógica de negocio (gestión de cuentas, tasas, transacciones) se encuentra contenida en un único módulo. La caída de cualquier componente interno afecta al sistema en su totalidad, ya que no existen mecanismos de aislamiento de fallos ni tolerancia a errores.
+
+2. **Alto acoplamiento entre módulos**  
+   Los componentes del sistema tienen dependencias directas y requieren inicializaciones en un orden específico. Esto implica que la indisponibilidad de un módulo interno impide el correcto funcionamiento del resto, amplificando los riesgos de interrupción total.
+
+3. **Escalabilidad y resiliencia limitadas**  
+   Al no existir modularidad ni servicios independientes, no es posible escalar ni recuperar selectivamente partes del sistema. Cualquier estrategia de replicación debe aplicarse al monolito completo, lo cual incrementa la complejidad operativa y reduce la capacidad de respuesta frente a fallos.
+
+**En síntesis**, la naturaleza monolítica del sistema no solo **explica** la existencia de múltiples puntos únicos de falla en la infraestructura actual, sino que también **agrava su impacto**: ante un error en un módulo o en la persistencia de datos, la indisponibilidad afecta a toda la aplicación. Esto limita severamente la capacidad de mantener una operación continua y dificulta la incorporación de mecanismos de alta disponibilidad o recuperación automática.
+
+**** **Carencia de uso de transacciones y su impacto**
+
+Otro aspecto crítico identificado es la ausencia de un sistema de **transacciones confiables** para el manejo de operaciones financieras (por ejemplo, conversiones entre diferentes monedas). Actualmente, la persistencia de datos se basa en archivos JSON locales, sin soporte nativo para propiedades ACID.
+
+Esta limitación introduce riesgos importantes que afectan directamente el atributo de calidad **Disponibilidad**, principalmente se tiene un gran riesgo de **inconsistencias de datos e incremento del tiempo de recuperación**, pues, al no existir mecanismos transaccionales, fallas en medio de una operación (ej. caída del proceso, error de escritura en disco) pueden dejar el sistema en un estado inconsistente. Esto obliga a tareas manuales de verificación y corrección, aumentando el tiempo que el sistema permanece fuera de servicio o con datos inválidos.  
+   En ausencia de transacciones, las operaciones incompletas no pueden deshacerse ni repetirse de forma segura. Frente a fallos, el sistema requiere procesos de recuperación manual o la restauración de copias de seguridad, en consecuencia, se disminuye la disponibilidad percibida.
+
+
+En conclusión, la carencia de un sistema de transacciones robusto aumenta significativamente la probabilidad de inconsistencias críticas y prolonga los tiempos de recuperación ante fallas. Dado el carácter financiero de las operaciones que maneja el sistema, esta limitación constituye un factor determinante que degrada la **Disponibilidad**, al no poder garantizar continuidad operativa ni datos válidos tras un incidente.
+
+**** **Otras decisiones de diseño con impacto indirecto en la disponibilidad**
+
+Existen además otras decisiones de diseño que, si bien no afectan a la **Disponibilidad** de manera directa, sí lo hacen de forma indirecta al influir en atributos de calidad relacionados:
+
+- **Monitoreo y métricas**: la toma de métricas y la incorporación de herramientas de observabilidad impactan directamente en el atributo de calidad **Visibilidad**. A su vez, una mayor visibilidad facilita la detección temprana de fallas y acelera los procesos de recuperación, contribuyendo indirectamente a la disponibilidad del sistema.  
+
+- **Escalabilidad**: las limitaciones en la capacidad del sistema para crecer o adaptarse a aumentos de carga afectan principalmente al atributo de calidad **Escalabilidad**. Sin embargo, la incapacidad de manejar picos de demanda también puede llevar a interrupciones o caídas, degradando en consecuencia la disponibilidad.  
+
+- **Mantenibilidad y evolución**: un diseño con alto acoplamiento o con dificultades para introducir cambios de manera segura impacta directamente en la **Mantenibilidad**. De forma indirecta, esto puede derivar en mayor riesgo de errores durante despliegues o en tiempos prolongados de indisponibilidad ante actualizaciones.
+
+Estas decisiones se abordarán en mayor detalle en las secciones correspondientes a cada atributo de calidad. Aquí basta con señalar que, aunque su impacto sobre la **Disponibilidad** no sea inmediato, sí la condicionan en tanto facilitan (o dificultan) la prevención, mitigación y recuperación frente a fallos.
+
+
+*** Escalabilidad (Elasticidad)
+Actualmente hay un Nginx que actua como reverse proxy y potencialmente balanceador de carga, pero en este momento solo tiene configurado una sola instancia de la app de Node.js. De todas formas, notamos varios problemas con esto. En principio, la app es _stateful_ porque guarda el estado en memoria y guarda cada tantos segundos el estado de la memoria en distintos archivos json en la carpeta ~state/~. Esto hace que no se pueda escalar horizontalmente la app sin perder el estado, ya que cada instancia tendria su propio estado en memoria y no habria forma de sincronizarlos.
+
+*** Performance
+
+*** Visibilidad: 
+
+Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas metricas en un dashboard creado por la catedra que permite visualizar algunas metricas como Scenarios launched, Request state, Response time y Resources. Faltarian metricas mas especificas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
+
+*** Seguridad
+
+*** Testabilidad
+
+*** Portabilidad
+
+*** Interoperabilidad
+
+*** Usabilidad
+
+*** Manejabilidad
+
+*** Confiabilidad
+
+*** Simplicidad
+
+*** Modificabilidad
+
+** Diagrama C&C inicial.
+
+#+BEGIN_SRC plantuml :file assets/componentes.png :exports results
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+component "Cliente" as Client
+
+component "Contenedores Docker" {
+ portin "5555" as p_nginx_host
+
+ portin "8090" as p_graphite_host
+ portin "8125" as p_graphite_statsd_host
+ portin "8126" as p_graphite_statsd_admin
+
+ portin "80" as p_grafana_host
+
+ portin "8080" as p_cadvisor_host
+
+ component "Nginx\n(Reverse Proxy)" as Nginx {
+   portin "80" as p_nginx_docker
+ }
+ component "API\n(Node.js)" as API {
+   portin "3000" as p_api_docker
+ }
+ database "Base de Datos" as DB {
+   folder "app/state" {
+     [accounts.json]
+     [log.json]
+     [rates.json]
+   }
+ }
+
+ component "cAdvisor\n(Monitoring)" as CAdvisor {
+   portin "8080" as p_cadvisor_docker
+ }
+ component "Graphite\n(Métricas)" as Graphite {
+   portin "80" as p_graphite_http_docker
+   portin "8125" as p_graphite_statsd_docker
+   portin "8126" as p_graphite_statds_admin_docker
+ }
+ component "Grafana\n(Dashboard)" as Grafana {
+   portin "3000" as p_grafana_docker
+ }
+}
+
+Client --> p_nginx_host : HTTP
+p_nginx_host --> p_nginx_docker : HTTP
+Nginx --> p_api_docker : HTTP
+API --> DB : I/O de archivos
+
+p_graphite_host --> p_graphite_http_docker
+p_graphite_statsd_host --> p_graphite_statsd_docker
+p_graphite_statsd_admin --> p_graphite_statds_admin_docker
+p_grafana_host --> p_grafana_docker
+p_cadvisor_host --> p_cadvisor_docker
+#+END_SRC
+
+#+RESULTS:
+[[file:assets/componentes.png]]
+
+
+** Crítica a arquitectura base.
+
+* Metodología de pruebas
+
+** Herramientas usadas (Artillery, Grafana, etc.).
+
+** Escenarios de carga diseñados.
+
+** Métricas recolectadas.
+
+* Resultados – Caso base
+
+** Screenshots de dashboards.
+
+** Interpretación de resultados.
+
+* Propuestas de mejora
+
+** Tácticas aplicadas.
+
+** Justificación de por qué se eligieron.
+
+** Diagramas C&C modificados.
+
+* Resultados – Casos mejorados
+
+** Screenshots comparativos.
+
+** Análisis de impacto sobre QA.
+
+** Trade-offs detectados.
+
+* Conclusiones
+
+** Resumen de hallazgos.
+
+** Beneficios y limitaciones de las mejoras.
+
+** Futuro (ej: pasar a DB externa en TP2).
+
+* Anexos
+
+** Configuraciones de escenarios de Artillery.
+
+** Configs modificadas de Nginx, Docker Compose, etc.

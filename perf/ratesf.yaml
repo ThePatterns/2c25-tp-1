@@ -18,7 +18,7 @@ config:
       rampTo: 800
     - name: Plain
       duration: 60
-      arrivalRate: 300
+      arrivalRate: 400
     
 
 scenarios:

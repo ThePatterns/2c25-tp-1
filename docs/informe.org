@@ -363,6 +363,34 @@ Al centralizar el estado en Valkey, múltiples instancias de la API pueden compa
 
 Esta táctica mejora significativamente la Disponibilidad y Escalabilidad, mitigando los puntos únicos de falla relacionados con la persistencia local.
 
+*** Implementación de PostgreSQL para persistencia y escalabilidad horizontal
+
+La implementación utiliza PostgreSQL como almacén de datos relacional, reemplazando la persistencia en archivos JSON y Valkey. Las tablas creadas son:
+
+- ~accounts~: Almacena las cuentas de usuario con campos como id, currency, balance, created_at, updated_at, deleted.
+- ~exchange_rates~: Contiene las tasas de cambio entre monedas con base_currency, counter_currency, rate, updated_at.
+- ~transactions~: Registra el historial de transacciones realizadas, con soporte para atomicidad en operaciones de intercambio.
+
+El módulo ~databaseAdapter.js~ proporciona funciones para conectarse a PostgreSQL usando el paquete ~pg~, manejando conexiones y transacciones. Los modelos en ~models/~ (Account, ExchangeRate, Transaction) manejan las operaciones CRUD con soporte para transacciones ACID.
+
+En ~exchange.js~, se utilizan estos modelos para todas las operaciones financieras, incluyendo transacciones atómicas para intercambios que requieren consistencia (ej. actualizar balances y registrar transacción en una sola operación).
+
+*** Configuración en Docker Compose
+
+Se agregó un servicio ~postgres~ en el ~docker-compose.yml~ utilizando la imagen ~postgres:15-alpine~, con inicialización de la base de datos mediante el script ~01-init.sql~ que crea las tablas, índices y datos iniciales.
+
+Se configuraron tres instancias de la API (~api1~, ~api2~, ~api3~) conectadas a PostgreSQL, permitiendo escalado horizontal sin pérdida de estado.
+
+*** Configuración de Load Balancing en Nginx
+
+Se actualizó ~nginx_reverse_proxy.conf~ para balancear carga entre las tres instancias de API utilizando un bloque ~upstream~.
+
+*** Beneficios para escalabilidad, disponibilidad y performance
+
+Al centralizar el estado en PostgreSQL con transacciones ACID, múltiples instancias pueden compartir el mismo almacén de datos de forma consistente y atómica. Esto elimina dependencias de estado local, permite escalado horizontal sin pérdida de consistencia, y asegura atomicidad en operaciones financieras críticas, mejorando la integridad de datos.
+
+Esta táctica mejora significativamente la Disponibilidad (reduciendo puntos únicos de falla en persistencia), Escalabilidad (permitiendo más nodos con estado compartido), y Performance (con transacciones eficientes, concurrencia controlada y consultas optimizadas con índices).
+
 ** Justificación de por qué se eligieron.
 
 ** Diagramas C&C modificados.
@@ -433,6 +461,80 @@ p_cadvisor_host --> p_cadvisor_docker
 
 #+RESULTS:
 [[file:assets/componentes-modificados.png]]
+
+** Diagrama C&C con PostgreSQL.
+
+#+BEGIN_SRC plantuml :file assets/componentes-postgresql.png :exports results
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+component "Cliente" as Client
+
+component "Contenedores Docker" {
+ portin "5555" as p_nginx_host
+
+ portin "8090" as p_graphite_host
+ portin "8125" as p_graphite_statsd_host
+ portin "8126" as p_graphite_statsd_admin
+
+ portin "80" as p_grafana_host
+
+ portin "8080" as p_cadvisor_host
+
+ component "Nginx\n(Reverse Proxy)" as Nginx {
+   portin "80" as p_nginx_docker
+ }
+ component "API Node 1\n(Node.js)" as API1 {
+   portin "3000" as p_api1_docker
+ }
+ component "API Node 2\n(Node.js)" as API2 {
+   portin "3001" as p_api2_docker
+ }
+ component "API Node 3\n(Node.js)" as API3 {
+   portin "3002" as p_api3_docker
+ }
+ database "PostgreSQL" as PostgreSQL {
+   folder "exchange_db" {
+     [accounts]
+     [exchange_rates]
+     [transactions]
+   }
+   portin "5432" as p_postgres_docker
+ }
+
+ component "cAdvisor\n(Monitoring)" as CAdvisor {
+   portin "8080" as p_cadvisor_docker
+ }
+ component "Graphite\n(Métricas)" as Graphite {
+   portin "80" as p_graphite_http_docker
+   portin "8125" as p_graphite_statsd_docker
+   portin "8126" as p_graphite_statds_admin_docker
+ }
+ component "Grafana\n(Dashboard)" as Grafana {
+   portin "3000" as p_grafana_docker
+ }
+}
+
+Client --> p_nginx_host : HTTP
+p_nginx_host --> p_nginx_docker : HTTP
+Nginx --> p_api1_docker : HTTP
+Nginx --> p_api2_docker : HTTP
+Nginx --> p_api3_docker : HTTP
+
+API1 --> p_postgres_docker : PostgreSQL
+API2 --> p_postgres_docker : PostgreSQL
+API3 --> p_postgres_docker : PostgreSQL
+
+p_graphite_host --> p_graphite_http_docker
+p_graphite_statsd_host --> p_graphite_statsd_docker
+p_graphite_statsd_admin --> p_graphite_statds_admin_docker
+p_grafana_host --> p_grafana_docker
+p_cadvisor_host --> p_cadvisor_docker
+#+END_SRC
+
+#+RESULTS:
+[[file:assets/componentes-postgresql.png]]
 
 * Resultados – Casos mejorados
 

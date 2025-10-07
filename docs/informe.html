@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
 <head>
-<!-- 2025-10-07 Tue 20:03 -->
+<!-- 2025-10-07 Tue 20:16 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -24,123 +24,128 @@
 <h2>&Iacute;ndice</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org51af80b">1. Introducción</a>
+<li><a href="#orgd55b8d1">1. Introducción</a>
 <ul>
-<li><a href="#org26a4cbc">1.1. Contexto (startup arVault).</a></li>
-<li><a href="#org7813464">1.2. Objetivos del TP.</a></li>
-<li><a href="#org0acdb18">1.3. Alcance del análisis.</a></li>
+<li><a href="#org946edde">1.1. Contexto (startup arVault).</a></li>
+<li><a href="#org2005e09">1.2. Objetivos del TP.</a></li>
+<li><a href="#orgaec5ed7">1.3. Alcance del análisis.</a></li>
 </ul>
 </li>
-<li><a href="#orgf8cd1de">2. Atributos de calidad (QA) identificados</a>
+<li><a href="#org345e074">2. Atributos de calidad (QA) identificados</a>
 <ul>
-<li><a href="#org44c901e">2.1. Disponibilidad</a></li>
-<li><a href="#org4176c0d">2.2. Escalabilidad (Elasticidad)</a></li>
-<li><a href="#org375e29f">2.3. Performance</a></li>
-<li><a href="#orged5ac14">2.4. Visibilidad</a></li>
-<li><a href="#orgb08b0cd">2.5. Seguridad</a></li>
+<li><a href="#orgf2c10c6">2.1. Disponibilidad</a></li>
+<li><a href="#orgd9ab296">2.2. Escalabilidad (Elasticidad)</a></li>
+<li><a href="#orgeade138">2.3. Performance</a></li>
+<li><a href="#org03477c0">2.4. Visibilidad</a></li>
+<li><a href="#org675db46">2.5. Seguridad</a></li>
 </ul>
 </li>
-<li><a href="#org604c32c">3. Arquitectura base</a>
+<li><a href="#org25aea03">3. Arquitectura base</a>
 <ul>
-<li><a href="#org1a1ca12">3.1. Análisis de la influencia de decisiones de diseño en los QA's</a>
+<li><a href="#orgc0175a3">3.1. Análisis de la influencia de decisiones de diseño en los QA's</a>
 <ul>
-<li><a href="#org363e0ef">3.1.1. Disponibilidad</a></li>
-<li><a href="#org65205c9">3.1.2. Escalabilidad (Elasticidad)</a></li>
-<li><a href="#orgc882e6b">3.1.3. Performance</a></li>
-<li><a href="#org576fef5">3.1.4. Visibilidad:</a></li>
-<li><a href="#org0d836a1">3.1.5. Seguridad</a></li>
-<li><a href="#org4ba7278">3.1.6. Testabilidad</a></li>
-<li><a href="#orgd438aa5">3.1.7. Portabilidad</a></li>
-<li><a href="#org91241d6">3.1.8. Interoperabilidad</a></li>
-<li><a href="#org6be59e1">3.1.9. Usabilidad</a></li>
-<li><a href="#org34788f0">3.1.10. Manejabilidad</a></li>
-<li><a href="#org4c079a8">3.1.11. Confiabilidad</a></li>
-<li><a href="#orgf51bbc6">3.1.12. Simplicidad</a></li>
-<li><a href="#orgb0f9a5d">3.1.13. Modificabilidad</a></li>
+<li><a href="#orgcc6e816">3.1.1. Disponibilidad</a></li>
+<li><a href="#org21619d7">3.1.2. Escalabilidad (Elasticidad)</a></li>
+<li><a href="#orga83e45a">3.1.3. Performance</a></li>
+<li><a href="#orgf83e17f">3.1.4. Visibilidad:</a></li>
+<li><a href="#orgd684edb">3.1.5. Seguridad</a></li>
+<li><a href="#org61e2950">3.1.6. Testabilidad</a></li>
+<li><a href="#org5646ed9">3.1.7. Portabilidad</a></li>
+<li><a href="#orge2d728b">3.1.8. Interoperabilidad</a></li>
+<li><a href="#orgfbfce11">3.1.9. Usabilidad</a></li>
+<li><a href="#org3122b5c">3.1.10. Manejabilidad</a></li>
+<li><a href="#orgac3888a">3.1.11. Confiabilidad</a></li>
+<li><a href="#orge47e931">3.1.12. Simplicidad</a></li>
+<li><a href="#org44d574e">3.1.13. Modificabilidad</a></li>
 </ul>
 </li>
-<li><a href="#org3ee7576">3.2. Diagrama C&amp;C inicial.</a></li>
-<li><a href="#orgd0c6b26">3.3. Crítica a arquitectura base.</a></li>
+<li><a href="#orga192866">3.2. Diagrama C&amp;C inicial.</a></li>
+<li><a href="#org841354f">3.3. Crítica a arquitectura base.</a></li>
 </ul>
 </li>
-<li><a href="#org0bd21c0">4. Metodología de pruebas</a>
+<li><a href="#orgdeaef5a">4. Metodología de pruebas</a>
 <ul>
-<li><a href="#orgc8bf49f">4.1. Herramientas usadas (Artillery, Grafana, etc.).</a></li>
-<li><a href="#orgc69acc7">4.2. Escenarios de carga diseñados.</a></li>
-<li><a href="#org84e200d">4.3. Métricas recolectadas.</a></li>
+<li><a href="#org8157929">4.1. Herramientas usadas (Artillery, Grafana, etc.).</a></li>
+<li><a href="#org7afd8c3">4.2. Escenarios de carga diseñados.</a></li>
+<li><a href="#org00d3c1d">4.3. Métricas recolectadas.</a></li>
 </ul>
 </li>
-<li><a href="#org60d896d">5. Resultados – Caso base</a>
+<li><a href="#org5cf1174">5. Resultados – Caso base</a>
 <ul>
-<li><a href="#orgd223fb9">5.1. Análisis del endpoint Rates</a>
+<li><a href="#org1748538">5.1. Análisis del endpoint Rates</a>
 <ul>
-<li><a href="#org338abca">5.1.1. Prueba con carga baja</a></li>
-<li><a href="#org853a4f7">5.1.2. Prueba con mayor carga</a></li>
-<li><a href="#org95a95cb">5.1.3. Resumen de métricas de Artillery</a></li>
+<li><a href="#orgd94e726">5.1.1. Prueba con carga baja</a></li>
+<li><a href="#orgbac8c8a">5.1.2. Prueba con mayor carga</a></li>
+<li><a href="#orgf3fcc7d">5.1.3. Resumen de métricas de Artillery</a></li>
 </ul>
 </li>
-<li><a href="#orgc9bae47">5.2. Screenshots de dashboards.</a></li>
-<li><a href="#org3feb39e">5.3. Interpretación de resultados.</a></li>
+<li><a href="#orgb92b71a">5.2. Screenshots de dashboards.</a></li>
+<li><a href="#orgb931840">5.3. Interpretación de resultados.</a></li>
 </ul>
 </li>
-<li><a href="#orgb6090aa">6. Propuestas de mejora</a>
+<li><a href="#orga3681a9">6. Propuestas de mejora</a>
 <ul>
-<li><a href="#org1fe0b95">6.1. Tácticas aplicadas.</a>
+<li><a href="#orgce97441">6.1. Tácticas aplicadas.</a>
 <ul>
-<li><a href="#org8d181ae">6.1.1. Implementación de Valkey para persistencia</a></li>
-<li><a href="#orgee5e148">6.1.2. Configuración en Docker Compose</a></li>
-<li><a href="#org30ca278">6.1.3. Beneficios para escalabilidad horizontal</a></li>
+<li><a href="#orgd258b74">6.1.1. Implementación de Valkey para persistencia</a></li>
+<li><a href="#org73eaaf9">6.1.2. Configuración en Docker Compose</a></li>
+<li><a href="#orgfbafb5b">6.1.3. Beneficios para escalabilidad horizontal</a></li>
+<li><a href="#org115c2d3">6.1.4. Implementación de PostgreSQL para persistencia y escalabilidad horizontal</a></li>
+<li><a href="#orgcc244fd">6.1.5. Configuración en Docker Compose</a></li>
+<li><a href="#org4b18c64">6.1.6. Configuración de Load Balancing en Nginx</a></li>
+<li><a href="#org93170af">6.1.7. Beneficios para escalabilidad, disponibilidad y performance</a></li>
 </ul>
 </li>
-<li><a href="#org7d6be58">6.2. Justificación de por qué se eligieron.</a></li>
-<li><a href="#org5c34140">6.3. Diagramas C&amp;C modificados.</a></li>
+<li><a href="#org76dfb5f">6.2. Justificación de por qué se eligieron.</a></li>
+<li><a href="#orgc54a1f1">6.3. Diagramas C&amp;C modificados.</a></li>
+<li><a href="#org6204382">6.4. Diagrama C&amp;C con PostgreSQL.</a></li>
 </ul>
 </li>
-<li><a href="#org318c466">7. Resultados – Casos mejorados</a>
+<li><a href="#orgd3f582f">7. Resultados – Casos mejorados</a>
 <ul>
-<li><a href="#orgdfce313">7.1. Screenshots comparativos.</a></li>
-<li><a href="#orge3771a1">7.2. Análisis de impacto sobre QA.</a></li>
-<li><a href="#org1fac496">7.3. Trade-offs detectados.</a></li>
+<li><a href="#orgccc4827">7.1. Screenshots comparativos.</a></li>
+<li><a href="#orge8b4586">7.2. Análisis de impacto sobre QA.</a></li>
+<li><a href="#org499e04c">7.3. Trade-offs detectados.</a></li>
 </ul>
 </li>
-<li><a href="#org66efa96">8. Conclusiones</a>
+<li><a href="#org99d40a7">8. Conclusiones</a>
 <ul>
-<li><a href="#org7afb72f">8.1. Resumen de hallazgos.</a></li>
-<li><a href="#org8767508">8.2. Beneficios y limitaciones de las mejoras.</a></li>
-<li><a href="#orgbd6aa40">8.3. Futuro (ej: pasar a DB externa en TP2).</a></li>
+<li><a href="#org0b2f752">8.1. Resumen de hallazgos.</a></li>
+<li><a href="#org310d143">8.2. Beneficios y limitaciones de las mejoras.</a></li>
+<li><a href="#org5f57685">8.3. Futuro (ej: pasar a DB externa en TP2).</a></li>
 </ul>
 </li>
-<li><a href="#orgdc013c7">9. Anexos</a>
+<li><a href="#orgaee723f">9. Anexos</a>
 <ul>
-<li><a href="#org373a367">9.1. Configuraciones de escenarios de Artillery.</a></li>
-<li><a href="#orge8832ef">9.2. Configs modificadas de Nginx, Docker Compose, etc.</a></li>
+<li><a href="#org03cf05f">9.1. Configuraciones de escenarios de Artillery.</a></li>
+<li><a href="#orgbd09a76">9.2. Configs modificadas de Nginx, Docker Compose, etc.</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org51af80b" class="outline-2">
-<h2 id="org51af80b"><span class="section-number-2">1.</span> Introducción</h2>
+<div id="outline-container-orgd55b8d1" class="outline-2">
+<h2 id="orgd55b8d1"><span class="section-number-2">1.</span> Introducción</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org26a4cbc" class="outline-3">
-<h3 id="org26a4cbc"><span class="section-number-3">1.1.</span> Contexto (startup arVault).</h3>
+<div id="outline-container-org946edde" class="outline-3">
+<h3 id="org946edde"><span class="section-number-3">1.1.</span> Contexto (startup arVault).</h3>
 </div>
 
-<div id="outline-container-org7813464" class="outline-3">
-<h3 id="org7813464"><span class="section-number-3">1.2.</span> Objetivos del TP.</h3>
+<div id="outline-container-org2005e09" class="outline-3">
+<h3 id="org2005e09"><span class="section-number-3">1.2.</span> Objetivos del TP.</h3>
 </div>
 
-<div id="outline-container-org0acdb18" class="outline-3">
-<h3 id="org0acdb18"><span class="section-number-3">1.3.</span> Alcance del análisis.</h3>
+<div id="outline-container-orgaec5ed7" class="outline-3">
+<h3 id="orgaec5ed7"><span class="section-number-3">1.3.</span> Alcance del análisis.</h3>
 </div>
 </div>
-<div id="outline-container-orgf8cd1de" class="outline-2">
-<h2 id="orgf8cd1de"><span class="section-number-2">2.</span> Atributos de calidad (QA) identificados</h2>
+<div id="outline-container-org345e074" class="outline-2">
+<h2 id="org345e074"><span class="section-number-2">2.</span> Atributos de calidad (QA) identificados</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org44c901e" class="outline-3">
-<h3 id="org44c901e"><span class="section-number-3">2.1.</span> Disponibilidad</h3>
+<div id="outline-container-orgf2c10c6" class="outline-3">
+<h3 id="orgf2c10c6"><span class="section-number-3">2.1.</span> Disponibilidad</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Al ser un servicio de exchange de monedas, asumimos que es un servicio que se utiliza durante todos los dias habiles de la semana en horario cambiario. Por lo tanto, es importante que el servicio se encuentre disponible durante esos horarios para no perder clientes.
@@ -151,8 +156,8 @@ Además, dado el contexto en el que queremos recuperar la confianza de los usuar
 </p>
 </div>
 </div>
-<div id="outline-container-org4176c0d" class="outline-3">
-<h3 id="org4176c0d"><span class="section-number-3">2.2.</span> Escalabilidad (Elasticidad)</h3>
+<div id="outline-container-orgd9ab296" class="outline-3">
+<h3 id="orgd9ab296"><span class="section-number-3">2.2.</span> Escalabilidad (Elasticidad)</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 La escalabilidad, y en particular la elasticidad, constituyen un atributo de calidad crítico para el servicio de intercambios de arVault. Esto se debe a que la infraestructura del sistema debe ser capaz de adaptarse dinámicamente a variaciones en la demanda de usuarios.
@@ -167,8 +172,8 @@ Si el sistema careciera de elasticidad, estos picos de operaciones de cambio de 
 </p>
 </div>
 </div>
-<div id="outline-container-org375e29f" class="outline-3">
-<h3 id="org375e29f"><span class="section-number-3">2.3.</span> Performance</h3>
+<div id="outline-container-orgeade138" class="outline-3">
+<h3 id="orgeade138"><span class="section-number-3">2.3.</span> Performance</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 El atributo de calidad Performance, y en particular el User-Perceived Performance, adquiere relevancia crítica en el servicio de intercambio de monedas de arVault, para sustentar esta afirmación nos basamos en el siguiente análisis del contexto y antecedentes brindados:
@@ -187,16 +192,16 @@ Por ello, la mejora del User-Perceived Performance se presenta como un paso impr
 </p>
 </div>
 </div>
-<div id="outline-container-orged5ac14" class="outline-3">
-<h3 id="orged5ac14"><span class="section-number-3">2.4.</span> Visibilidad</h3>
+<div id="outline-container-org03477c0" class="outline-3">
+<h3 id="org03477c0"><span class="section-number-3">2.4.</span> Visibilidad</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 El valor de este atributo de calidad es más indirecto pero estratégico pues permite entender el comportamiento real del sistema, identificar cuellos de botella de performance, localizar errores en operaciones de cambio y detectar patrones de saturación que anticipen problemas de disponibilidad o escalabilidad. Es decir, la visibilidad no impacta de forma inmediata en la experiencia del usuario, pero habilita a los arquitectos y al equipo técnico a diagnosticar, mejorar y sostener los otros atributos de calidad prioritarios.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb08b0cd" class="outline-3">
-<h3 id="orgb08b0cd"><span class="section-number-3">2.5.</span> Seguridad</h3>
+<div id="outline-container-org675db46" class="outline-3">
+<h3 id="org675db46"><span class="section-number-3">2.5.</span> Seguridad</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 Es fundamental que el sistema sea seguro para evitar posibles ataques que puedan comprometer la integridad del sistema, la privacidad de los datos de los clientes o perdida/robo de dinero. Incluso pensando que debemos tambien tener en cuenta marcos regulatorios sobre el manejo de datos personales y financieros. Tambien entendemos del enunciado que es importante la reputacion del sistema, y esto podria verse muy dañado en caso de que haya una brecha de seguridad.
@@ -204,20 +209,20 @@ Es fundamental que el sistema sea seguro para evitar posibles ataques que puedan
 </div>
 </div>
 </div>
-<div id="outline-container-org604c32c" class="outline-2">
-<h2 id="org604c32c"><span class="section-number-2">3.</span> Arquitectura base</h2>
+<div id="outline-container-org25aea03" class="outline-2">
+<h2 id="org25aea03"><span class="section-number-2">3.</span> Arquitectura base</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org1a1ca12" class="outline-3">
-<h3 id="org1a1ca12"><span class="section-number-3">3.1.</span> Análisis de la influencia de decisiones de diseño en los QA's</h3>
+<div id="outline-container-orgc0175a3" class="outline-3">
+<h3 id="orgc0175a3"><span class="section-number-3">3.1.</span> Análisis de la influencia de decisiones de diseño en los QA's</h3>
 <div class="outline-text-3" id="text-3-1">
 </div>
-<div id="outline-container-org363e0ef" class="outline-4">
-<h4 id="org363e0ef"><span class="section-number-4">3.1.1.</span> Disponibilidad</h4>
+<div id="outline-container-orgcc6e816" class="outline-4">
+<h4 id="orgcc6e816"><span class="section-number-4">3.1.1.</span> Disponibilidad</h4>
 <div class="outline-text-4" id="text-3-1-1">
 </div>
 <ol class="org-ol">
-<li><a id="org19ee184"></a><b><b>Puntos únicos de falla (únicas instancias de servicios) y su impacto</b></b><br />
+<li><a id="org79ddbe1"></a><b><b>Puntos únicos de falla (únicas instancias de servicios) y su impacto</b></b><br />
 <div class="outline-text-5" id="text-3-1-1-1">
 <p>
 Analizando las decisiones de diseño tomadas por el desarollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
@@ -253,7 +258,7 @@ Actualmente la aplicación utiliza archivos JSON locales para la persistencia, e
 </ol>
 </div>
 </li>
-<li><a id="orgb2b0b39"></a><b><b>Arquitectura monolítica y su impacto</b></b><br />
+<li><a id="org27f757c"></a><b><b>Arquitectura monolítica y su impacto</b></b><br />
 <div class="outline-text-5" id="text-3-1-1-2">
 <p>
 Al analizar la estructura lógica del sistema, se observa que este responde a un patrón <b><b>monolítico</b></b>, en el cual toda la lógica de negocio, el manejo de estado y la persistencia de datos se concentran en un solo bloque sin separación clara de responsabilidades ni interfaces desacopladas. Este diseño acarrea consecuencias directas sobre la <b><b>Disponibilidad</b></b>, entre las que se destacan:
@@ -274,7 +279,7 @@ Al no existir modularidad ni servicios independientes, no es posible escalar ni 
 </p>
 </div>
 </li>
-<li><a id="orgbeee49f"></a><b><b>Carencia de uso de transacciones y su impacto</b></b><br />
+<li><a id="org3e35f29"></a><b><b>Carencia de uso de transacciones y su impacto</b></b><br />
 <div class="outline-text-5" id="text-3-1-1-3">
 <p>
 Otro aspecto crítico identificado es la ausencia de un sistema de <b><b>transacciones confiables</b></b> para el manejo de operaciones financieras (por ejemplo, conversiones entre diferentes monedas). Actualmente, la persistencia de datos se basa en archivos JSON locales, sin soporte nativo para propiedades ACID.
@@ -291,7 +296,7 @@ En conclusión, la carencia de un sistema de transacciones robusto aumenta signi
 </p>
 </div>
 </li>
-<li><a id="org2e11b08"></a><b><b>Otras decisiones de diseño con impacto indirecto en la disponibilidad</b></b><br />
+<li><a id="orgc20c160"></a><b><b>Otras decisiones de diseño con impacto indirecto en la disponibilidad</b></b><br />
 <div class="outline-text-5" id="text-3-1-1-4">
 <p>
 Existen además otras decisiones de diseño que, si bien no afectan a la <b><b>Disponibilidad</b></b> de manera directa, sí lo hacen de forma indirecta al influir en atributos de calidad relacionados:
@@ -312,102 +317,102 @@ Estas decisiones se abordarán en mayor detalle en las secciones correspondiente
 </li>
 </ol>
 </div>
-<div id="outline-container-org65205c9" class="outline-4">
-<h4 id="org65205c9"><span class="section-number-4">3.1.2.</span> Escalabilidad (Elasticidad)</h4>
+<div id="outline-container-org21619d7" class="outline-4">
+<h4 id="org21619d7"><span class="section-number-4">3.1.2.</span> Escalabilidad (Elasticidad)</h4>
 <div class="outline-text-4" id="text-3-1-2">
 <p>
 Actualmente hay un Nginx que actua como reverse proxy y potencialmente balanceador de carga, pero en este momento solo tiene configurado una sola instancia de la app de Node.js. De todas formas, notamos varios problemas con esto. En principio, la app es <span class="underline">stateful</span> porque guarda el estado en memoria y guarda cada tantos segundos el estado de la memoria en distintos archivos json en la carpeta <code>state/</code>. Esto hace que no se pueda escalar horizontalmente la app sin perder el estado, ya que cada instancia tendria su propio estado en memoria y no habria forma de sincronizarlos.
 </p>
 </div>
 </div>
-<div id="outline-container-orgc882e6b" class="outline-4">
-<h4 id="orgc882e6b"><span class="section-number-4">3.1.3.</span> Performance</h4>
+<div id="outline-container-orga83e45a" class="outline-4">
+<h4 id="orga83e45a"><span class="section-number-4">3.1.3.</span> Performance</h4>
 </div>
 
-<div id="outline-container-org576fef5" class="outline-4">
-<h4 id="org576fef5"><span class="section-number-4">3.1.4.</span> Visibilidad:</h4>
+<div id="outline-container-orgf83e17f" class="outline-4">
+<h4 id="orgf83e17f"><span class="section-number-4">3.1.4.</span> Visibilidad:</h4>
 <div class="outline-text-4" id="text-3-1-4">
 <p>
 Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas metricas en un dashboard creado por la catedra que permite visualizar algunas metricas como Scenarios launched, Request state, Response time y Resources. Faltarian metricas mas especificas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
 </p>
 </div>
 </div>
-<div id="outline-container-org0d836a1" class="outline-4">
-<h4 id="org0d836a1"><span class="section-number-4">3.1.5.</span> Seguridad</h4>
+<div id="outline-container-orgd684edb" class="outline-4">
+<h4 id="orgd684edb"><span class="section-number-4">3.1.5.</span> Seguridad</h4>
 </div>
 
-<div id="outline-container-org4ba7278" class="outline-4">
-<h4 id="org4ba7278"><span class="section-number-4">3.1.6.</span> Testabilidad</h4>
+<div id="outline-container-org61e2950" class="outline-4">
+<h4 id="org61e2950"><span class="section-number-4">3.1.6.</span> Testabilidad</h4>
 </div>
 
-<div id="outline-container-orgd438aa5" class="outline-4">
-<h4 id="orgd438aa5"><span class="section-number-4">3.1.7.</span> Portabilidad</h4>
+<div id="outline-container-org5646ed9" class="outline-4">
+<h4 id="org5646ed9"><span class="section-number-4">3.1.7.</span> Portabilidad</h4>
 </div>
 
-<div id="outline-container-org91241d6" class="outline-4">
-<h4 id="org91241d6"><span class="section-number-4">3.1.8.</span> Interoperabilidad</h4>
+<div id="outline-container-orge2d728b" class="outline-4">
+<h4 id="orge2d728b"><span class="section-number-4">3.1.8.</span> Interoperabilidad</h4>
 </div>
 
-<div id="outline-container-org6be59e1" class="outline-4">
-<h4 id="org6be59e1"><span class="section-number-4">3.1.9.</span> Usabilidad</h4>
+<div id="outline-container-orgfbfce11" class="outline-4">
+<h4 id="orgfbfce11"><span class="section-number-4">3.1.9.</span> Usabilidad</h4>
 </div>
 
-<div id="outline-container-org34788f0" class="outline-4">
-<h4 id="org34788f0"><span class="section-number-4">3.1.10.</span> Manejabilidad</h4>
+<div id="outline-container-org3122b5c" class="outline-4">
+<h4 id="org3122b5c"><span class="section-number-4">3.1.10.</span> Manejabilidad</h4>
 </div>
 
-<div id="outline-container-org4c079a8" class="outline-4">
-<h4 id="org4c079a8"><span class="section-number-4">3.1.11.</span> Confiabilidad</h4>
+<div id="outline-container-orgac3888a" class="outline-4">
+<h4 id="orgac3888a"><span class="section-number-4">3.1.11.</span> Confiabilidad</h4>
 </div>
 
-<div id="outline-container-orgf51bbc6" class="outline-4">
-<h4 id="orgf51bbc6"><span class="section-number-4">3.1.12.</span> Simplicidad</h4>
+<div id="outline-container-orge47e931" class="outline-4">
+<h4 id="orge47e931"><span class="section-number-4">3.1.12.</span> Simplicidad</h4>
 </div>
 
-<div id="outline-container-orgb0f9a5d" class="outline-4">
-<h4 id="orgb0f9a5d"><span class="section-number-4">3.1.13.</span> Modificabilidad</h4>
+<div id="outline-container-org44d574e" class="outline-4">
+<h4 id="org44d574e"><span class="section-number-4">3.1.13.</span> Modificabilidad</h4>
 </div>
 </div>
-<div id="outline-container-org3ee7576" class="outline-3">
-<h3 id="org3ee7576"><span class="section-number-3">3.2.</span> Diagrama C&amp;C inicial.</h3>
+<div id="outline-container-orga192866" class="outline-3">
+<h3 id="orga192866"><span class="section-number-3">3.2.</span> Diagrama C&amp;C inicial.</h3>
 <div class="outline-text-3" id="text-3-2">
 
-<div id="orgd72de4c" class="figure">
+<div id="org32032cc" class="figure">
 <p><img src="assets/componentes.png" alt="componentes.png" />
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgd0c6b26" class="outline-3">
-<h3 id="orgd0c6b26"><span class="section-number-3">3.3.</span> Crítica a arquitectura base.</h3>
+<div id="outline-container-org841354f" class="outline-3">
+<h3 id="org841354f"><span class="section-number-3">3.3.</span> Crítica a arquitectura base.</h3>
 </div>
 </div>
-<div id="outline-container-org0bd21c0" class="outline-2">
-<h2 id="org0bd21c0"><span class="section-number-2">4.</span> Metodología de pruebas</h2>
+<div id="outline-container-orgdeaef5a" class="outline-2">
+<h2 id="orgdeaef5a"><span class="section-number-2">4.</span> Metodología de pruebas</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgc8bf49f" class="outline-3">
-<h3 id="orgc8bf49f"><span class="section-number-3">4.1.</span> Herramientas usadas (Artillery, Grafana, etc.).</h3>
+<div id="outline-container-org8157929" class="outline-3">
+<h3 id="org8157929"><span class="section-number-3">4.1.</span> Herramientas usadas (Artillery, Grafana, etc.).</h3>
 </div>
 
-<div id="outline-container-orgc69acc7" class="outline-3">
-<h3 id="orgc69acc7"><span class="section-number-3">4.2.</span> Escenarios de carga diseñados.</h3>
+<div id="outline-container-org7afd8c3" class="outline-3">
+<h3 id="org7afd8c3"><span class="section-number-3">4.2.</span> Escenarios de carga diseñados.</h3>
 </div>
 
-<div id="outline-container-org84e200d" class="outline-3">
-<h3 id="org84e200d"><span class="section-number-3">4.3.</span> Métricas recolectadas.</h3>
+<div id="outline-container-org00d3c1d" class="outline-3">
+<h3 id="org00d3c1d"><span class="section-number-3">4.3.</span> Métricas recolectadas.</h3>
 </div>
 </div>
-<div id="outline-container-org60d896d" class="outline-2">
-<h2 id="org60d896d"><span class="section-number-2">5.</span> Resultados – Caso base</h2>
+<div id="outline-container-org5cf1174" class="outline-2">
+<h2 id="org5cf1174"><span class="section-number-2">5.</span> Resultados – Caso base</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-orgd223fb9" class="outline-3">
-<h3 id="orgd223fb9"><span class="section-number-3">5.1.</span> Análisis del endpoint Rates</h3>
+<div id="outline-container-org1748538" class="outline-3">
+<h3 id="org1748538"><span class="section-number-3">5.1.</span> Análisis del endpoint Rates</h3>
 <div class="outline-text-3" id="text-5-1">
 </div>
-<div id="outline-container-org338abca" class="outline-4">
-<h4 id="org338abca"><span class="section-number-4">5.1.1.</span> Prueba con carga baja</h4>
+<div id="outline-container-orgd94e726" class="outline-4">
+<h4 id="orgd94e726"><span class="section-number-4">5.1.1.</span> Prueba con carga baja</h4>
 <div class="outline-text-4" id="text-5-1-1">
 <p>
 Se realiza una prueba de carga con los siguientes parámetros usando la herramienta Artillery:
@@ -426,10 +431,10 @@ Se realiza una prueba de carga con los siguientes parámetros usando la herramie
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="org0be92ae"></a>Resultados observados<br />
+<li><a id="org41e86ee"></a>Resultados observados<br />
 <div class="outline-text-5" id="text-5-1-1-1">
 
-<div id="org0ef2583" class="figure">
+<div id="org452782e" class="figure">
 <p><img src="./assets/rates1rps.png" alt="rates1rps.png" />
 </p>
 </div>
@@ -439,7 +444,7 @@ Para el escenario con una carga baja se observa el crecimiento sostenido y un po
 </p>
 
 
-<div id="org7b0d2b4" class="figure">
+<div id="org0e21857" class="figure">
 <p><img src="./assets/rates1state.png" alt="rates1state.png" />
 </p>
 </div>
@@ -449,7 +454,7 @@ También se logra observar que en un escenario con carga baja, el servidor consi
 </p>
 
 
-<div id="org81b55ab" class="figure">
+<div id="orgf8f9db8" class="figure">
 <p><img src="./assets/rates1rpt.png" alt="rates1rpt.png" />
 </p>
 </div>
@@ -459,7 +464,7 @@ Del lado del cliente se aprecian dos medidas en el tiempo de respuesta, el máxi
 </p>
 
 
-<div id="orgd282702" class="figure">
+<div id="org3344194" class="figure">
 <p><img src="./assets/rates1resources.png" alt="rates1resources.png" />
 </p>
 </div>
@@ -475,8 +480,8 @@ En conclusión, analizando los gráficos y leyendo el resumen dado del comportam
 </li>
 </ol>
 </div>
-<div id="outline-container-org853a4f7" class="outline-4">
-<h4 id="org853a4f7"><span class="section-number-4">5.1.2.</span> Prueba con mayor carga</h4>
+<div id="outline-container-orgbac8c8a" class="outline-4">
+<h4 id="orgbac8c8a"><span class="section-number-4">5.1.2.</span> Prueba con mayor carga</h4>
 <div class="outline-text-4" id="text-5-1-2">
 <p>
 A continuación se realiza una prueba de estrés más intensa sobre la API, específicamente en el endpoint <code>rates</code>, con el objetivo de analizar el comportamiento del sistema bajo condiciones de alta demanda y cómo esto impacta en los atributos de calidad, tales como disponibilidad, rendimiento y uso de recursos.
@@ -503,10 +508,10 @@ Para esto se recurre nuevamente a la herramienta Artillery, esta vez modificando
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="org05fe2ff"></a>Resultados observados<br />
+<li><a id="org8035d08"></a>Resultados observados<br />
 <div class="outline-text-5" id="text-5-1-2-1">
 
-<div id="org2ac89ea" class="figure">
+<div id="orgdc4257a" class="figure">
 <p><img src="./assets/rates2rps.png" alt="rates2rps.png" />
 </p>
 </div>
@@ -516,7 +521,7 @@ En un escenario de mayor carga se observa un crecimiento sostenido en la cantida
 </p>
 
 
-<div id="orgbec8be7" class="figure">
+<div id="org606c71f" class="figure">
 <p><img src="./assets/rates2state.png" alt="rates2state.png" />
 </p>
 </div>
@@ -526,7 +531,7 @@ En cambio, en el gráfico del estado de las respuestas se observa un crecimiento
 </p>
 
 
-<div id="org2c923be" class="figure">
+<div id="org0b50dfd" class="figure">
 <p><img src="./assets/rates2rpt.png" alt="rates2rpt.png" />
 </p>
 </div>
@@ -536,7 +541,7 @@ Para el tiempo de respuestas se observa que una vez el servidor empieza a respon
 </p>
 
 
-<div id="org959bc5f" class="figure">
+<div id="orga42a8fc" class="figure">
 <p><img src="./assets/rates2resources.png" alt="rates2resources.png" />
 </p>
 </div>
@@ -546,7 +551,7 @@ A su vez, los resultados observados para los recursos utilizados, en primer luga
 </p>
 </div>
 </li>
-<li><a id="org9691136"></a>Conclusión<br />
+<li><a id="orgab45b3b"></a>Conclusión<br />
 <div class="outline-text-5" id="text-5-1-2-2">
 <p>
 En conclusión en un escenario de carga alta el servidor no es capaz de atender a todos los clientes de manera eficiente y afectando completamente la disponibilidad del servicio, el cual es un atributo de calidad clave y uno de los que se desea mejorar para incrementar la percepción positiva de la aplicación por parte de los clientes.
@@ -555,8 +560,8 @@ En conclusión en un escenario de carga alta el servidor no es capaz de atender 
 </li>
 </ol>
 </div>
-<div id="outline-container-org95a95cb" class="outline-4">
-<h4 id="org95a95cb"><span class="section-number-4">5.1.3.</span> Resumen de métricas de Artillery</h4>
+<div id="outline-container-orgf3fcc7d" class="outline-4">
+<h4 id="orgf3fcc7d"><span class="section-number-4">5.1.3.</span> Resumen de métricas de Artillery</h4>
 <div class="outline-text-4" id="text-5-1-3">
 <p>
 Para la prueba de carga baja (salidarates1.txt):
@@ -580,27 +585,27 @@ Para la prueba de carga alta (salidarates2.txt):
 </div>
 </div>
 </div>
-<div id="outline-container-orgc9bae47" class="outline-3">
-<h3 id="orgc9bae47"><span class="section-number-3">5.2.</span> Screenshots de dashboards.</h3>
+<div id="outline-container-orgb92b71a" class="outline-3">
+<h3 id="orgb92b71a"><span class="section-number-3">5.2.</span> Screenshots de dashboards.</h3>
 </div>
 
-<div id="outline-container-org3feb39e" class="outline-3">
-<h3 id="org3feb39e"><span class="section-number-3">5.3.</span> Interpretación de resultados.</h3>
+<div id="outline-container-orgb931840" class="outline-3">
+<h3 id="orgb931840"><span class="section-number-3">5.3.</span> Interpretación de resultados.</h3>
 </div>
 </div>
-<div id="outline-container-orgb6090aa" class="outline-2">
-<h2 id="orgb6090aa"><span class="section-number-2">6.</span> Propuestas de mejora</h2>
+<div id="outline-container-orga3681a9" class="outline-2">
+<h2 id="orga3681a9"><span class="section-number-2">6.</span> Propuestas de mejora</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org1fe0b95" class="outline-3">
-<h3 id="org1fe0b95"><span class="section-number-3">6.1.</span> Tácticas aplicadas.</h3>
+<div id="outline-container-orgce97441" class="outline-3">
+<h3 id="orgce97441"><span class="section-number-3">6.1.</span> Tácticas aplicadas.</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Intentamos agregar una base de datos tipo Redis (específicamente Valkey, un fork de Redis) para tener persistencia real y poder escalar horizontalmente los nodos. Esta solución aborda los problemas de la persistencia basada en archivos JSON locales, que no permiten compartir estado entre instancias y carecen de atomicidad en las operaciones.
 </p>
 </div>
-<div id="outline-container-org8d181ae" class="outline-4">
-<h4 id="org8d181ae"><span class="section-number-4">6.1.1.</span> Implementación de Valkey para persistencia</h4>
+<div id="outline-container-orgd258b74" class="outline-4">
+<h4 id="orgd258b74"><span class="section-number-4">6.1.1.</span> Implementación de Valkey para persistencia</h4>
 <div class="outline-text-4" id="text-6-1-1">
 <p>
 La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Los datos se almacenan como claves en Redis:
@@ -621,16 +626,16 @@ En <code>exchange.js</code>, se importa y utiliza este módulo para todas las op
 </p>
 </div>
 </div>
-<div id="outline-container-orgee5e148" class="outline-4">
-<h4 id="orgee5e148"><span class="section-number-4">6.1.2.</span> Configuración en Docker Compose</h4>
+<div id="outline-container-org73eaaf9" class="outline-4">
+<h4 id="org73eaaf9"><span class="section-number-4">6.1.2.</span> Configuración en Docker Compose</h4>
 <div class="outline-text-4" id="text-6-1-2">
 <p>
 Se agregó un servicio <code>valkey</code> en el <code>docker-compose.yml</code> utilizando la imagen <code>valkey/valkey:8.1.4-alpine</code>, expuesto en el puerto 6379. La aplicación se conecta mediante la variable de entorno <code>VALKEY_URL=redis://valkey:6379</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org30ca278" class="outline-4">
-<h4 id="org30ca278"><span class="section-number-4">6.1.3.</span> Beneficios para escalabilidad horizontal</h4>
+<div id="outline-container-orgfbafb5b" class="outline-4">
+<h4 id="orgfbafb5b"><span class="section-number-4">6.1.3.</span> Beneficios para escalabilidad horizontal</h4>
 <div class="outline-text-4" id="text-6-1-3">
 <p>
 Al centralizar el estado en Valkey, múltiples instancias de la API pueden compartir el mismo almacén de datos. Esto elimina la dependencia de estado local en memoria o archivos, permitiendo:
@@ -647,69 +652,133 @@ Esta táctica mejora significativamente la Disponibilidad y Escalabilidad, mitig
 </p>
 </div>
 </div>
+<div id="outline-container-org115c2d3" class="outline-4">
+<h4 id="org115c2d3"><span class="section-number-4">6.1.4.</span> Implementación de PostgreSQL para persistencia y escalabilidad horizontal</h4>
+<div class="outline-text-4" id="text-6-1-4">
+<p>
+La implementación utiliza PostgreSQL como almacén de datos relacional, reemplazando la persistencia en archivos JSON y Valkey. Las tablas creadas son:
+</p>
+
+<ul class="org-ul">
+<li><code>accounts</code>: Almacena las cuentas de usuario con campos como id, currency, balance, created<sub>at</sub>, updated<sub>at</sub>, deleted.</li>
+<li><code>exchange_rates</code>: Contiene las tasas de cambio entre monedas con base<sub>currency</sub>, counter<sub>currency</sub>, rate, updated<sub>at</sub>.</li>
+<li><code>transactions</code>: Registra el historial de transacciones realizadas, con soporte para atomicidad en operaciones de intercambio.</li>
+</ul>
+
+<p>
+El módulo <code>databaseAdapter.js</code> proporciona funciones para conectarse a PostgreSQL usando el paquete <code>pg</code>, manejando conexiones y transacciones. Los modelos en <code>models/</code> (Account, ExchangeRate, Transaction) manejan las operaciones CRUD con soporte para transacciones ACID.
+</p>
+
+<p>
+En <code>exchange.js</code>, se utilizan estos modelos para todas las operaciones financieras, incluyendo transacciones atómicas para intercambios que requieren consistencia (ej. actualizar balances y registrar transacción en una sola operación).
+</p>
 </div>
-<div id="outline-container-org7d6be58" class="outline-3">
-<h3 id="org7d6be58"><span class="section-number-3">6.2.</span> Justificación de por qué se eligieron.</h3>
+</div>
+<div id="outline-container-orgcc244fd" class="outline-4">
+<h4 id="orgcc244fd"><span class="section-number-4">6.1.5.</span> Configuración en Docker Compose</h4>
+<div class="outline-text-4" id="text-6-1-5">
+<p>
+Se agregó un servicio <code>postgres</code> en el <code>docker-compose.yml</code> utilizando la imagen <code>postgres:15-alpine</code>, con inicialización de la base de datos mediante el script <code>01-init.sql</code> que crea las tablas, índices y datos iniciales.
+</p>
+
+<p>
+Se configuraron tres instancias de la API (<code>api1</code>, <code>api2</code>, <code>api3</code>) conectadas a PostgreSQL, permitiendo escalado horizontal sin pérdida de estado.
+</p>
+</div>
+</div>
+<div id="outline-container-org4b18c64" class="outline-4">
+<h4 id="org4b18c64"><span class="section-number-4">6.1.6.</span> Configuración de Load Balancing en Nginx</h4>
+<div class="outline-text-4" id="text-6-1-6">
+<p>
+Se actualizó <code>nginx_reverse_proxy.conf</code> para balancear carga entre las tres instancias de API utilizando un bloque <code>upstream</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-org93170af" class="outline-4">
+<h4 id="org93170af"><span class="section-number-4">6.1.7.</span> Beneficios para escalabilidad, disponibilidad y performance</h4>
+<div class="outline-text-4" id="text-6-1-7">
+<p>
+Al centralizar el estado en PostgreSQL con transacciones ACID, múltiples instancias pueden compartir el mismo almacén de datos de forma consistente y atómica. Esto elimina dependencias de estado local, permite escalado horizontal sin pérdida de consistencia, y asegura atomicidad en operaciones financieras críticas, mejorando la integridad de datos.
+</p>
+
+<p>
+Esta táctica mejora significativamente la Disponibilidad (reduciendo puntos únicos de falla en persistencia), Escalabilidad (permitiendo más nodos con estado compartido), y Performance (con transacciones eficientes, concurrencia controlada y consultas optimizadas con índices).
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org76dfb5f" class="outline-3">
+<h3 id="org76dfb5f"><span class="section-number-3">6.2.</span> Justificación de por qué se eligieron.</h3>
 </div>
 
-<div id="outline-container-org5c34140" class="outline-3">
-<h3 id="org5c34140"><span class="section-number-3">6.3.</span> Diagramas C&amp;C modificados.</h3>
+<div id="outline-container-orgc54a1f1" class="outline-3">
+<h3 id="orgc54a1f1"><span class="section-number-3">6.3.</span> Diagramas C&amp;C modificados.</h3>
 <div class="outline-text-3" id="text-6-3">
 
-<div id="org72498ab" class="figure">
+<div id="org7203695" class="figure">
 <p><img src="assets/componentes-modificados.png" alt="componentes-modificados.png" />
 </p>
 </div>
 </div>
 </div>
+<div id="outline-container-org6204382" class="outline-3">
+<h3 id="org6204382"><span class="section-number-3">6.4.</span> Diagrama C&amp;C con PostgreSQL.</h3>
+<div class="outline-text-3" id="text-6-4">
+
+<div id="orga8ade43" class="figure">
+<p><img src="assets/componentes-postgresql.png" alt="componentes-postgresql.png" />
+</p>
 </div>
-<div id="outline-container-org318c466" class="outline-2">
-<h2 id="org318c466"><span class="section-number-2">7.</span> Resultados – Casos mejorados</h2>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd3f582f" class="outline-2">
+<h2 id="orgd3f582f"><span class="section-number-2">7.</span> Resultados – Casos mejorados</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-orgdfce313" class="outline-3">
-<h3 id="orgdfce313"><span class="section-number-3">7.1.</span> Screenshots comparativos.</h3>
+<div id="outline-container-orgccc4827" class="outline-3">
+<h3 id="orgccc4827"><span class="section-number-3">7.1.</span> Screenshots comparativos.</h3>
 </div>
 
-<div id="outline-container-orge3771a1" class="outline-3">
-<h3 id="orge3771a1"><span class="section-number-3">7.2.</span> Análisis de impacto sobre QA.</h3>
+<div id="outline-container-orge8b4586" class="outline-3">
+<h3 id="orge8b4586"><span class="section-number-3">7.2.</span> Análisis de impacto sobre QA.</h3>
 </div>
 
-<div id="outline-container-org1fac496" class="outline-3">
-<h3 id="org1fac496"><span class="section-number-3">7.3.</span> Trade-offs detectados.</h3>
+<div id="outline-container-org499e04c" class="outline-3">
+<h3 id="org499e04c"><span class="section-number-3">7.3.</span> Trade-offs detectados.</h3>
 </div>
 </div>
-<div id="outline-container-org66efa96" class="outline-2">
-<h2 id="org66efa96"><span class="section-number-2">8.</span> Conclusiones</h2>
+<div id="outline-container-org99d40a7" class="outline-2">
+<h2 id="org99d40a7"><span class="section-number-2">8.</span> Conclusiones</h2>
 <div class="outline-text-2" id="text-8">
 </div>
-<div id="outline-container-org7afb72f" class="outline-3">
-<h3 id="org7afb72f"><span class="section-number-3">8.1.</span> Resumen de hallazgos.</h3>
+<div id="outline-container-org0b2f752" class="outline-3">
+<h3 id="org0b2f752"><span class="section-number-3">8.1.</span> Resumen de hallazgos.</h3>
 </div>
 
-<div id="outline-container-org8767508" class="outline-3">
-<h3 id="org8767508"><span class="section-number-3">8.2.</span> Beneficios y limitaciones de las mejoras.</h3>
+<div id="outline-container-org310d143" class="outline-3">
+<h3 id="org310d143"><span class="section-number-3">8.2.</span> Beneficios y limitaciones de las mejoras.</h3>
 </div>
 
-<div id="outline-container-orgbd6aa40" class="outline-3">
-<h3 id="orgbd6aa40"><span class="section-number-3">8.3.</span> Futuro (ej: pasar a DB externa en TP2).</h3>
+<div id="outline-container-org5f57685" class="outline-3">
+<h3 id="org5f57685"><span class="section-number-3">8.3.</span> Futuro (ej: pasar a DB externa en TP2).</h3>
 </div>
 </div>
-<div id="outline-container-orgdc013c7" class="outline-2">
-<h2 id="orgdc013c7"><span class="section-number-2">9.</span> Anexos</h2>
+<div id="outline-container-orgaee723f" class="outline-2">
+<h2 id="orgaee723f"><span class="section-number-2">9.</span> Anexos</h2>
 <div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-org373a367" class="outline-3">
-<h3 id="org373a367"><span class="section-number-3">9.1.</span> Configuraciones de escenarios de Artillery.</h3>
+<div id="outline-container-org03cf05f" class="outline-3">
+<h3 id="org03cf05f"><span class="section-number-3">9.1.</span> Configuraciones de escenarios de Artillery.</h3>
 </div>
 
-<div id="outline-container-orge8832ef" class="outline-3">
-<h3 id="orge8832ef"><span class="section-number-3">9.2.</span> Configs modificadas de Nginx, Docker Compose, etc.</h3>
+<div id="outline-container-orgbd09a76" class="outline-3">
+<h3 id="orgbd09a76"><span class="section-number-3">9.2.</span> Configs modificadas de Nginx, Docker Compose, etc.</h3>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-10-07 Tue 20:03</p>
+<p class="date">Created: 2025-10-07 Tue 20:16</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

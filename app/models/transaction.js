@@ -1,4 +1,5 @@
 import { query } from '../utils/database/databaseAdapter.js';
+import { nanoid } from 'nanoid';
 
 class Transaction {
   static async create(transactionData) {
@@ -33,8 +34,48 @@ class Transaction {
     return result.rows[0];
   }
 
-  static async findById(id) {
-    const result = await query('SELECT * FROM transactions WHERE id = $1', [id]);
+  static async findById(transactionId) {
+    const result = await query('SELECT * FROM transactions WHERE id = $1', [transactionId]);
+    return result.rows[0];
+  }
+
+  static async recordTransaction(
+    baseAccountId,
+    counterAccountId,
+    baseAmount,
+    exchangeRate,
+    client
+  ) {
+    const transactionId = nanoid();
+    const counterAmount = baseAmount * exchangeRate;
+    
+    const queryText = `
+      INSERT INTO transactions (
+        id,
+        base_account_id,
+        counter_account_id,
+        base_amount,
+        counter_amount,
+        exchange_rate,
+        status
+      ) VALUES ($1, $2, $3, $4, $5, $6, 'COMPLETED')
+      RETURNING *
+    `;
+
+    const queryParams = [
+      transactionId,
+      baseAccountId,
+      counterAccountId,
+      baseAmount,
+      counterAmount,
+      exchangeRate
+    ];
+
+    // Use the provided client if in a transaction, otherwise create a new connection
+    const result = client 
+      ? await client.query(queryText, queryParams)
+      : await query(queryText, queryParams);
+
     return result.rows[0];
   }
 

@@ -34,10 +34,7 @@ export async function getRates() {
 export async function getLog() {
   return Transaction.findAll();
 }
-/**
- * @returns {Promise<boolean>} True if successful
- * @throws {Error} If required parameters are missing or operation fails
- */
+
 export async function setRate(rateRequest, client) {
   const { baseCurrency, counterCurrency, rate } = rateRequest;
 
@@ -82,23 +79,31 @@ export async function setRate(rateRequest, client) {
   }
 }
 
-/**
- * Executes an atomic exchange operation between accounts
- * @param {Object} exchangeRequest - The exchange request object
- * @param {Object} [client] - Optional database client for transactions
- * @returns {Promise<Object>} The exchange result
- */
 export async function exchange(exchangeRequest, client) {
+  console.log('Exchange request received:', JSON.stringify(exchangeRequest, null, 2));
+  
   const {
     baseCurrency,
     counterCurrency,
-    baseAccountId: clientBaseAccountId,
-    counterAccountId: clientCounterAccountId,
+    baseAccountId,
+    counterAccountId,
     baseAmount,
   } = exchangeRequest;
 
-  if (!baseCurrency || !counterCurrency || !clientBaseAccountId || !clientCounterAccountId || baseAmount === undefined) {
-    throw new Error('Missing required fields in exchange request');
+  if (!baseCurrency) {
+    throw new Error('Missing baseCurrency field in exchange request');
+  }
+  if (!counterCurrency) {
+    throw new Error('Missing counterCurrency field in exchange request');
+  }
+  if (!baseAccountId) {
+    throw new Error('Missing baseAccountId field in exchange request');
+  }
+  if (!counterAccountId) {
+    throw new Error('Missing counterAccountId field in exchange request');
+  }
+  if (baseAmount === undefined) {
+    throw new Error('Missing baseAmount field in exchange request');
   }
 
   if (baseAmount <= 0) {
@@ -142,32 +147,30 @@ export async function exchange(exchangeRequest, client) {
     
     // Perform the exchange in a single transaction
     // 1. Transfer from client's account to our account (base currency)
-    if (clientBaseAccountId !== baseAccount.id) {
+    if (baseAccountId !== baseAccount.id) {
       await Account.transferFunds(
-        clientBaseAccountId,  // from: client's account
-        baseAccount.id,       // to: our account
-        baseAmount,           // amount
-        client               // transaction client
+        baseAccountId,    // from: client's account
+        baseAccount.id,   // to: our account
+        baseAmount,       // amount
+        client           // transaction client
       );
     }
 
     // 2. Transfer from our account to client's account (counter currency)
-    if (counterAccount.id !== clientCounterAccountId) {
+    if (counterAccount.id !== counterAccountId) {
       await Account.transferFunds(
-        counterAccount.id,      // from: our account
-        clientCounterAccountId, // to: client's account
-        counterAmount,          // amount
-        client                 // transaction client
+        counterAccount.id,  // from: our account
+        counterAccountId,   // to: client's account
+        counterAmount,      // amount
+        client             // transaction client
       );
     }
 
     // Record the transaction
     await Transaction.recordTransaction(
-      clientBaseAccountId,
-      clientCounterAccountId,
+      baseAccountId,
+      counterAccountId,
       baseAmount,
-      baseCurrency,
-      counterCurrency,
       exchangeRate,
       client
     );
@@ -185,13 +188,6 @@ export async function exchange(exchangeRequest, client) {
   }
 }
 
-/**
- * Simulates a transfer with a random delay between 200-400ms
- * @param {string} fromAccountId - Source account ID
- * @param {string} toAccountId - Destination account ID
- * @param {number} amount - Amount to transfer
- * @returns {Promise<boolean>} Always resolves to true after delay
- */
 async function simulateTransfer() {
   const min = 200;  // Minimum delay in ms
   const max = 400;   // Maximum delay in ms

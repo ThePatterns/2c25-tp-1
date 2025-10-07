@@ -102,56 +102,6 @@ class Account {
       throw error;
     }
   }
-
-  static async transferFunds(fromAccountId, toAccountId, amount, client = null) {
-    // Skip if same account
-    if (fromAccountId === toAccountId) {
-      throw new Error('Cannot transfer to the same account');
-    }
-
-    const queryText = `
-      WITH updated AS (
-        UPDATE accounts 
-        SET balance = CASE 
-          WHEN id = $1 THEN balance - $3
-          WHEN id = $2 THEN balance + $3
-          ELSE balance
-        END,
-            updated_at = NOW()
-        WHERE id IN ($1, $2)
-        RETURNING id, balance, currency
-      )
-      SELECT * FROM updated;
-    `;
-    
-    const values = [fromAccountId, toAccountId, amount];
-    
-    try {
-      const result = client 
-        ? await client.query(queryText, values)
-        : await query(queryText, values);
-        
-      // Check if both accounts were updated
-      const updatedAccounts = result.rows || [];
-      const updatedIds = updatedAccounts.map(acc => acc.id);
-      
-      if (updatedIds.length !== 2 || 
-          !updatedIds.includes(fromAccountId) || 
-          !updatedIds.includes(toAccountId)) {
-            
-        // Get account details for better error message
-        const fromAccount = await Account.findById(fromAccountId, client);
-        const toAccount = await Account.findById(toAccountId, client);
-        
-        throw new Error(`Transfer failed. Accounts: ${fromAccountId} (${fromAccount?.currency}) -> ${toAccountId} (${toAccount?.currency})`);
-      }
-      
-      return updatedAccounts;
-    } catch (error) {
-      console.error('Error in transferFunds:', error);
-      throw error;
-    }
-  }
 }
 
 export default Account;

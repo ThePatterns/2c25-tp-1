@@ -104,7 +104,6 @@ app.get("/log", async (req, res) => {
 });
 
 // EXCHANGE endpoint
-// FIXME: Revisar implementación que está devolviendo siempre false
 // Atomicidad implementada porque realiza múltiples operaciones: actualizar saldo de cuenta origen y destino
 // y registrar la transacción. Estas deben de suceder en su totalidad o no sin ser interrumpidas.
 app.post("/exchange", async (req, res) => {

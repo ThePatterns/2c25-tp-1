@@ -20,20 +20,19 @@ app.use(express.json());
 
 // ACCOUNT endpoints
 
-app.get("/accounts", (req, res) => {
-  res.json(getAccounts());
+app.get("/accounts", async (req, res) => {
+  res.json(await getAccounts());
 });
 
-app.put("/accounts/:id/balance", (req, res) => {
+app.put("/accounts/:id/balance", async (req, res) => {
   const accountId = req.params.id;
   const { balance } = req.body;
 
   if (!accountId || !balance) {
     return res.status(400).json({ error: "Malformed request" });
   } else {
-    setAccountBalance(accountId, balance);
-
-    res.json(getAccounts());
+    await setAccountBalance(accountId, balance);
+    res.json(await getAccounts());
   }
 });
 

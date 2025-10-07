@@ -90,19 +90,18 @@ export async function exchange(exchangeRequest, client) {
     baseAmount,
   } = exchangeRequest;
 
+  // validations
   const requiredFields = ['baseCurrency', 'counterCurrency', 'baseAccountId', 'counterAccountId', 'baseAmount'];
   const missingFields = requiredFields.filter(field => !exchangeRequest[field]);
-
   if (missingFields.length > 0) {
     const errorMessage = `Missing required fields in exchange request: ${missingFields.join(', ')}`;
     throw new Error(errorMessage);
   }
-
   if (baseAmount <= 0) {
     throw new Error('Base amount must be positive');
   }
 
-  // Get the exchange rate with lock if in transaction
+  // Get the exchange rate 
   const rate = await ExchangeRate.findByCurrenciesWithLock(baseCurrency, counterCurrency, client);
   if (!rate) {
     throw new Error(`No exchange rate available for ${baseCurrency} to ${counterCurrency}`);
@@ -133,29 +132,33 @@ export async function exchange(exchangeRequest, client) {
       return exchangeResult;
     }
 
-    // Simulate both transfers
+    // Simulate external transfers (to/from client accounts)
     await simulateTransfer();
     await simulateTransfer();
     
     // Perform the exchange in a single transaction
-    // 1. Transfer from client's account to our account (base currency)
-    if (baseAccountId !== baseAccount.id) {
-      await Account.transferFunds(
-        baseAccountId,    // from: client's account
-        baseAccount.id,   // to: our account
-        baseAmount,       // amount
-        client           // transaction client
-      );
+    // 1. Update our base currency account (client is sending us money)
+    console.log(`Updating internal ${baseCurrency} account ${baseAccount.id} with +${baseAmount}`);
+    const updatedBaseAccount = await Account.updateBalance(
+      baseAccount.id,
+      parseFloat(baseAccount.balance) + parseFloat(baseAmount),
+      client
+    );
+    
+    if (!updatedBaseAccount) {
+      throw new Error(`Failed to update ${baseCurrency} account balance`);
     }
-
-    // 2. Transfer from our account to client's account (counter currency)
-    if (counterAccount.id !== counterAccountId) {
-      await Account.transferFunds(
-        counterAccount.id,  // from: our account
-        counterAccountId,   // to: client's account
-        counterAmount,      // amount
-        client             // transaction client
-      );
+    
+    // 2. Update our counter currency account (we're sending money to client)
+    console.log(`Updating internal ${counterCurrency} account ${counterAccount.id} with -${counterAmount}`);
+    const updatedCounterAccount = await Account.updateBalance(
+      counterAccount.id,
+      parseFloat(counterAccount.balance) - parseFloat(counterAmount),
+      client
+    );
+    
+    if (!updatedCounterAccount) {
+      throw new Error(`Failed to update ${counterCurrency} account balance`);
     }
 
     // Record the transaction
@@ -176,7 +179,8 @@ export async function exchange(exchangeRequest, client) {
   } catch (error) {
     console.error('Exchange failed:', error);
     exchangeResult.obs = error.message || 'Exchange operation failed';
-    return exchangeResult;
+    // Re-throw the error to allow transaction rollback in the calling function
+    throw error;
   }
 }
 

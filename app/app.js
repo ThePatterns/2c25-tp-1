@@ -9,7 +9,7 @@ import {
   getLog,
   exchange,
 } from "./exchange.js";
-
+import { withTransaction } from './utils/database/databaseAdapter.js';
 
 await exchangeInit();
 
@@ -51,8 +51,9 @@ app.put("/rates", async (req, res) => {
     return res.status(400).json({ error: "Malformed request" });
   }
 
-  const newRateRequest = { ...req.body };
-  setRate(newRateRequest);
+  await withTransaction(async (client) => {
+    await setRate(req.body, client);
+  });
 
   let rates = await getRates();
 
@@ -69,31 +70,18 @@ app.get("/log", async (req, res) => {
 // EXCHANGE endpoint
 
 app.post("/exchange", async (req, res) => {
-  const {
-    baseCurrency,
-    counterCurrency,
-    baseAccountId,
-    counterAccountId,
-    baseAmount,
-  } = req.body;
+  const exchangeRequest = req.body;
 
-  if (
-    !baseCurrency ||
-    !counterCurrency ||
-    !baseAccountId ||
-    !counterAccountId ||
-    !baseAmount
-  ) {
-    return res.status(400).json({ error: "Malformed request" });
-  }
-
-  const exchangeRequest = { ...req.body };
-  const exchangeResult = await exchange(exchangeRequest);
-
-  if (exchangeResult.ok) {
-    res.status(200).json(exchangeResult);
-  } else {
-    res.status(500).json(exchangeResult);
+  try {
+    // Wrap the exchange operation in a transaction
+    const exchangeResult = await withTransaction(async (client) => {
+      return await exchange(exchangeRequest, client);
+    });
+    
+    res.json(exchangeResult);
+  } catch (error) {
+    console.error('Exchange error:', error);
+    res.status(400).json({ error: error.message || 'Exchange failed' });
   }
 });
 

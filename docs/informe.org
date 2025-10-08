@@ -236,6 +236,52 @@ Con el propósito de realizar pruebas y tener una medición de los atributos de 
 
 ** Generación de carga
 
+Con proposito de observar la aplicacion se generaron diferentes escenarios de carga, uno de bajan carga con el proposito de observar el comportamiento de la api en un momento de uso con baja intensidad y otro de uso con alta intensidad representando los posibles escenarios en los que se encuentre la aplicacion en produccion. 
+
+Los escenarios se aplicaran a cada uno de los endpoints, si es un endpoint get, se generan muchas consultas a la api por el mismo endpoint, mientras que en casos de put se interactuan con las distintas monedas generando una carga mas variada y simulando una situacion lo mas realista posible.
+
+Los patrones son los siguientes:
+
+Para una carga y observar un comportamiento generico de la app:
+
+#+BEGIN_SRC yaml :eval no
+phases:
+  - name: Ramp
+    duration: 30
+    arrivalRate: 1
+    rampTo: 5
+  - name: Plain
+    duration: 60
+    arrivalRate: 5
+#+END_SRC
+
+Mientras que para uso intensivo de la aplicacion se usa el mismo patron pero variando los valores:
+
+
+#+BEGIN_SRC yaml :eval no
+phases:
+  - name: Ramp
+    duration: 30
+    arrivalRate: 0
+    rampTo: 1000
+  - name: Plain
+    duration: 60
+    arrivalRate: 500
+#+END_SRC
+
+Por lo tanto ambas cargas seran aplicadas a los endpoints considerando la variabilidad de los datos en el caso que sea necesario
+
+** Graficos 
+
+En lineas generales se presentan 4 graficos: 
+
+- **Scenarios launched (stacked)**: Este grafico muestra los escenarios que se estan ejecutando, en caso de ser la prueba de un metodo get, no habra variabilidad en los casos, por otro lado, cuando se trate de un post o un put se podran apreciar la variabilidad en los escenarios de prueba configurados 
+- **Requests state (stacked)**: Muestra el estado de los request, se grafican principalmente los escenarios en los cuales la api contesta a la request con un codigo 200, en algunos casos, se apreciaran la graficacion de errores los cuales consideran: *ECONNRESET* y *ETIMEDOUT*  
+- **Request time (client-side)**: Que permite obtener una magnitud de la performance del producto como tambien del tiempo que toma a la aplicacion en contestar un request 
+- **Resources**: Este grafico permite observar los recursos utilizados por el ordenador tales como: CPU y memoria ram
+
+Estos graficos no permiten tener una visibilidad amplia y global sobre el funcionamiento de la aplicacion como tambien entender el comportamiento de los *Atributos de calidad* claves de la aplicacion
+
 * Resultados – Caso base
 
 ** Análisis del endpoint Rates

@@ -35,43 +35,46 @@
 
 ** Contexto (startup arVault).
 
+ArVault es una startup fintech que ofrece una billetera digital con cuentas en múltiples monedas y operaciones de cambio. Su rápido crecimiento expuso problemas de confiabilidad en el servicio de cambio de divisas. Ante las quejas de usuarios y la pérdida de confianza de inversores, se solicita una auditoría arquitectónica integral.
+
 ** Objetivos del TP.
 
+Se busca realizar un análisis del estado actual de la API y evaluar su arquitectura. A partir de este estudio, se pretende identificar los atributos de calidad esenciales para garantizar el correcto funcionamiento del sistema y mejorar la percepción general de la organización, así como proponer mejoras arquitecturales y contrastar, mediante mediciones, el impacto de las soluciones implementadas.
+
 ** Alcance del análisis.
+
+El alcance del proyecto consiste en analizar la arquitectura actual del sistema, identidicar los atributos de calidad clave para el producto y medirlos mediante la ejecución de pruebas de estrés, con el proposito de identificar y evaluar distintas propuestas arquitectónicas que mejoren la solución, y efectuar una comparativa final de los resultados obtenidos sobre los atributos de calidad en cada escenario planteado.
 
 * Atributos de calidad (QA) identificados
 
 
 ** Disponibilidad
 
-Al ser un servicio de exchange de monedas, asumimos que es un servicio que se utiliza durante todos los dias habiles de la semana en horario cambiario. Por lo tanto, es importante que el servicio se encuentre disponible durante esos horarios para no perder clientes.
+Al tratarse de un servicio de intercambio de monedas, se considera que su utilización se concentra principalmente durante los días hábiles y en horario cambiario. En consecuencia, es fundamental garantizar su disponibilidad en dichos períodos para evitar la pérdida de usuarios o transacciones.
 
-Además, dado el contexto en el que queremos recuperar la confianza de los usuarios y remontar la reputación, el sistema debe ser altamente accesible para los usuarios y permitir realizar correctamente sus operaciones respetando tiempos razonables de respuesta.
+Asimismo, teniendo en cuenta la necesidad de recuperar la confianza de los usuarios y mejorar la reputación del servicio, el sistema debe ofrecer altos niveles de accesibilidad y permitir la ejecución correcta de las operaciones, manteniendo tiempos de respuesta adecuados y consistentes.
+
 ** Escalabilidad (Elasticidad)
 
-La escalabilidad, y en particular la elasticidad, constituyen un atributo de calidad crítico para el servicio de intercambios de arVault. Esto se debe a que la infraestructura del sistema debe ser capaz de adaptarse dinámicamente a variaciones en la demanda de usuarios.
+La escalabilidad, y en particular la elasticidad, constituyen un atributo de calidad fundamental para el servicio de intercambio de divisas. Esto se debe a que la infraestructura del sistema debe poder adaptarse dinámicamente a las variaciones en la demanda de uso.
 
-En el contexto del negocio, es esperable la aparición de picos significativos de demanda en momentos específicos (por ejemplo, en la apertura y cierre del horario cambiario), así como también períodos de baja o nula actividad. A ello se suma que, dado que el servicio busca captar rápidamente un gran volumen de nuevos usuarios, especialmente tras campañas de promoción destinadas a revertir percepciones negativas de experiencias pasadas, existe el riesgo de enfrentar aumentos inesperados de tráfico.
+En el contexto operativo, es previsible la aparición de picos significativos de actividad en momentos determinados, como la apertura y cierre del horario cambiario, así como también períodos de menor o nula demanda. Además, dado que el servicio busca incrementar rápidamente su base de usuarios, especialmente tras campañas orientadas a mejorar su percepción pública, existe el riesgo de enfrentar incrementos inesperados en el volumen de tráfico.
 
-Si el sistema careciera de elasticidad, estos picos de operaciones de cambio de moneda podrían derivar en saturación de recursos, lo que a su vez ocasionaría demoras, rechazos de transacciones o caídas del servicio. Dichos incidentes afectarían de manera directa la reputación de la empresa, un aspecto considerado prioritario en función de los objetivos actuales y de las expectativas de los stakeholders.
+Si el sistema no contara con la capacidad de escalar de forma elástica, estos picos de operaciones podrían provocar saturación de recursos, generando demoras, rechazos de transacciones o interrupciones del servicio. Tales incidentes impactarían directamente en la percepción y confianza de los usuarios, aspectos clave para el cumplimiento de los objetivos estratégicos de la organización.
 
 ** Performance
 
-El atributo de calidad Performance, y en particular el User-Perceived Performance, adquiere relevancia crítica en el servicio de intercambio de monedas de arVault, para sustentar esta afirmación nos basamos en el siguiente análisis del contexto y antecedentes brindados:
+El atributo de calidad **Rendimiento**, y en particular el **Rendimiento Percibido por el Usuario**, resulta de relevancia crítica para el servicio de intercambio de divisas. Esta afirmación se sustenta en el análisis del contexto y los antecedentes disponibles.
 
-Tras el lanzamiento de la funcionalidad, se registraron reclamos de usuarios relacionados con demoras y fallas en la ejecución de operaciones de cambio, lo que ha derivado en reseñas negativas y pérdida de confianza en la plataforma. En un contexto donde la empresa necesita con urgencia atraer nuevas rondas de inversión, estas deficiencias de rendimiento representan un riesgo directo, ya que los potenciales inversores han condicionado su apoyo a la realización de mejoras en la calidad del servicio.
+Luego del lanzamiento de la funcionalidad, se detectaron reportes de demoras y fallas en la ejecución de operaciones, lo que generó comentarios negativos y una disminución en la confianza hacia la plataforma. En un escenario donde la organización busca atraer nuevas rondas de inversión, estas limitaciones de rendimiento constituyen un riesgo relevante, dado que los potenciales inversores han condicionado su apoyo a la mejora en la calidad del servicio.
 
-En una aplicación financiera, la percepción de agilidad y confiabilidad en la respuesta del sistema es esencial: tiempos de espera excesivos o transacciones fallidas afectan la experiencia de los usuarios y minan la credibilidad de la plataforma. Aunque el diferencial de arVault reside en ofrecer tasas de cambio más convenientes que la competencia, dicho valor se ve neutralizado si el servicio de intercambio no responde con la rapidez y estabilidad que los clientes esperan.
+En aplicaciones de carácter financiero, la percepción de agilidad y confiabilidad en las respuestas del sistema es un factor determinante. Tiempos de espera prolongados o transacciones fallidas afectan de manera directa la experiencia de las personas usuarias y la credibilidad del sistema. Aunque el valor diferencial del servicio radica en ofrecer tasas de cambio competitivas, dicho beneficio pierde relevancia si la aplicación no responde con la rapidez y estabilidad esperadas.
 
-Por ello, la mejora del User-Perceived Performance se presenta como un paso imprescindible no solo para recuperar la confianza de los usuarios actuales, sino también para restaurar la reputación de la empresa ante el mercado y viabilizar la captación de nuevos inversores, garantizando así la continuidad y evolución del negocio.
+Por lo tanto, la optimización del Rendimiento Percibido por el Usuario se plantea como una acción prioritaria, orientada a recuperar la confianza de los usuarios actuales, fortalecer la reputación institucional y favorecer la atracción de nuevas inversiones, asegurando la continuidad y el crecimiento del servicio.
 
 ** Visibilidad
 
-El valor de este atributo de calidad es más indirecto pero estratégico pues permite entender el comportamiento real del sistema, identificar cuellos de botella de performance, localizar errores en operaciones de cambio y detectar patrones de saturación que anticipen problemas de disponibilidad o escalabilidad. Es decir, la visibilidad no impacta de forma inmediata en la experiencia del usuario, pero habilita a los arquitectos y al equipo técnico a diagnosticar, mejorar y sostener los otros atributos de calidad prioritarios.
-
-** Seguridad
-
-Es fundamental que el sistema sea seguro para evitar posibles ataques que puedan comprometer la integridad del sistema, la privacidad de los datos de los clientes o perdida/robo de dinero. Incluso pensando que debemos tambien tener en cuenta marcos regulatorios sobre el manejo de datos personales y financieros. Tambien entendemos del enunciado que es importante la reputacion del sistema, y esto podria verse muy dañado en caso de que haya una brecha de seguridad.
+El valor de este atributo de calidad es más indirecto, pero estratégico, ya que permite comprender el comportamiento real del sistema, identificar cuellos de botella en el rendimiento, localizar errores en las operaciones de cambio y detectar patrones de saturación que puedan anticipar problemas de disponibilidad o escalabilidad. En otras palabras, aunque la visibilidad no impacta de manera inmediata en la experiencia del usuario, proporciona a los arquitectos y al equipo técnico la información necesaria para diagnosticar, mejorar y mantener otros atributos de calidad prioritarios del sistema.
 
 * Arquitectura base
 
@@ -83,29 +86,29 @@ Es fundamental que el sistema sea seguro para evitar posibles ataques que puedan
 
 Analizando las decisiones de diseño tomadas por el desarollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
 1. **Backend (API)**
-    
+
     Se despliega una única instancia del servicio de API (según la configuración en docker-compose). De esta forma, la ausencia de réplicas y de un mecanismo efectivo de balanceo de carga (porque no hay múltiples nodos entre los cuales se balancee la carga) la caída de dicha instancia del backend causaría que el sistema completo deje de responder a solicitudes.
-    
+
 2. **Nginx (reverse proxy)**
-    
+
     Para este servicio también existe una sola instancia configurada como punto de entrada y aunque se define un bloque `upstream`, este solo redirige a una única API backend.
-    
+
     Por esto la arquitectura termina teniendo dos puntos críticos: tanto el proxy (nginx) como el backend, la indisponibilidad de cualquiera de ellos impacta directamente en la experiencia del usuario final.
-    
+
 3. **Persistencia de datos**
-    
+
     Actualmente la aplicación utiliza archivos JSON locales para la persistencia, este enfoque presenta múltiples limitaciones: falta de replicación, ausencia de mecanismos de recuperación ante fallas, y dependencia del almacenamiento local del contenedor/host. Una pérdida de datos o la caída del servicio implican tiempos de recuperación prolongados, degradando así directamente la disponibilidad.
 
 **** **Arquitectura monolítica y su impacto**
 
 Al analizar la estructura lógica del sistema, se observa que este responde a un patrón **monolítico**, en el cual toda la lógica de negocio, el manejo de estado y la persistencia de datos se concentran en un solo bloque sin separación clara de responsabilidades ni interfaces desacopladas. Este diseño acarrea consecuencias directas sobre la **Disponibilidad**, entre las que se destacan:
-1. **Arquitectura unificada**  
+1. **Arquitectura unificada**
    Toda la lógica de negocio (gestión de cuentas, tasas, transacciones) se encuentra contenida en un único módulo. La caída de cualquier componente interno afecta al sistema en su totalidad, ya que no existen mecanismos de aislamiento de fallos ni tolerancia a errores.
 
-2. **Alto acoplamiento entre módulos**  
+2. **Alto acoplamiento entre módulos**
    Los componentes del sistema tienen dependencias directas y requieren inicializaciones en un orden específico. Esto implica que la indisponibilidad de un módulo interno impide el correcto funcionamiento del resto, amplificando los riesgos de interrupción total.
 
-3. **Escalabilidad y resiliencia limitadas**  
+3. **Escalabilidad y resiliencia limitadas**
    Al no existir modularidad ni servicios independientes, no es posible escalar ni recuperar selectivamente partes del sistema. Cualquier estrategia de replicación debe aplicarse al monolito completo, lo cual incrementa la complejidad operativa y reduce la capacidad de respuesta frente a fallos.
 
 **En síntesis**, la naturaleza monolítica del sistema no solo **explica** la existencia de múltiples puntos únicos de falla en la infraestructura actual, sino que también **agrava su impacto**: ante un error en un módulo o en la persistencia de datos, la indisponibilidad afecta a toda la aplicación. Esto limita severamente la capacidad de mantener una operación continua y dificulta la incorporación de mecanismos de alta disponibilidad o recuperación automática.
@@ -114,7 +117,7 @@ Al analizar la estructura lógica del sistema, se observa que este responde a un
 
 Otro aspecto crítico identificado es la ausencia de un sistema de **transacciones confiables** para el manejo de operaciones financieras (por ejemplo, conversiones entre diferentes monedas). Actualmente, la persistencia de datos se basa en archivos JSON locales, sin soporte nativo para propiedades ACID.
 
-Esta limitación introduce riesgos importantes que afectan directamente el atributo de calidad **Disponibilidad**, principalmente se tiene un gran riesgo de **inconsistencias de datos e incremento del tiempo de recuperación**, pues, al no existir mecanismos transaccionales, fallas en medio de una operación (ej. caída del proceso, error de escritura en disco) pueden dejar el sistema en un estado inconsistente. Esto obliga a tareas manuales de verificación y corrección, aumentando el tiempo que el sistema permanece fuera de servicio o con datos inválidos.  
+Esta limitación introduce riesgos importantes que afectan directamente el atributo de calidad **Disponibilidad**, principalmente se tiene un gran riesgo de **inconsistencias de datos e incremento del tiempo de recuperación**, pues, al no existir mecanismos transaccionales, fallas en medio de una operación (ej. caída del proceso, error de escritura en disco) pueden dejar el sistema en un estado inconsistente. Esto obliga a tareas manuales de verificación y corrección, aumentando el tiempo que el sistema permanece fuera de servicio o con datos inválidos.
    En ausencia de transacciones, las operaciones incompletas no pueden deshacerse ni repetirse de forma segura. Frente a fallos, el sistema requiere procesos de recuperación manual o la restauración de copias de seguridad, en consecuencia, se disminuye la disponibilidad percibida.
 
 
@@ -124,9 +127,9 @@ En conclusión, la carencia de un sistema de transacciones robusto aumenta signi
 
 Existen además otras decisiones de diseño que, si bien no afectan a la **Disponibilidad** de manera directa, sí lo hacen de forma indirecta al influir en atributos de calidad relacionados:
 
-- **Monitoreo y métricas**: la toma de métricas y la incorporación de herramientas de observabilidad impactan directamente en el atributo de calidad **Visibilidad**. A su vez, una mayor visibilidad facilita la detección temprana de fallas y acelera los procesos de recuperación, contribuyendo indirectamente a la disponibilidad del sistema.  
+- **Monitoreo y métricas**: la toma de métricas y la incorporación de herramientas de observabilidad impactan directamente en el atributo de calidad **Visibilidad**. A su vez, una mayor visibilidad facilita la detección temprana de fallas y acelera los procesos de recuperación, contribuyendo indirectamente a la disponibilidad del sistema.
 
-- **Escalabilidad**: las limitaciones en la capacidad del sistema para crecer o adaptarse a aumentos de carga afectan principalmente al atributo de calidad **Escalabilidad**. Sin embargo, la incapacidad de manejar picos de demanda también puede llevar a interrupciones o caídas, degradando en consecuencia la disponibilidad.  
+- **Escalabilidad**: las limitaciones en la capacidad del sistema para crecer o adaptarse a aumentos de carga afectan principalmente al atributo de calidad **Escalabilidad**. Sin embargo, la incapacidad de manejar picos de demanda también puede llevar a interrupciones o caídas, degradando en consecuencia la disponibilidad.
 
 - **Mantenibilidad y evolución**: un diseño con alto acoplamiento o con dificultades para introducir cambios de manera segura impacta directamente en la **Mantenibilidad**. De forma indirecta, esto puede derivar en mayor riesgo de errores durante despliegues o en tiempos prolongados de indisponibilidad ante actualizaciones.
 
@@ -138,7 +141,7 @@ Actualmente hay un Nginx que actua como reverse proxy y potencialmente balancead
 
 *** Performance
 
-*** Visibilidad: 
+*** Visibilidad:
 
 Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas metricas en un dashboard creado por la catedra que permite visualizar algunas metricas como Scenarios launched, Request state, Response time y Resources. Faltarian metricas mas especificas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
 
@@ -227,44 +230,325 @@ p_cadvisor_host --> p_cadvisor_docker
 
 * Metodología de pruebas
 
-** Herramientas usadas (Artillery, Grafana, etc.).
+Con el propósito de realizar pruebas y tener una medición de los atributos de calidad relevantes del sistema, se realizaron pruebas de carga sobre la aplicación mediante la herramienta Artillery y junto con StatsD, Graphite, Grafana y Datadog, se realiza la recolección y visualización de los datos de desempeño, incluyendo métricas como tiempos de respuesta, errores y uso de recursos, lo que permite evaluar la capacidad del sistema para manejar diferentes niveles de carga y detectar posibles cuellos de botella.
 
-** Escenarios de carga diseñados.
+** DataDog
 
-** Métricas recolectadas.
+** Generación de carga
 
 * Resultados – Caso base
 
-** Screenshots de dashboards.
+** Análisis del endpoint Rates
 
-** Interpretación de resultados.
+*** Prueba con carga baja
+
+Se realiza una prueba de carga con los siguientes parámetros usando la herramienta Artillery:
+
+#+BEGIN_SRC yaml :eval no
+phases:
+  - name: Ramp
+    duration: 30
+    arrivalRate: 1
+    rampTo: 5
+  - name: Plain
+    duration: 60
+    arrivalRate: 5
+#+END_SRC
+
+**** Resultados observados
+
+[[file:./assets/rates1rps.png]]
+
+Para el escenario con una carga baja se observa el crecimiento sostenido y un posterior estado en el cual se mantiene constante la cantidad de request realizadas al servidor. Se observa que el máximo de la cantidad reportada de request son unas 50 y una media de 36.3 request por segundo.
+
+[[file:./assets/rates1state.png]]
+
+También se logra observar que en un escenario con carga baja, el servidor consigue responder satisfactoriamente a todas las consultas realizadas sin presentar fallos.
+
+[[file:./assets/rates1rpt.png]]
+
+Del lado del cliente se aprecian dos medidas en el tiempo de respuesta, el máximo registrado y la media del tiempo de respuesta. En la totalidad de la prueba de carga se la media se mantiene en un rango de 4-6 ms sin variar de manera brusca, a su vez, el máximo del tiempo de respuesta tiene una media 19.6 ms y se reduce drásticamente en el momento en el que el servidor alcanza su máxima cantidad de carga, mismo punto en el que alcanza un máximo, el cual corresponde a 28.2 ms.
+
+[[file:./assets/rates1resources.png]]
+
+Finalmente en un escenario de carga baja, el sistema se encuentra usando recursos casi constantes, las variaciones en el uso del CPU se encuentra en un rango de 0.5% a 0.6% y la memoria a su vez usa un porcentaje aún menor encontrándose en un rango de 0.071% a 0.074%.
+
+En conclusión, analizando los gráficos y leyendo el resumen dado del comportamiento de la API, se realizaron 390 consultas al endpoint ~rates~ de las cuales todas fueron contestadas de manera satisfactoria.
+
+*** Prueba con mayor carga
+
+A continuación se realiza una prueba de estrés más intensa sobre la API, específicamente en el endpoint ~rates~, con el objetivo de analizar el comportamiento del sistema bajo condiciones de alta demanda y cómo esto impacta en los atributos de calidad, tales como disponibilidad, rendimiento y uso de recursos.
+
+Se incrementa significativamente la cantidad de solicitudes por segundo, simulando un escenario donde múltiples usuarios acceden simultáneamente al servicio. Los resultados permiten identificar el punto de saturación del sistema, posibles errores en las respuestas y variaciones en los tiempos de respuesta y consumo de recursos.
+
+Para esto se recurre nuevamente a la herramienta Artillery, esta vez modificando la configuración anterior por la siguiente:
+
+#+BEGIN_SRC yaml :eval no
+phases:
+  - name: Ramp
+    duration: 30
+    arrivalRate: 0
+    rampTo: 1000
+  - name: Plain
+    duration: 60
+    arrivalRate: 600
+#+END_SRC
+
+**** Resultados observados
+
+[[file:./assets/rates2rps.png]]
+
+En un escenario de mayor carga se observa un crecimiento sostenido en la cantidad de request por segundos, una reducción y estabilización de la misma, en esta ocasión el gráfico no permite realizar conclusiones sobre el estado de la aplicación.
+
+[[file:./assets/rates2state.png]]
+
+En cambio, en el gráfico del estado de las respuestas se observa un crecimiento en la cantidad de respuestas correctas del servidor, pero durante la etapa de llegada constante de la cantidad de request por segundo se observa la aparición de casos de error en las respuestas a los clientes, indicando claramente que el servidor alcanza un límite en la cantidad de clientes que puede atender.
+
+[[file:./assets/rates2rpt.png]]
+
+Para el tiempo de respuestas se observa que una vez el servidor empieza a responder con códigos de error para los clientes, inicia un crecimiento acelerado en los máximos de tiempo de respuesta registrados, para el máximo, la media alcanza 1.46s y el máximo ahora alcanza casi los 10s para poder completar una consulta, mientras que para la media, se observa un crecimiento parecido. Esto indica claramente que el servidor presenta saturación de clientes y no permite responder adecuadamente a todos los clientes que intentan realizar una consulta sobre este endpoint.
+
+[[file:./assets/rates2resources.png]]
+
+A su vez, los resultados observados para los recursos utilizados, en primer lugar para la memoria, se observa un aumento en comparación al test anterior pero no representa un uso excesivo de la misma, haciendo uso de la memoria RAM en un rango de 0.188% a 0.194%. Por el contrario esta vez el CPU alcanza el máximo de su uso rápidamente, llegando a usar un 35.7%, esto antes de alcanzar el máximo en la cantidad de request realizados al servidor, sin embargo a partir de haber alcanzado el límite el uso del CPU desciende rápidamente y a pesar de anteriormente haber observado respuestas con errores en los clientes y no se observaría una relación con el uso de recursos excesivos, es decir, la aplicación no alcanza un límite en el uso de los recursos disponibles.
+
+**** Conclusión
+
+En conclusión en un escenario de carga alta el servidor no es capaz de atender a todos los clientes de manera eficiente y afectando completamente la disponibilidad del servicio, el cual es un atributo de calidad clave y uno de los que se desea mejorar para incrementar la percepción positiva de la aplicación por parte de los clientes.
+
+*** Resumen de métricas de Artillery
+
+Para la prueba de carga baja (salidarates1.txt):
+
+- Total de solicitudes: 390
+- Todas respondidas con código 200 (sin fallos)
+- Tiempo de respuesta medio: 1.1 ms, mediana: 1 ms, p95: 2 ms, p99: 2 ms
+
+Para la prueba de carga alta (salidarates2.txt):
+
+- Total de solicitudes: 45000
+- Respuestas exitosas: 35944 (con 9056 errores ECONNRESET)
+- Tiempo de respuesta medio: 321.2 ms, mediana: 16 ms, p95: 2836.2 ms, p99: 4492.8 ms
 
 * Propuestas de mejora
 
-** Tácticas aplicadas.
+** Implementacion de Valkey como persistencia
 
-** Justificación de por qué se eligieron.
+*** Tactica aplicada
 
-** Diagramas C&C modificados.
+La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Los datos se almacenan como claves en Redis:
 
-* Resultados – Casos mejorados
+- ~accounts~: Almacena la lista de cuentas de usuario en formato JSON.
 
-** Screenshots comparativos.
+- ~rates~: Contiene las tasas de cambio entre monedas.
 
-** Análisis de impacto sobre QA.
+- ~log~: Registra el historial de transacciones realizadas.
 
-** Trade-offs detectados.
+El módulo ~valkey.js~ proporciona funciones asíncronas para inicializar la conexión (~init()~), obtener datos (~getAccounts()~, ~getRates()~, ~getLog()~) y actualizarlos (~setAccounts()~, ~setRates()~, ~setLog()~). Estas funciones serializan/deserializan los datos a JSON para almacenarlos como strings en Redis.
+
+En ~exchange.js~, se importa y utiliza este módulo para todas las operaciones de persistencia, reemplazando las lecturas/escrituras directas a archivos. La inicialización se realiza al inicio de la aplicación con ~await valkeyInit()~.
+
+*** Configuracion
+
+Se agregó un servicio ~valkey~ en el ~docker-compose.yml~ utilizando la imagen ~valkey/valkey:8.1.4-alpine~, expuesto en el puerto 6379. La aplicación se conecta mediante la variable de entorno ~VALKEY_URL=redis://valkey:6379~.
+
+*** Beneficios
+
+Al centralizar el estado en Valkey, múltiples instancias de la API pueden compartir el mismo almacén de datos. Esto elimina la dependencia de estado local en memoria o archivos, permitiendo:
+
+- Escalado horizontal sin pérdida de consistencia.
+
+- Persistencia real de los datos, sobreviviente a reinicios de contenedores.
+
+- Operaciones atómicas en Redis para transacciones financieras.
+
+Esta táctica mejora significativamente la Disponibilidad y Escalabilidad, mitigando los puntos únicos de falla relacionados con la persistencia local.
+
+#+BEGIN_SRC plantuml :file assets/componentes-modificados.png :exports results
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+component "Cliente" as Client
+
+component "Contenedores Docker" {
+  portin "5555" as p_nginx_host
+
+  portin "8090" as p_graphite_host
+  portin "8125" as p_graphite_statsd_host
+  portin "8126" as p_graphite_statsd_admin
+
+  portin "80" as p_grafana_host
+
+  portin "8080" as p_cadvisor_host
+
+  component "Nginx\n(Reverse Proxy)" as Nginx {
+    portin "80" as p_nginx_docker
+  }
+  component "API Node 1\n(Node.js)" as API1 {
+    portin "3000" as p_api1_docker
+  }
+  component "API Node 2\n(Node.js)" as API2 {
+    portin "3001" as p_api2_docker
+  }
+  component "API Node 3\n(Node.js)" as API3 {
+    portin "3002" as p_api3_docker
+  }
+  database "Valkey\n(Redis)" as Valkey {
+    portin "6379" as p_valkey_docker
+  }
+
+  component "cAdvisor\n(Monitoring)" as CAdvisor {
+    portin "8080" as p_cadvisor_docker
+  }
+  component "Graphite\n(Métricas)" as Graphite {
+    portin "80" as p_graphite_http_docker
+    portin "8125" as p_graphite_statsd_docker
+    portin "8126" as p_graphite_statds_admin_docker
+  }
+  component "Grafana\n(Dashboard)" as Grafana {
+    portin "3000" as p_grafana_docker
+  }
+}
+
+Client --> p_nginx_host : HTTP
+p_nginx_host --> p_nginx_docker : HTTP
+Nginx --> p_api1_docker : HTTP
+Nginx --> p_api2_docker : HTTP
+Nginx --> p_api3_docker : HTTP
+
+API1 --> p_valkey_docker : Redis
+API2 --> p_valkey_docker : Redis
+API3 --> p_valkey_docker : Redis
+
+p_graphite_host --> p_graphite_http_docker
+p_graphite_statsd_host --> p_graphite_statsd_docker
+p_graphite_statsd_admin --> p_graphite_statds_admin_docker
+p_grafana_host --> p_grafana_docker
+p_cadvisor_host --> p_cadvisor_docker
+#+END_SRC
+
+#+RESULTS:
+[[file:assets/componentes-modificados.png]]
+
+
+** Implementacion de PostgreSQL como persistencia
+
+*** Tactica aplicada
+
+La implementación utiliza PostgreSQL como almacén de datos relacional, reemplazando la persistencia en archivos JSON y Valkey. Las tablas creadas son:
+
+- ~accounts~: Almacena las cuentas de usuario con campos como id, currency, balance, created_at, updated_at, deleted.
+
+- ~exchange_rates~: Contiene las tasas de cambio entre monedas con base_currency, counter_currency, rate, updated_at.
+
+- ~transactions~: Registra el historial de transacciones realizadas, con soporte para atomicidad en operaciones de intercambio.
+
+El módulo ~databaseAdapter.js~ proporciona funciones para conectarse a PostgreSQL usando el paquete ~pg~, manejando conexiones y transacciones. Los modelos en ~models/~ (Account, ExchangeRate, Transaction) manejan las operaciones CRUD con soporte para transacciones ACID.
+
+En ~exchange.js~, se utilizan estos modelos para todas las operaciones financieras, incluyendo transacciones atómicas para intercambios que requieren consistencia (ej. actualizar balances y registrar transacción en una sola operación).
+
+*** Configuracion
+
+Se agregó un servicio ~postgres~ en el ~docker-compose.yml~ utilizando la imagen ~postgres:15-alpine~, con inicialización de la base de datos mediante el script ~01-init.sql~ que crea las tablas, índices y datos iniciales.
+
+Se configuraron tres instancias de la API (~api1~, ~api2~, ~api3~) conectadas a PostgreSQL, permitiendo escalado horizontal sin pérdida de estado.
+
+Se actualizó ~nginx_reverse_proxy.conf~ para balancear carga entre las tres instancias de API utilizando un bloque ~upstream~.
+
+*** Beneficios
+
+Al centralizar el estado en PostgreSQL con transacciones ACID, múltiples instancias pueden compartir el mismo almacén de datos de forma consistente y atómica. Esto elimina dependencias de estado local, permite escalado horizontal sin pérdida de consistencia, y asegura atomicidad en operaciones financieras críticas, mejorando la integridad de datos.
+
+Esta táctica mejora significativamente la Disponibilidad (reduciendo puntos únicos de falla en persistencia), Escalabilidad (permitiendo más nodos con estado compartido), y Performance (con transacciones eficientes, concurrencia controlada y consultas optimizadas con índices).
+
+#+BEGIN_SRC plantuml :file assets/componentes-postgresql.png :exports results
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+component "Cliente" as Client
+
+component "Contenedores Docker" {
+  portin "5555" as p_nginx_host
+
+  portin "8090" as p_graphite_host
+  portin "8125" as p_graphite_statsd_host
+  portin "8126" as p_graphite_statsd_admin
+
+  portin "80" as p_grafana_host
+
+  portin "8080" as p_cadvisor_host
+
+  component "Nginx\n(Reverse Proxy)" as Nginx {
+    portin "80" as p_nginx_docker
+  }
+  component "API Node 1\n(Node.js)" as API1 {
+    portin "3000" as p_api1_docker
+  }
+  component "API Node 2\n(Node.js)" as API2 {
+    portin "3001" as p_api2_docker
+  }
+  component "API Node 3\n(Node.js)" as API3 {
+    portin "3002" as p_api3_docker
+  }
+  database "PostgreSQL" as PostgreSQL {
+    folder "exchange_db" {
+      [accounts]
+      [exchange_rates]
+      [transactions]
+    }
+    portin "5432" as p_postgres_docker
+  }
+
+  component "cAdvisor\n(Monitoring)" as CAdvisor {
+    portin "8080" as p_cadvisor_docker
+  }
+  component "Graphite\n(Métricas)" as Graphite {
+    portin "80" as p_graphite_http_docker
+    portin "8125" as p_graphite_statsd_docker
+    portin "8126" as p_graphite_statds_admin_docker
+  }
+  component "Grafana\n(Dashboard)" as Grafana {
+    portin "3000" as p_grafana_docker
+  }
+}
+
+Client --> p_nginx_host : HTTP
+p_nginx_host --> p_nginx_docker : HTTP
+Nginx --> p_api1_docker : HTTP
+Nginx --> p_api2_docker : HTTP
+Nginx --> p_api3_docker : HTTP
+
+API1 --> p_postgres_docker : PostgreSQL
+API2 --> p_postgres_docker : PostgreSQL
+API3 --> p_postgres_docker : PostgreSQL
+
+p_graphite_host --> p_graphite_http_docker
+p_graphite_statsd_host --> p_graphite_statsd_docker
+p_graphite_statsd_admin --> p_graphite_statds_admin_docker
+p_grafana_host --> p_grafana_docker
+p_cadvisor_host --> p_cadvisor_docker
+#+END_SRC
+
+#+RESULTS:
+[[file:assets/componentes-postgresql.png]]
+
+
+** Comparacion de estados de requests
+
+#+CAPTION: Estado de requests en la arquitectura base
+[[file:assets/request-state-base.png]]
+
+En la arquitectura base, se observa una alta tasa de errores debido a la sobrecarga de la única instancia de la API y problemas de concurrencia en el acceso a archivos JSON locales, lo que resulta en fallos de conexión y respuestas erróneas bajo carga elevada.
+
+#+CAPTION: Estado de requests con la propuesta de mejora (PostgreSQL y balanceo de carga)
+[[file:assets/request-state-postgresql.png]]
+
+Con la propuesta de mejora que incluye balanceo de carga entre tres nodos y PostgreSQL como persistencia, la tasa de errores se reduce significativamente. El balanceo de carga distribuye la carga uniformemente entre los nodos, evitando la saturación de un solo punto, mientras que PostgreSQL maneja mejor la concurrencia mediante transacciones ACID y acceso controlado a la base de datos, minimizando errores por conflictos de acceso a datos y mejorando la estabilidad general del sistema.
+
+* Trade-offs detectados.
+
+* Pedido Adicional (Volumen de transacciones por moneda)
 
 * Conclusiones
-
-** Resumen de hallazgos.
-
-** Beneficios y limitaciones de las mejoras.
-
-** Futuro (ej: pasar a DB externa en TP2).
-
-* Anexos
-
-** Configuraciones de escenarios de Artillery.
-
-** Configs modificadas de Nginx, Docker Compose, etc.

@@ -227,6 +227,8 @@ p_cadvisor_host --> p_cadvisor_docker
 
 * Metodología de pruebas
 
+
+
 ** Recolección de datos
 
 *** StatsD + Graphit + Grafana

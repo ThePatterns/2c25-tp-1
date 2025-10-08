@@ -35,7 +35,11 @@
 
 ** Contexto (startup arVault).
 
+ArVault es una startup fintech que ofrece una billetera digital con cuentas en múltiples monedas y operaciones de cambio. Su rápido crecimiento expuso problemas de confiabilidad en el servicio de cambio de divisas. Ante las quejas de usuarios y la pérdida de confianza de inversores, se solicita una auditoría arquitectónica integral.
+
 ** Objetivos del TP.
+
+Dado el contexto previamente mencionado, se busca realizar un análisis del estado actual de la API y evaluar su arquitectura. A partir de este estudio, se pretende identificar los atributos de calidad esenciales para garantizar el correcto funcionamiento del sistema y mejorar la percepción general de la organización, así como proponer mejoras arquitecturales y contrastar, mediante mediciones, el impacto de las soluciones implementadas.
 
 ** Alcance del análisis.
 

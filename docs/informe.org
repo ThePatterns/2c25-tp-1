@@ -230,13 +230,9 @@ p_cadvisor_host --> p_cadvisor_docker
 
 * Metodología de pruebas
 
+Con el propósito de realizar pruebas y tener una medición de los atributos de calidad relevantes del sistema, se realizaron pruebas de carga sobre la aplicación mediante la herramienta Artillery y junto con StatsD, Graphite, Grafana y Datadog, se realiza la recolección y visualización de los datos de desempeño, incluyendo métricas como tiempos de respuesta, errores y uso de recursos, lo que permite evaluar la capacidad del sistema para manejar diferentes niveles de carga y detectar posibles cuellos de botella.
 
-
-** Recolección de datos
-
-*** StatsD + Graphit + Grafana
-
-*** DataDog
+** DataDog
 
 ** Generación de carga
 

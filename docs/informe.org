@@ -33,19 +33,24 @@
 
 * Introducción
 
-** Contexto (startup arVault).
+arVault es una startup fintech que opera una billetera digital con un enfoque en ofrecer tasas de cambio competitivas para operaciones entre distintas monedas. En un contexto donde la confianza del usuario es fundamental, la empresa se enfrenta al desafío de mejorar su servicio de cambio de divisas tras recibir múltiples reclamos por problemas de rendimiento y disponibilidad.
 
-ArVault es una startup fintech que ofrece una billetera digital con cuentas en múltiples monedas y operaciones de cambio. Su rápido crecimiento expuso problemas de confiabilidad en el servicio de cambio de divisas. Ante las quejas de usuarios y la pérdida de confianza de inversores, se solicita una auditoría arquitectónica integral.
+El presente trabajo se enmarca en la necesidad de arVault de realizar una auditoría exhaustiva de su arquitectura actual para identificar oportunidades de mejora en los atributos de calidad del sistema. Este análisis resulta crucial para la empresa, ya que su capacidad de atraer nuevas inversiones depende directamente de la confiabilidad y desempeño de su plataforma.
 
-** Objetivos del TP.
+Los objetivos principales de este trabajo práctico son:
 
-Se busca realizar un análisis del estado actual de la API y evaluar su arquitectura. A partir de este estudio, se pretende identificar los atributos de calidad esenciales para garantizar el correcto funcionamiento del sistema y mejorar la percepción general de la organización, así como proponer mejoras arquitecturales y contrastar, mediante mediciones, el impacto de las soluciones implementadas.
+1. Analizar la arquitectura actual del sistema de cambio de divisas.
+2. Identificar los atributos de calidad críticos para el negocio.
+3. Evaluar el impacto de las decisiones de diseño en dichos atributos.
+4. Proponer e implementar mejoras basadas en tácticas arquitectónicas.
+5. Medir y comparar el rendimiento antes y después de las modificaciones.
 
-** Alcance del análisis.
+El alcance del análisis abarca tanto aspectos técnicos como de negocio, considerando la infraestructura existente (Node.js, Express, Nginx, etc) y las herramientas de monitoreo implementadas (cAdvisor, StatsD, Graphite, Grafana). Se prestará especial atención a métricas clave como el volumen de operaciones por moneda y el neto de transacciones, tal como lo solicitó el fundador de arVault.
 
-El alcance del proyecto consiste en analizar la arquitectura actual del sistema, identificar los atributos de calidad clave para el producto y medirlos mediante la ejecución de pruebas de estrés, con el propósito de identificar y evaluar distintas propuestas arquitectónicas que mejoren la solución, y efectuar una comparativa final de los resultados obtenidos sobre los atributos de calidad en cada escenario planteado.
+Este informe documenta nuestro proceso de análisis, las decisiones tomadas y los resultados obtenidos, con el fin de proporcionar recomendaciones fundamentadas que permitan a arVault mejorar la calidad de su servicio y recuperar la confianza de sus usuarios e inversores.
 
-* Atributos de calidad (QA) identificados
+
+* Atributos de calidad (QA) claves identificados
 
 
 ** Disponibilidad
@@ -77,91 +82,117 @@ Por lo tanto, la optimización del Rendimiento Percibido por el Usuario se plant
 El valor de este atributo de calidad es más indirecto, pero estratégico, ya que permite comprender el comportamiento real del sistema, identificar cuellos de botella en el rendimiento, localizar errores en las operaciones de cambio y detectar patrones de saturación que puedan anticipar problemas de disponibilidad o escalabilidad. En otras palabras, aunque la visibilidad no impacta de manera inmediata en la experiencia del usuario, proporciona a los arquitectos y al equipo técnico la información necesaria para diagnosticar, mejorar y mantener otros atributos de calidad prioritarios del sistema.
 
 * Arquitectura base
-
 ** Análisis de la influencia de decisiones de diseño en los QA's
+En la presente sección se explorarán las decisiones de diseño identificadas en la arquitectura base y su impacto sobre los atributos de calidad estudiados.
 
-*** Disponibilidad
+** Incorporación del stack de monitoreo cAdvisor + Artillery + StatsD + Graphite + Grafana
 
-**** **Puntos únicos de falla (únicas instancias de servicios) y su impacto**
+El sistema actual presenta un stack de observabilidad para medir, almacenar y visualizar métricas en tiempo real. En concreto:
+- cAdvisor: mide métricas de contenedores (CPU, memoria, etc.)
+- Artillery: genera carga (testing de rendimiento)
+- StatsD + Graphite: recolectan y almacenan métricas
+- Grafana: visualiza las métricas
 
-Analizando las decisiones de diseño tomadas por el desarrollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
-1. **Backend (API)**
+Esta decisión implicó agregar tres nuevos contenedores, configuraciones adicionales, puertos, conexiones en red internas de Docker y dependencias entre servicios, lo cual impactó de diferentes formas a distintos *stakeholders*.
 
-    Se despliega una única instancia del servicio de API (según la configuración en docker-compose). De esta forma, la ausencia de réplicas y de un mecanismo efectivo de balanceo de carga (porque no hay múltiples nodos entre los cuales se balancee la carga) la caída de dicha instancia del backend causaría que el sistema completo deje de responder a solicitudes.
+*** Impactos identificados
 
-2. **Nginx (reverse proxy)**
+- *Carga cognitiva alta:*  
+  Implicó que desarrolladores y arquitectos del sistema deban comprender cómo se conectan las herramientas, qué hace cada una y cómo interpretar los datos generados.  
+  Esto impacta la *usabilidad interna* (para el desarrollador), la *manejabilidad* y la *simplicidad* del sistema, que originalmente se componía solo de un backend y un proxy inverso (Nginx).
 
-    Para este servicio también existe una sola instancia configurada como punto de entrada y aunque se define un bloque `upstream`, este solo redirige a una única API backend.
+- *Complejidad operativa:*  
+  Más contenedores implican más puertos, configuraciones y *logs* extensos (en particular en el entorno local del trabajo práctico), lo cual aumenta el esfuerzo de *debugging* y de gestión general.  
+  Esto afecta negativamente la *manejabilidad*, dado que se incrementa la complejidad operativa y el tiempo requerido para mantener el sistema.
 
-    Por esto la arquitectura termina teniendo dos puntos críticos: tanto el proxy (nginx) como el backend, la indisponibilidad de cualquiera de ellos impacta directamente en la experiencia del usuario final.
+- *Evaluación y visibilidad del comportamiento del sistema:*  
+  Cuando el stack se encuentra correctamente configurado, las métricas permiten monitorear el rendimiento, detectar cuellos de botella y observar cómo interactúan los distintos componentes.  
+  Esto mejora la *visibilidad* del sistema y favorece la *confiabilidad*, ya que permite anticipar fallos o anomalías de comportamiento.  
+  No obstante, la dependencia entre múltiples herramientas introduce el riesgo de obtener una visibilidad incompleta si alguno de los servicios del stack (por ejemplo, Graphite o StatsD) deja de funcionar.
 
-3. **Persistencia de datos**
+- *Afectación a la disponibilidad:*  
+  El aumento en la cantidad de servicios dependientes implica más puntos de falla. Si Graphite o StatsD se detienen, Grafana dejará de mostrar información actualizada.  
+  Además, el tiempo de despliegue y recuperación ante fallos se incrementa, afectando la *disponibilidad* de manera negativa, sobre todo en entornos locales.
 
-    Actualmente la aplicación utiliza archivos JSON locales para la persistencia, este enfoque presenta múltiples limitaciones: falta de replicación, ausencia de mecanismos de recuperación ante fallas, y dependencia del almacenamiento local del contenedor/host. Una pérdida de datos o la caída del servicio implican tiempos de recuperación prolongados, degradando así directamente la disponibilidad.
+- *Apoyo a la testeabilidad y diagnóstico:*  
+  El stack de monitoreo potencia la capacidad de análisis durante pruebas de rendimiento (por ejemplo, al utilizar Artillery y observar las métricas en Grafana).  
+  Esto facilita la identificación de comportamientos anómalos y la validación de la estabilidad del sistema, mejorando la *testeabilidad*.  
+  Sin embargo, la infraestructura adicional necesaria para habilitar el monitoreo también introduce complejidad en el entorno de prueba, lo que puede dificultar la reproducibilidad y el control de los experimentos.
 
-**** **Arquitectura monolítica y su impacto**
+- *Seguridad y aislamiento:*  
+  Añadir más servicios amplía la superficie de ataque, ya que cada contenedor es un proceso escuchando en distintos puertos internos.  
+  Esto impacta la *seguridad operativa*, aunque su efecto sea poco relevante en entornos locales de desarrollo.
 
-Al analizar la estructura lógica del sistema, se observa que este responde a un patrón **monolítico**, en el cual toda la lógica de negocio, el manejo de estado y la persistencia de datos se concentran en un solo bloque sin separación clara de responsabilidades ni interfaces desacopladas. Este diseño acarrea consecuencias directas sobre la **Disponibilidad**, entre las que se destacan:
-1. **Arquitectura unificada**
-   Toda la lógica de negocio (gestión de cuentas, tasas, transacciones) se encuentra contenida en un único módulo. La caída de cualquier componente interno afecta al sistema en su totalidad, ya que no existen mecanismos de aislamiento de fallos ni tolerancia a errores.
+- *Impacto en la portabilidad del sistema:*  
+  La containerización permite desplegar el stack completo en distintos entornos con relativa facilidad, lo cual favorece la *portabilidad técnica*.  
+  Sin embargo, la fuerte interdependencia entre servicios y las configuraciones específicas de red, puertos y volúmenes reducen la *portabilidad práctica*, dado que pequeñas diferencias en la infraestructura pueden afectar el funcionamiento o requerir ajustes manuales.
 
-2. **Alto acoplamiento entre módulos**
-   Los componentes del sistema tienen dependencias directas y requieren inicializaciones en un orden específico. Esto implica que la indisponibilidad de un módulo interno impide el correcto funcionamiento del resto, amplificando los riesgos de interrupción total.
+- *Interoperabilidad y acoplamiento tecnológico:*  
+  El uso de protocolos y herramientas estandarizadas (UDP, HTTP, Grafana, StatsD) favorece la *interoperabilidad* del sistema, tanto entre sus propios componentes como con futuras herramientas externas de monitoreo.
 
-3. **Escalabilidad y resiliencia limitadas**
-   Al no existir modularidad ni servicios independientes, no es posible escalar ni recuperar selectivamente partes del sistema. Cualquier estrategia de replicación debe aplicarse al monolito completo, lo cual incrementa la complejidad operativa y reduce la capacidad de respuesta frente a fallos.
+** Impactos del modelo de persistencia elegido
 
-**En síntesis**, la naturaleza monolítica del sistema no solo **explica** la existencia de múltiples puntos únicos de falla en la infraestructura actual, sino que también **agrava su impacto**: ante un error en un módulo o en la persistencia de datos, la indisponibilidad afecta a toda la aplicación. Esto limita severamente la capacidad de mantener una operación continua y dificulta la incorporación de mecanismos de alta disponibilidad o recuperación automática.
+El modelo de persistencia implementado en el sistema consiste en mantener en memoria el estado de los datos y, periódicamente, volcar dicho estado a archivos JSON almacenados localmente en la carpeta ~~/state/~~.  
+Esto implica que la persistencia está acoplada directamente a la instancia del servidor —es decir, se trata de un sistema *stateful*—, lo que conlleva una serie de consecuencias relevantes sobre diversos atributos de calidad.
 
-**** **Carencia de uso de transacciones y su impacto**
+- *Acoplamiento con la instancia del servidor:*  
+  Al vincular el estado con una única instancia, las sesiones de usuario y los datos persistentes no pueden compartirse entre instancias.  
+  Esto impide la *escalabilidad horizontal*, dado que cada réplica tendría su propio estado local no sincronizado. Implementar una gestión de estado distribuido requeriría una infraestructura adicional (por ejemplo, una base de datos externa o un servicio de caché compartido).
 
-Otro aspecto crítico identificado es la ausencia de un sistema de **transacciones confiables** para el manejo de operaciones financieras (por ejemplo, conversiones entre diferentes monedas). Actualmente, la persistencia de datos se basa en archivos JSON locales, sin soporte nativo para propiedades ACID.
+- *Impacto en la disponibilidad y rendimiento percibido:*  
+  La existencia de una única instancia con estado convierte al backend en un *punto único de falla*.  
+  Si el servidor se detiene, todas las sesiones activas se pierden y no pueden ser recuperadas por otra instancia.  
+  Esto afecta la *disponibilidad* y la *experiencia del usuario*, ya que aumenta la percepción de fallas y degradación del rendimiento.
 
-Esta limitación introduce riesgos importantes que afectan directamente el atributo de calidad **Disponibilidad**, principalmente se tiene un gran riesgo de **inconsistencias de datos e incremento del tiempo de recuperación**, pues, al no existir mecanismos transaccionales, fallas en medio de una operación (ej. caída del proceso, error de escritura en disco) pueden dejar el sistema en un estado inconsistente. Esto obliga a tareas manuales de verificación y corrección, aumentando el tiempo que el sistema permanece fuera de servicio o con datos inválidos.
-   En ausencia de transacciones, las operaciones incompletas no pueden deshacerse ni repetirse de forma segura. Frente a fallos, el sistema requiere procesos de recuperación manual o la restauración de copias de seguridad, en consecuencia, se disminuye la disponibilidad percibida.
+- *Problemas de concurrencia:*  
+  Al utilizar el sistema de archivos local como medio de persistencia, se introducen *condiciones de carrera* durante operaciones de lectura y escritura concurrentes.  
+  El modelo de concurrencia de Node.js (basado en asincronía) no resulta suficiente para garantizar consistencia, dado que el file system no ofrece bloqueo ni sincronización de accesos concurrentes.  
+  Esto impacta negativamente la *confiabilidad* y la *consistencia de datos*.
 
+- *Ausencia de soporte transaccional:*  
+  El modelo carece de transacciones, por lo que las operaciones no son atómicas ni recuperables ante fallos.  
+  En caso de interrupciones durante la escritura, el sistema puede quedar en estados inconsistentes o requerir restauraciones manuales.  
+  Esto degrada tanto la *disponibilidad* como la *recuperabilidad*.
 
-En conclusión, la carencia de un sistema de transacciones robusto aumenta significativamente la probabilidad de inconsistencias críticas y prolonga los tiempos de recuperación ante fallas. Dado el carácter financiero de las operaciones que maneja el sistema, esta limitación constituye un factor determinante que degrada la **Disponibilidad**, al no poder garantizar continuidad operativa ni datos válidos tras un incidente.
+- *Pérdida de integridad de datos:*  
+  La falta de atomicidad en las operaciones puede dejar al sistema en estados inválidos (por ejemplo, inconsistencias en saldos o cantidades totales).  
+  En consecuencia, la *integridad* del sistema se ve directamente comprometida.
 
-**** **Otras decisiones de diseño con impacto indirecto en la disponibilidad**
+- *Incompatibilidad con balanceo de carga:*  
+  Dado que el modelo de persistencia no soporta replicación, la existencia de un balanceador de carga (como Nginx) se vuelve una decisión cuestionable.  
+  No existen múltiples backends entre los cuales distribuir tráfico, y el balanceador introduce una capa de comunicación adicional que *degrada el rendimiento* sin aportar beneficios reales.
 
-Existen además otras decisiones de diseño que, si bien no afectan a la **Disponibilidad** de manera directa, sí lo hacen de forma indirecta al influir en atributos de calidad relacionados:
+En conjunto, este modelo de persistencia afecta negativamente la *disponibilidad*, la *escalabilidad*, la *integridad* y la *mantenibilidad*, al tiempo que incrementa la *complejidad operativa* y el riesgo de errores durante la evolución del sistema.
 
-- **Monitoreo y métricas**: la toma de métricas y la incorporación de herramientas de observabilidad impactan directamente en el atributo de calidad **Visibilidad**. A su vez, una mayor visibilidad facilita la detección temprana de fallas y acelera los procesos de recuperación, contribuyendo indirectamente a la disponibilidad del sistema.
+** Instancias únicas de cada servicio
 
-- **Escalabilidad**: las limitaciones en la capacidad del sistema para crecer o adaptarse a aumentos de carga afectan principalmente al atributo de calidad **Escalabilidad**. Sin embargo, la incapacidad de manejar picos de demanda también puede llevar a interrupciones o caídas, degradando en consecuencia la disponibilidad.
+El sistema fue diseñado de manera que cada servicio (API, proxy inverso Nginx, almacenamiento local, etc.) cuenta con una única instancia activa.  
+Esta decisión genera *múltiples puntos únicos de falla* y limita severamente la capacidad del sistema para mantener su operación ante fallos parciales.
 
-- **Mantenibilidad y evolución**: un diseño con alto acoplamiento o con dificultades para introducir cambios de manera segura impacta directamente en la **Mantenibilidad**. De forma indirecta, esto puede derivar en mayor riesgo de errores durante despliegues o en tiempos prolongados de indisponibilidad ante actualizaciones.
+- Si cualquiera de estos servicios se detiene, el sistema completo se vuelve *indisponible*, afectando directamente la *disponibilidad* y la *tolerancia a fallos*.  
+- La ausencia de mecanismos automáticos de recuperación o reinicio (como *health checks*, *watchdogs* o políticas de *restart* configuradas en Docker) agrava el impacto de las fallas, ya que se requiere intervención manual para restablecer el servicio.  
+- Tampoco existen estrategias de *replicación*, *balanceo* ni *redundancia*, lo que hace imposible sostener niveles de servicio adecuados bajo carga o ante degradación de componentes.
 
-Estas decisiones se abordarán en mayor detalle en las secciones correspondientes a cada atributo de calidad. Aquí basta con señalar que, aunque su impacto sobre la **Disponibilidad** no sea inmediato, sí la condicionan en tanto facilitan (o dificultan) la prevención, mitigación y recuperación frente a fallos.
+Esta configuración puede ser suficiente para entornos de desarrollo o demostración, pero resulta *inadecuada para entornos de producción*, donde la *disponibilidad*, *resiliencia* y *recuperabilidad* son atributos esenciales.
 
+** Ausencia de un patrón de arquitectura interna
 
-*** Escalabilidad (Elasticidad)
-Actualmente hay un Nginx que actúa como reverse proxy y potencialmente balanceador de carga, pero en este momento solo tiene configurada una sola instancia de la app de Node.js. De todas formas, notamos varios problemas con esto. En principio, la app es _stateful_ porque guarda el estado en memoria y guarda cada tantos segundos el estado de la memoria en distintos archivos JSON en la carpeta ~state/~. Esto hace que no se pueda escalar horizontalmente la app sin perder el estado, ya que cada instancia tendría su propio estado en memoria y no habría forma de sincronizarlos.
+El sistema carece de un patrón de arquitectura claramente definido a nivel interno (por ejemplo, MVC, capas o microservicios), lo cual genera una estructura *monolítica y fuertemente acoplada*.  
+Esta decisión afecta negativamente atributos clave del sistema relacionados con su evolución y mantenibilidad.
 
-*** Performance
+- *Dificultad para modificar o extender funcionalidades:*  
+  La ausencia de separación de responsabilidades y de interfaces desacopladas complica la incorporación de nuevas funcionalidades (*extensibilidad*) o la modificación segura de las existentes (*modificabilidad*).
 
-*** Visibilidad:
+- *Incremento en la complejidad del código:*  
+  La lógica de negocio, de presentación y de persistencia tienden a mezclarse, lo que eleva la *complejidad cognitiva* y el riesgo de introducir errores.
 
-Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas métricas en un dashboard creado por la cátedra que permite visualizar algunas métricas como Scenarios launched, Request state, Response time y Resources. Faltarían métricas más específicas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
+- *Falta de testabilidad:*  
+  Al no existir módulos claramente delimitados, las pruebas unitarias o de integración se vuelven difíciles de implementar, afectando la *testeabilidad* del sistema.
 
-*** Seguridad
+- *Escasa capacidad de evolución:*  
+  La arquitectura monolítica limita la posibilidad de migrar gradualmente a tecnologías más modernas o de reestructurar componentes de forma incremental.
 
-*** Testabilidad
-
-*** Portabilidad
-
-*** Interoperabilidad
-
-*** Usabilidad
-
-*** Manejabilidad
-
-*** Confiabilidad
-
-*** Simplicidad
-
-*** Modificabilidad
+En conjunto, esta ausencia de estructura arquitectónica limita la *mantenibilidad*, *evolutividad*, *testeabilidad* y *extensibilidad*, dificultando la gestión del ciclo de vida del software.
 
 ** Diagrama C&C inicial.
 
@@ -232,7 +263,100 @@ p_cadvisor_host --> p_cadvisor_docker
 
 Con el propósito de realizar pruebas y tener una medición de los atributos de calidad relevantes del sistema, se realizaron pruebas de carga sobre la aplicación mediante la herramienta Artillery y junto con StatsD, Graphite, Grafana y Datadog, se realiza la recolección y visualización de los datos de desempeño, incluyendo métricas como tiempos de respuesta, errores y uso de recursos, lo que permite evaluar la capacidad del sistema para manejar diferentes niveles de carga y detectar posibles cuellos de botella.
 
-** DataDog
+*** Graphit + Grafana
+
+*** StatsD (métricas custom)
+
+En la app se agregaron métricas propias con ~hot-shots~ (cliente StatsD/DogStatsD) usando el prefijo ~arvault.~. Se emiten en dos puntos: (a) middleware HTTP para latencia y throughput, y (b) lógica de negocio del exchange para volumen y estado de las operaciones.
+
+- HTTP (Performance)
+  - ~arvault.api.response_time~ (*timing*, ms): latencia por request medida en el middleware. Útil para ver p50/p95/p99 y detectar degradaciones bajo carga.
+  - ~arvault.api.requests~ (*counter*): throughput de la API. Sirve para correlacionar picos de tráfico con cambios en latencia y calcular tasas (p. ej., error rate).
+
+- Negocio (Visibilidad, Disponibilidad proxy)
+  - ~arvault.exchange.transactions~ (*counter*): total de operaciones de intercambio. Base para segmentar por par de monedas y estado.
+    - ~arvault.exchange.successful_transactions~ (*counter*): operaciones exitosas; permite estimar disponibilidad efectiva percibida.
+    - ~arvault.exchange.failed_transactions~ (*counter*): operaciones fallidas; se usa con la anterior para ver el ratio de fallas.
+  - ~arvault.exchange.base_amount~ / ~arvault.exchange.counter_amount~ (*gauge*): montos de la operación en moneda base y contraparte. Ayudan a entender volumen económico y detectar outliers.
+  - ~arvault.exchange.rate~ (*gauge*): tasa aplicada al momento del intercambio. Útil para auditar cambios de precio y drift respecto de configuraciones.
+  - ~arvault.volume.by_currency~ (*gauge*): volumen por ~currency~ y ~operation~ (~buy/sell~). Indica monedas demandadas y patrones de demanda.
+  - ~arvault.volume.operations_count~ (*counter*): cantidad de operaciones por dimensión de volumen; complementa el gauge para ver frecuencia sin importar el monto.
+  - ~arvault.volume.net~ (*gauge*): balance neto por moneda (positivo en ~buy~, negativo en ~sell~). Sirve para monitorear exposición neta / liquidez.
+  - ~arvault.account.balance~ (*gauge*): balances reportados por cuenta/moneda. Útil para verificar disponibilidad de fondos y umbrales operativos.
+
+- Errores (Confiabilidad)
+  - ~arvault.errors.count~ (*counter*)
+
+Las métricas incluyen *tags* según el caso (p. ej., ~endpoint~, ~method~, ~status_code~, ~currency~, ~operation~, ~base_currency~, ~counter_currency~, ~success~, y metadatos globales ~service~, ~env~). Estas señales se usan luego para contrastar escenarios de carga y fundamentar observaciones sobre **Performance**, **Disponibilidad** y **Visibilidad**.
+
+*** DataDog (logs + métricas etiquetadas)
+
+Se habilitó **logging estructurado** y el envío de **métricas etiquetadas** compatibles con DogStatsD.
+
+- Logs JSON con ~winston~
+  - Formato: ~timestamp~, captura de ~errors({ stack: true })~, y ~defaultMeta~ (~service~, ~env~, ~version~).
+  - Registros implementados:
+    - ~logRequest~: método, URL/path, ~status_code~, ~response_time~, ~user_agent~, IP, ~request_id~.
+    - ~logValidationError~: errores de entrada (tipo, mensaje, ~endpoint~, ~request_data~).
+    - ~logSystemError~: fallas internas (mensaje, ~stack~, nombre de error, ~context~).
+    - ~logExchangeTransaction~: resultado de intercambio (ok/falla), IDs de cuentas, monedas, montos, ~exchange_rate~, mensaje de error si aplica.
+    - ~logPerformance~: duración de operaciones puntuales.
+    - ~logLifecycleEvent~: eventos de ciclo de vida (ej., ~startup~).
+
+- Métricas con *tags* (DogStatsD)
+  - Las métricas ~arvault.*~ anteriores se envían con *tags* (p. ej., ~endpoint~, ~method~, ~status_code~, ~currency~, ~operation~, ~base_currency~, ~counter_currency~, ~success~, además de ~service~, ~env~, ~version~).
+  - Esto permite segmentar los indicadores de **Performance** y **Visibilidad** por dimensiones de negocio y técnicas.
+
+*** DataDog (dashboard)
+
+Armamos un dashboard simple para entender las fallas criticas del servicio y ademas entender el dominio del negocio. La idea es cubrir tres frentes a la vez: **Performance** (qué tan rápido respondemos), **Disponibilidad/Confiabilidad** (qué tan seguido falla) y **Visibilidad** (qué parte del negocio está más activa).
+
+**** Requests per endpoint
+Cuántas llamadas recibe cada ruta. Con esto vemos cuáles son las más usadas y dónde conviene poner foco de capacidad.
+#+CAPTION: Requests por endpoint
+[[file:assets/db-02-requests-by-endpoint.png]]
+
+**** Status Codes Distribution
+La mezcla de 200/4xx/5xx a lo largo del tiempo. Es nuestro termómetro de salud: muchos 5xx = algo se rompió del lado servidor; pico de 4xx = validaciones/UX para revisar.
+#+CAPTION: Distribución de status codes
+[[file:assets/db-03-status-codes.png]]
+
+**** Exchange – Success rate
+Porcentaje de transacciones que salen bien vs. fallan. Cuando baja, impacta directo al negocio y hay que mirar lógica y dependencias.
+#+CAPTION: Tasa de éxito de transacciones de exchange
+[[file:assets/db-04-exchange-success-rate.png]]
+
+**** Exchange – Total transactions
+Volumen bruto de operaciones. Útil para ver actividad, comparar días y estimar capacidad necesaria.
+#+CAPTION: Total de transacciones de exchange
+[[file:assets/db-05-exchange-total.png]]
+
+**** Volume by currency
+Cuánta actividad concentra cada moneda (USD, ARS, EUR, …). Ayuda con liquidez y prioridades: dónde hay más movimiento, ahí hay más riesgo/atención.
+#+CAPTION: Volumen por moneda
+[[file:assets/db-06-volume-by-currency.png]]
+
+**** Net volume by currency
+Compras menos ventas por moneda. Si el neto de USD es muy negativo, estamos vendiendo más de lo que compramos: ojo con la posición.
+#+CAPTION: Volumen neto por moneda
+[[file:assets/db-07-net-volume-by-currency.png]]
+
+**** Exchange rates
+Las tasas vigentes por par. Sirve para chequear precios, detectar volatilidad y cuidar márgenes.
+#+CAPTION: Tasas de cambio por par
+[[file:assets/db-08-exchange-rates.png]]
+
+**** Error count por tipo
+Los errores agrupados por categoría (p. ej., ~validation_error~, ~exchange_failed~). Da pista rápida de dónde conviene atacar: UX/validaciones o lógica interna.
+#+CAPTION: Conteo de errores por tipo
+[[file:assets/db-10-error-count-by-type.png]]
+
+
+**** KPIs de resumen
+Un par de tarjetas con lo esencial: throughput, total de transacciones y total de errores. Es la vista “de un vistazo” para status diario y alertas.
+#+CAPTION: KPIs de resumen (requests, transacciones, errores)
+[[file:assets/db-12-15-summary-kpis.png]]
+
 
 ** Generación de carga
 
@@ -380,7 +504,7 @@ Adicionalmente es interesante observar el consumo de recursos del balanceador de
 
 <Revisar en donde iria esto>
 
-* Resultados - Valkey/Redis
+* Resultados de propuesta - Valkey/Redis
 
 En las propuestas de mejoras se busca principalmente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicación, dadas las conclusiones resultantes de la sección 5, se analizarán la evolución de las propuestas únicamente en escenarios de alta carga para la aplicación. 
 

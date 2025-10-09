@@ -38,20 +38,15 @@ class ExchangeRate {
       FOR UPDATE`;
     const values = [baseCurrency, counterCurrency];
     
-    try {
-      const result = client 
-        ? await client.query(queryText, values)
-        : await query(queryText, values);
-        
-      if (!result.rows || result.rows.length === 0) {
-        throw new Error(`Exchange rate from ${baseCurrency} to ${counterCurrency} not found`);
-      }
+    const result = client 
+      ? await client.query(queryText, values)
+      : await query(queryText, values);
       
-      return result.rows[0];
-    } catch (error) {
-      console.error('Error in findByCurrenciesWithLock:', error);
-      throw error;
+    if (!result.rows || result.rows.length === 0) {
+      return null;
     }
+      
+    return result.rows[0];
   }
 
   /**

@@ -57,6 +57,7 @@ app.put("/rates", async (req, res) => {
   let rates = await getRates();
 
   res.json(rates);
+  console.log("Resquets responsed");
 });
 
 // LOG endpoint

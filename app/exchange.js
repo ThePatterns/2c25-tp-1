@@ -49,8 +49,10 @@ export async function setRate(rateRequest, client) {
     
     // Update or create the rate
     if (existingRate) {
+      console.log(`Updating existing rate for ${baseCurrency}/${counterCurrency}: ${rate}`);
       await ExchangeRate.updateRate(baseCurrency, counterCurrency, rate, client);
     } else {
+      console.log(`Creating new rate for ${baseCurrency}/${counterCurrency}: ${rate}`);
       await ExchangeRate.createRate(baseCurrency, counterCurrency, rate, client);
     }
 

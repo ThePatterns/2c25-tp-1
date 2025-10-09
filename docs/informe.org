@@ -43,7 +43,7 @@ Se busca realizar un análisis del estado actual de la API y evaluar su arquitec
 
 ** Alcance del análisis.
 
-El alcance del proyecto consiste en analizar la arquitectura actual del sistema, identidicar los atributos de calidad clave para el producto y medirlos mediante la ejecución de pruebas de estrés, con el proposito de identificar y evaluar distintas propuestas arquitectónicas que mejoren la solución, y efectuar una comparativa final de los resultados obtenidos sobre los atributos de calidad en cada escenario planteado.
+El alcance del proyecto consiste en analizar la arquitectura actual del sistema, identificar los atributos de calidad clave para el producto y medirlos mediante la ejecución de pruebas de estrés, con el propósito de identificar y evaluar distintas propuestas arquitectónicas que mejoren la solución, y efectuar una comparativa final de los resultados obtenidos sobre los atributos de calidad en cada escenario planteado.
 
 * Atributos de calidad (QA) identificados
 
@@ -84,7 +84,7 @@ El valor de este atributo de calidad es más indirecto, pero estratégico, ya qu
 
 **** **Puntos únicos de falla (únicas instancias de servicios) y su impacto**
 
-Analizando las decisiones de diseño tomadas por el desarollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
+Analizando las decisiones de diseño tomadas por el desarrollador, particularmente con un análisis de la infraestructura y diseño del despliegue del sistema, nos percatamos que los puntos que se mencionan a continuación impactan negativamente en la Disponibilidad del sistema pues modelan una arquitectura con alta dependencia de componentes individuales, sin mecanismos de redundancia, con múltiples puntos únicos de falla y carente de mecanismos de recuperación automática, lo cual implica que la falla de un solo servicio (API, Nginx, almacenamiento local) ocasionaría la indisponibilidad total del sistema.
 1. **Backend (API)**
 
     Se despliega una única instancia del servicio de API (según la configuración en docker-compose). De esta forma, la ausencia de réplicas y de un mecanismo efectivo de balanceo de carga (porque no hay múltiples nodos entre los cuales se balancee la carga) la caída de dicha instancia del backend causaría que el sistema completo deje de responder a solicitudes.
@@ -137,13 +137,13 @@ Estas decisiones se abordarán en mayor detalle en las secciones correspondiente
 
 
 *** Escalabilidad (Elasticidad)
-Actualmente hay un Nginx que actua como reverse proxy y potencialmente balanceador de carga, pero en este momento solo tiene configurado una sola instancia de la app de Node.js. De todas formas, notamos varios problemas con esto. En principio, la app es _stateful_ porque guarda el estado en memoria y guarda cada tantos segundos el estado de la memoria en distintos archivos json en la carpeta ~state/~. Esto hace que no se pueda escalar horizontalmente la app sin perder el estado, ya que cada instancia tendria su propio estado en memoria y no habria forma de sincronizarlos.
+Actualmente hay un Nginx que actúa como reverse proxy y potencialmente balanceador de carga, pero en este momento solo tiene configurada una sola instancia de la app de Node.js. De todas formas, notamos varios problemas con esto. En principio, la app es _stateful_ porque guarda el estado en memoria y guarda cada tantos segundos el estado de la memoria en distintos archivos JSON en la carpeta ~state/~. Esto hace que no se pueda escalar horizontalmente la app sin perder el estado, ya que cada instancia tendría su propio estado en memoria y no habría forma de sincronizarlos.
 
 *** Performance
 
 *** Visibilidad:
 
-Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas metricas en un dashboard creado por la catedra que permite visualizar algunas metricas como Scenarios launched, Request state, Response time y Resources. Faltarian metricas mas especificas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
+Actualmente hay un contenedor de Graphite y otro de Grafana para monitorear el sistema, y tienen algunas métricas en un dashboard creado por la cátedra que permite visualizar algunas métricas como Scenarios launched, Request state, Response time y Resources. Faltarían métricas más específicas del negocio como por ejemplo, volumen de transacciones por moneda, cantidad de clientes activos, etc.
 
 *** Seguridad
 
@@ -236,13 +236,13 @@ Con el propósito de realizar pruebas y tener una medición de los atributos de 
 
 ** Generación de carga
 
-Con proposito de observar la aplicacion se generaron diferentes escenarios de carga, uno de bajan carga con el proposito de observar el comportamiento de la api en un momento de uso con baja intensidad y otro de uso con alta intensidad representando los posibles escenarios en los que se encuentre la aplicacion en produccion. 
+Con propósito de observar la aplicación se generaron diferentes escenarios de carga, uno de baja carga con el propósito de observar el comportamiento de la API en un momento de uso con baja intensidad y otro de uso con alta intensidad representando los posibles escenarios en los que se encuentre la aplicación en producción. 
 
-Los escenarios se aplicaran a cada uno de los endpoints, si es un endpoint get, se generan muchas consultas a la api por el mismo endpoint, mientras que en casos de put se interactuan con las distintas monedas generando una carga mas variada y simulando una situacion lo mas realista posible.
+Los escenarios se aplicarán a cada uno de los endpoints, si es un endpoint GET, se generan muchas consultas a la API por el mismo endpoint, mientras que en casos de PUT se interactúa con las distintas monedas generando una carga más variada y simulando una situación lo más realista posible.
 
 Los patrones son los siguientes:
 
-Para una carga y observar un comportamiento generico de la app:
+Para una carga y observar un comportamiento genérico de la app:
 
 #+BEGIN_SRC yaml :eval no
 phases:
@@ -255,7 +255,7 @@ phases:
     arrivalRate: 5
 #+END_SRC
 
-Mientras que para uso intensivo de la aplicacion se usa el mismo patron pero variando los valores:
+Mientras que para uso intensivo de la aplicación se usa el mismo patrón pero variando los valores:
 
 
 #+BEGIN_SRC yaml :eval no
@@ -269,18 +269,18 @@ phases:
     arrivalRate: 500
 #+END_SRC
 
-Por lo tanto ambas cargas seran aplicadas a los endpoints considerando la variabilidad de los datos en el caso que sea necesario
+Por lo tanto ambas cargas serán aplicadas a los endpoints considerando la variabilidad de los datos en el caso que sea necesario
 
 ** Graficos 
 
-En lineas generales se presentan 4 graficos: 
+En líneas generales se presentan 4 gráficos: 
 
-- **Scenarios launched (stacked)**: Este grafico muestra los escenarios que se estan ejecutando, en caso de ser la prueba de un metodo get, no habra variabilidad en los casos, por otro lado, cuando se trate de un post o un put se podran apreciar la variabilidad en los escenarios de prueba configurados 
-- **Requests state (stacked)**: Muestra el estado de los request, se grafican principalmente los escenarios en los cuales la api contesta a la request con un codigo 200, en algunos casos, se apreciaran la graficacion de errores los cuales consideran: *ECONNRESET* y *ETIMEDOUT*  
-- **Request time (client-side)**: Que permite obtener una magnitud de la performance del producto como tambien del tiempo que toma a la aplicacion en contestar un request 
-- **Resources**: Este grafico permite observar los recursos utilizados por el ordenador tales como: CPU y memoria ram
+- **Scenarios launched (stacked)**: Este gráfico muestra los escenarios que se están ejecutando, en caso de ser la prueba de un método GET, no habrá variabilidad en los casos, por otro lado, cuando se trate de un POST o un PUT se podrán apreciar la variabilidad en los escenarios de prueba configurados 
+- **Requests state (stacked)**: Muestra el estado de las request, se grafican principalmente los escenarios en los cuales la API contesta a la request con un código 200, en algunos casos, se apreciarán la graficación de errores los cuales consideran: *ECONNRESET* y *ETIMEDOUT*  
+- **Request time (client-side)**: Que permite obtener una magnitud de la performance del producto como también del tiempo que toma a la aplicación en contestar una request 
+- **Resources**: Este gráfico permite observar los recursos utilizados por el ordenador tales como: CPU y memoria RAM
 
-Estos graficos no permiten tener una visibilidad amplia y global sobre el funcionamiento de la aplicacion como tambien entender el comportamiento de los *Atributos de calidad* claves de la aplicacion
+Estos gráficos no permiten tener una visibilidad amplia y global sobre el funcionamiento de la aplicación como también entender el comportamiento de los *Atributos de calidad* claves de la aplicación
 
 * Resultados – Caso base
 
@@ -292,77 +292,77 @@ Se procede a presentar los datos de pruebas recolectados en un escenario de baja
 
 [[file:./assets/ratesscenarios.png]]
 
-Por la simplicidad del endpoint y dada la falta de parametros que tiene el mismo, el grafico representa la evolucion a traves del tiempo de la cantidad de consultas que son realizadas al endpoint
+Por la simplicidad del endpoint y dada la falta de parámetros que tiene el mismo, el gráfico representa la evolución a través del tiempo de la cantidad de consultas que son realizadas al endpoint
 
 [[file:./assets/ratesstate.png]]
 
-De los datos se puede extraer que en un escenario de baja carga de la api, se observa que la totalidad de las consultas fue contestada de manera satisfactoria 
+De los datos se puede extraer que en un escenario de baja carga de la API, se observa que la totalidad de las consultas fue contestada de manera satisfactoria 
 
 [[file:./assets/ratesresponsetime.png]]
 
-Del este grafico se puede extraer informacion sobre el tiempo de procesamiento y la latencia existente entre el cliente y la aplicacion debido a ser un escenario de pruebas en este caso la latencia es un valor despreciable, mientras que, el se puede apreciar la evolucion del tiempo de procesamiento y se podria considerar la relacion existente entre este y la cantidad de request que se encuentra procesando el servidor en el momento
+De este gráfico se puede extraer información sobre el tiempo de procesamiento y la latencia existente entre el cliente y la aplicación, debido a ser un escenario de pruebas en este caso la latencia es un valor despreciable, mientras que se puede apreciar la evolución del tiempo de procesamiento y se podría considerar la relación existente entre este y la cantidad de request que se encuentra procesando el servidor en el momento
 
 [[file:./assets/ratesresources.png]]
 
-Finalmente la cantidad de recursos del ordenador usadas para procesar las consultas no parece ser representativa, se puede concluir que en escenarios de baja intensidad la api responde de manera eficiente y tanto la performance percibida por el usuario como la disponibilidad no se ven afectados en estos escenarios 
+Finalmente la cantidad de recursos del ordenador usadas para procesar las consultas no parece ser representativa, se puede concluir que en escenarios de baja intensidad la API responde de manera eficiente y tanto la performance percibida por el usuario como la disponibilidad no se ven afectados en estos escenarios 
 
-*** Analisis del endpoint putrates 
+*** Análisis del endpoint putrates 
 
 [[file:./assets/putratesscenarios.png]]
 
-Al tratarse de un metodo put, la variabilidad entre los diferentes tipos de monedas utilizadas se puede usar para ejemplificar el funcionamiento en el test, por lo tanto, se puede apreciar que hay una tendencia a realizar cuatro tipos de transacciones diferentes considerando las distintas monedas
+Al tratarse de un método PUT, la variabilidad entre los diferentes tipos de monedas utilizadas se puede usar para ejemplificar el funcionamiento en el test, por lo tanto, se puede apreciar que hay una tendencia a realizar cuatro tipos de transacciones diferentes considerando las distintas monedas
 
 [[file:./assets/putratesstate.png]]
 
-Como en el caso anterior, todos las peticiones al servidor respondieron de manera satisfactoria a los clientes 
+Como en el caso anterior, todas las peticiones al servidor respondieron de manera satisfactoria a los clientes 
 
 [[file:./assets/putratesresponsetime.png]]
 
-Una vez mas se puede apreciar la tendencia a que el uso de recursos (en este caso del CPU) sea mas intensivo en el periodo mas temprano en que se realiza el test, es importante aclarar que la recta verde representa los maximos registrados, un valor mas parecido al real percibido por el cliente es la media del tiempo de respuesta que tambien se encuentra en el grafico
+Una vez más se puede apreciar la tendencia a que el uso de recursos (en este caso del CPU) sea más intensivo en el período más temprano en que se realiza el test, es importante aclarar que la recta verde representa los máximos registrados, un valor más parecido al real percibido por el cliente es la media del tiempo de respuesta que también se encuentra en el gráfico
 
 [[file:./assets/putratesresources.png]]
 
 Nuevamente se observa que no existe un uso excesivo de los recursos del ordenador, por lo tanto, en escenarios de baja intensidad el endpoint contesta de manera satisfactoria a las transacciones 
 
-*** Analisis del endpoint exchange
+*** Análisis del endpoint exchange
 
 [[file:./assets/exchangescenario.png]]
 
-Como en el caso del endpoint anterior, se agrega variabilidad en los escenarios de prueba para simular de manera mas realista el escenario de la aplicacion que se encuentra productiva, los escenarios estan dispuestos que ocurran de manera equiprobable 
+Como en el caso del endpoint anterior, se agrega variabilidad en los escenarios de prueba para simular de manera más realista el escenario de la aplicación que se encuentra en producción, los escenarios están dispuestos que ocurran de manera equiprobable 
 
 [[file:./assets/exchangestatus.png]]
 
-Todos los post fueron realizados de manera exitosa sin presentar ningun problema en la aplicacion 
+Todos los POST fueron realizados de manera exitosa sin presentar ningún problema en la aplicación 
 
 [[file:./assets/exchangeresponsetime.png]]
 
-A comparacion de los otros endpoints analizados, es evidente que la finalizacion de esta tarea tiene un orden de magnitud superior a los otros casos, vease que en las pruebas anteriores el maximo de los tiempos de ejecución se encontraba al rededor de los 30 ms mientras que la media se encontraba al rededor de los 20 ms, para este endpoint los tiempos de ejecución se van hasta el rango de los 600 - 800 ms. Esta prueba permite identificar que este endpoint puede ser un posible cuello de botella en un caso de alto volumen de transacciones 
+A comparación de los otros endpoints analizados, es evidente que la finalización de esta tarea tiene un orden de magnitud superior a los otros casos, véase que en las pruebas anteriores el máximo de los tiempos de ejecución se encontraba alrededor de los 30 ms mientras que la media se encontraba alrededor de los 20 ms, para este endpoint los tiempos de ejecución se van hasta el rango de los 600 - 800 ms. Esta prueba permite identificar que este endpoint puede ser un posible cuello de botella en un caso de alto volumen de transacciones 
 
 [[file:./assets/exchangeresources.png]]
 
-Finalmente observando el uso de los recursos del ordenador, se destaca el uso del CPU, para llevar a cabo este conjunto de operaciones el uso del CPU escalo a casi el 1% de su uso. Con este resultado y el anterior es facil identificar a este endpoint como uno de los posibles casos a considerar para aplicar estrategias en busca de mejorar la performance, esto, pensando a futuro en escenarios de uso intensivo de la aplicacion
+Finalmente observando el uso de los recursos del ordenador, se destaca el uso del CPU, para llevar a cabo este conjunto de operaciones el uso del CPU escaló a casi el 1% de su uso. Con este resultado y el anterior es fácil identificar a este endpoint como uno de los posibles casos a considerar para aplicar estrategias en busca de mejorar la performance, esto, pensando a futuro en escenarios de uso intensivo de la aplicación
 
-Ademas de la informacion anteriormente recolectada, para evitar la repeticion sobre la evidencia se descarta la presentacion de las pruebas para los otros endpoints, puesto que, la informacion recolectada fue similar y no fue concluyente a la hora de determinar nuevas estrategias arquitectonicas que no puedan ser deducidas de los problemas que fueron encontrados anteriormente en el resto de endpoints
+Además de la información anteriormente recolectada, para evitar la repetición sobre la evidencia se descarta la presentación de las pruebas para los otros endpoints, puesto que la información recolectada fue similar y no fue concluyente a la hora de determinar nuevas estrategias arquitectónicas que no puedan ser deducidas de los problemas que fueron encontrados anteriormente en el resto de endpoints
 
 ** Prueba con carga alta
 
 *** Análisis del endpoint Rates
 
-Se presentan los datos de pruebas recolectados en un escenario de uso intensivo de la aplicacion
+Se presentan los datos de pruebas recolectados en un escenario de uso intensivo de la aplicación
 
 [[file:./assets/ratesfscenarios.png]]
 [[file:./assets/ratesfstate.png]]
 [[file:./assets/ratesfresponsetime.png]]
 [[file:./assets/ratesfresources.png]]
 
-*** Analisis del enpoint putrates 
+*** Análisis del endpoint putrates 
 
 [[file:./assets/putratesfscenarios.png]]
 [[file:./assets/putratesfstate.png]]
 [[file:./assets/putratesfresponsetime.png]]
 [[file:./assets/putratesfresources.png]]
 
-*** Analisis del enpoint exchange
+*** Análisis del endpoint exchange
 
 [[file:./assets/exchangefscenario.png]]
 [[file:./assets/exchangefstatus.png]]
@@ -382,9 +382,9 @@ Adicionalmente es interesante observar el consumo de recursos del balanceador de
 
 * Resultados - Valkey/Redis
 
-En las propuestas de mejoras se busca principalemente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicacion, dadas las conclusiones resultantes de la seccion 5, se analizaran la evolucion de las propuestas unicamente en escenearios de alta carga para la aplicacion. 
+En las propuestas de mejoras se busca principalmente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicación, dadas las conclusiones resultantes de la sección 5, se analizarán la evolución de las propuestas únicamente en escenarios de alta carga para la aplicación. 
 
-Se presentan los resultados de haber integrado valkey en la aplicacion: 
+Se presentan los resultados de haber integrado Valkey en la aplicación: 
 
 ** Rates
 
@@ -402,9 +402,9 @@ Se presentan los resultados de haber integrado valkey en la aplicacion:
 
 * Propuestas de mejora
 
-** Implementacion de Valkey como persistencia
+** Implementación de Valkey como persistencia
 
-*** Tactica aplicada
+*** Táctica aplicada
 
 La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Los datos se almacenan como claves en Redis:
 
@@ -418,7 +418,7 @@ El módulo ~valkey.js~ proporciona funciones asíncronas para inicializar la con
 
 En ~exchange.js~, se importa y utiliza este módulo para todas las operaciones de persistencia, reemplazando las lecturas/escrituras directas a archivos. La inicialización se realiza al inicio de la aplicación con ~await valkeyInit()~.
 
-*** Configuracion
+*** Configuración
 
 Se agregó un servicio ~valkey~ en el ~docker-compose.yml~ utilizando la imagen ~valkey/valkey:8.1.4-alpine~, expuesto en el puerto 6379. La aplicación se conecta mediante la variable de entorno ~VALKEY_URL=redis://valkey:6379~.
 
@@ -502,9 +502,9 @@ p_cadvisor_host --> p_cadvisor_docker
 [[file:assets/componentes-modificados.png]]
 
 
-** Implementacion de PostgreSQL como persistencia
+** Implementación de PostgreSQL como persistencia
 
-*** Tactica aplicada
+*** Táctica aplicada
 
 La implementación utiliza PostgreSQL como almacén de datos relacional, reemplazando la persistencia en archivos JSON y Valkey. Las tablas creadas son:
 
@@ -518,7 +518,7 @@ El módulo ~databaseAdapter.js~ proporciona funciones para conectarse a PostgreS
 
 En ~exchange.js~, se utilizan estos modelos para todas las operaciones financieras, incluyendo transacciones atómicas para intercambios que requieren consistencia (ej. actualizar balances y registrar transacción en una sola operación).
 
-*** Configuracion
+*** Configuración
 
 Se agregó un servicio ~postgres~ en el ~docker-compose.yml~ utilizando la imagen ~postgres:15-alpine~, con inicialización de la base de datos mediante el script ~01-init.sql~ que crea las tablas, índices y datos iniciales.
 
@@ -605,7 +605,7 @@ p_cadvisor_host --> p_cadvisor_docker
 [[file:assets/componentes-postgresql.png]]
 
 
-** Comparacion de estados de requests
+** Comparación de estados de requests
 
 #+CAPTION: Estado de requests en la arquitectura base
 [[file:assets/request-state-base.png]]

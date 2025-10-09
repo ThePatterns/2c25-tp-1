@@ -347,12 +347,59 @@ Los errores agrupados por categoría (p. ej., ~validation_error~, ~exchange_fail
 #+CAPTION: Conteo de errores por tipo
 [[file:assets/db-10-error-count-by-type.png]]
 
-
 **** KPIs de resumen
 Un par de tarjetas con lo esencial: throughput, total de transacciones y total de errores. Es la vista “de un vistazo” para status diario y alertas.
 #+CAPTION: KPIs de resumen (requests, transacciones, errores)
 [[file:assets/db-12-15-summary-kpis.png]]
+**** Escenario de prueba
+- *pool:* ~50~ conexiones HTTP en el *pool*.
+- *Fases:*
+  - ~Ramp~: 30s escalando de ~0~ a ~1000 rps~. Permite observar cómo reacciona la API cuando sube la presión.
+  - ~Plain~: 60s sostenidos en ~500 rps~. Ventana “estable” para observar latencias, errores y uso de recursos sin el ruido del ramp-up.
+- *Escenarios (mix 25/25/25/25):* cuatro flujos sobre */exchange* con pares distintos:
+  - ~ARS→USD~, ~USD→ARS~, ~EUR→ARS~, ~BRL→ARS~, con montos chicos (~5~, ~10~, ~50~) y cuentas fijas.
+  - *Expect* ~[200, 500]~: el test **no falla** si la API devuelve ~500~; se registra a propósito para medir tasa de éxito/fracaso con las métricas de negocio (~arvault.exchange.*~). Así el *runner* no “rompe” y se obtienen datos comparables.
 
+**** Lectura del dashboard
+#+CAPTION: Resumen de la corrida (ventana analizada)
+[[file:assets/dd-overview.png]]
+
+En la ventana analizada se ejecutaron ~662~ requests de *transacción de exchange*. El panel de *Status Codes* muestra ~600~ respuestas ~200~ en el mismo tramo; esa diferencia se explica por la ventana temporal y por la semántica de los contadores (ciertas transacciones quedan registradas aunque el cliente corte antes de recibir la respuesta).
+
+1) *Status Codes Distribution* — *Disponibilidad / Confiabilidad*
+#+CAPTION: Distribución de códigos HTTP
+[[file:assets/dd-status-codes.png]]
+
+En este intervalo todas las respuestas graficadas fueron ~200~ (suma ~600~); no aparece serie para ~500~. Hubo un pico de ~218~ respuestas en un bucket y el último ronda ~209~. En síntesis: *error rate 0%* en la muestra y la API soportó bien el *burst* sin caerse.
+
+2) *Exchange Transactions Success Rate* — *Confiabilidad de negocio*
+#+CAPTION: Tasa de transacciones exitosas por segundo
+[[file:assets/dd-success-rate.png]]
+
+Se observa un pico cercano a ~218/s~, luego una caída casi a cero y más tarde una meseta de ~20–70/s~ antes de apagarse al final. El promedio de la ventana es ~33/s. La serie de ~failed_transactions~ permanece en ~0~, por lo que en este tramo no se registran fallas: lo que entró, se procesó OK.
+
+3) *Total Exchange Transactions* — *Actividad / Throughput de negocio*
+#+CAPTION: Volumen total de transacciones por intervalo
+[[file:assets/dd-total-exchange-transactions.png]]
+
+Se distinguen ráfagas claras: entre ~23:07–23:08~ aparecen dos picos (~219~ por bucket) y, cerca de ~23:09~, barras más bajas (decenas por intervalo). En el tramo suman ~662~ transacciones, con *promedio ~33/s* y valor instantáneo hacia el final de ~19/s*. El sistema tolera picos altos puntuales y luego se estabiliza en un caudal menor.
+
+4) *Volume by Currency* (barras) — *Visibilidad / Liquidez*
+#+CAPTION: Volumen por moneda (detalle por currency)
+[[file:assets/dd-volume-by-currency-bars.png]]
+
+El movimiento se concentra casi por completo en ~ARS~: suma ~112.65k~, con picos de ~14.7k~ y mínimos de ~8.7k~ por barra. En comparación, ~USD~ suma ~90~, ~EUR~ ~45~ y ~BRL~ ~450~. En otras palabras, *ARS explica ~99.5% del volumen* del período, coherente con el caso de uso (tres escenarios terminan en ARS y uno sale de ARS).
+
+#+CAPTION: Volumen por moneda (vista apilada para contraste)
+[[file:assets/dd-volume-by-currency-stacked.png]]
+
+La vista apilada resalta la escala de ~USD/EUR/BRL~ frente a ~ARS~. Además, las columnas mantienen alturas similares a lo largo del tiempo, señal de que la fase ~Plain~ de Artillery sostuvo un ritmo estable.
+
+5) *Net Volume by Currency* (líneas) — *Visibilidad / Exposición*
+#+CAPTION: Volumen neto por moneda (positivo = buy / negativo = sell)
+[[file:assets/dd-net-volume.png]]
+
+El signo importa: positivo cuando se *compra* la moneda y negativo cuando se *vende*. ~ARS~ se mantiene fuertemente positivo toda la ventana; la línea oscila entre ~8.7k~ y ~14.69k~ por intervalo (promedio ~11.84k~, acumulado ~106.58k~, último ~13.86k~). Esto encaja con los escenarios (tres compran ARS y uno vende ARS). Las demás monedas quedan casi planas y negativas por los montos base: ~USD -10~ por evento (suma ~-90~), ~EUR -5~ (suma ~-45~) y ~BRL -50~ (suma ~-450~).
 
 ** Generación de carga
 
@@ -638,7 +685,6 @@ p_cadvisor_host --> p_cadvisor_docker
 
 #+RESULTS:
 [[file:assets/componentes-modificados.png]]
-
 
 ** Implementación de PostgreSQL como persistencia
 

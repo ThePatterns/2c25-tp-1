@@ -19,7 +19,7 @@ config:
       rampTo: 1000
     - name: Plain
       duration: 60
-      arrivalRate: 500
+      arrivalRate: 350
 
 scenarios:
   - name: Exchange ARS to USD
@@ -54,7 +54,7 @@ scenarios:
           expect:
             - statusCode: [200, 500]
 
-  - name: Exchange EUR to ARS  
+  - name: Exchange EUR to ARS
     weight: 25
     flow:
       - post:

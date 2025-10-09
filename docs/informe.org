@@ -470,7 +470,7 @@ Además de la información anteriormente recolectada, para evitar la repetición
 
 ** Prueba con carga alta
 
-Se presentan los datos de pruebas recolectados en un escenario de uso intensivo de la aplicación
+Se presentan los datos de pruebas recolectados en un escenario de alta carga de la aplicación.
 
 *** Análisis del endpoint GET Rates
 
@@ -510,21 +510,41 @@ Similar al endpoint analizado anteriormente nuevamente el tiempo promedio y el t
 
 [[file:./assets/putratesfresources.png]]
 
+Como en el caso anterior no se observa un uso excesivo de los recursos para el nodo de la api.
+
 *** Análisis del endpoint POST exchange
 
 [[file:./assets/exchangefscenario.png]]
+
+Se observa la simulacion de casos variados de pruebas para el endpoint post exchange, el analisis de este endpoint es crucial ya que en el caso de baja carga se observo que dicho endpoint era el mas complejo de ejecutarse
+
 [[file:./assets/exchangefstatus.png]]
+
+Debido a los datos recolectados, era evidente, que para este caso ocurriria una situacion similar al realizar la carga en el servidor, esto se debe a la observacion de casos de error por parte de los clientes simil a los casos evaluados anteriormente
+
 [[file:./assets/exchangefresponsetime.png]]
+
+Una vez mas la performance y la disponibilidad del servicio se ven comprometidas y los tiempos de respuesta crecen exponencialmente en escenario de carga alta, alcanzando tambien el rango de los 4-10 segundos para conseguir contestar una respuesta en los clientes por parte del servidor 
+
 [[file:./assets/exchangefresources.png]]
+
+En este caso si se aprecia considerablemente el el crecimiento en el uso de los recursos, esto debido a la complejidad en la realizacion del post como tambien la cantidad de operaciones realizadas en un esceneario de carga muy alta
 
 *** Consumo de recursos del Balanceador de carga
 
 Adicionalmente es interesante observar el consumo de recursos del balanceador de carga que se encuentra trabajando en conjunto con la api, esto para cada uno de los escenarios *intensivos*.
 Se presenta entonces la recoleccion de datos sobre el uso de los recursos del computador por parte del balanceador de carga: 
 
+#+CAPTION: Carga del loadbalancer para get Rates
 [[file:./assets/lbexchangefresources.png]]
+
+#+CAPTION: Carga del loadbalancer para Put Rates
 [[file:./assets/lbputratesfresources.png]]
+
+#+CAPTION: Carga del loadbalancer para Post Exchange
 [[file:./assets/lbexchangefresources.png]]
+
+Finalmente, es facil concluir que el sistema base no posee la capacidad de soportar escenearios de alta carga, comprometiendo la disponibilidad y la performance de un servicio que precisamente busca atraer clientes mediante la mejora de estos atributos de calidad claves
 
 * Propuestas de mejora
 

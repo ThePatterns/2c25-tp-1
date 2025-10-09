@@ -1,0 +1,87 @@
+
+
+config:
+  environments:
+    api:
+      target: 'http://localhost:5555'
+      plugins:
+        statsd:
+          host: localhost
+          port: 8125
+          prefix: "artillery-api"
+
+  pool: 50
+
+  phases:
+    - name: Ramp
+      duration: 30
+      arrivalRate: 0
+      rampTo: 1000
+    - name: Plain
+      duration: 60
+      arrivalRate: 500
+
+scenarios:
+  - name: Exchange ARS to USD
+    weight: 25
+    flow:
+      - post:
+          url: '/exchange?RUP=1'
+          headers:
+            Content-Type: 'application/json'
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "USD"
+            baseAmount: 5
+            baseAccountId: 1
+            counterAccountId: 2
+          expect:
+            - statusCode: [200, 500]
+
+  - name: Exchange USD to ARS
+    weight: 25
+    flow:
+      - post:
+          url: '/exchange?RUP=2'
+          headers:
+            Content-Type: 'application/json'
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
+            baseAmount: 10
+            baseAccountId: 2
+            counterAccountId: 1
+          expect:
+            - statusCode: [200, 500]
+
+  - name: Exchange EUR to ARS  
+    weight: 25
+    flow:
+      - post:
+          url: '/exchange?RUP=3'
+          headers:
+            Content-Type: 'application/json'
+          json:
+            baseCurrency: "EUR"
+            counterCurrency: "ARS"
+            baseAmount: 5
+            baseAccountId: 3
+            counterAccountId: 1
+          expect:
+            - statusCode: [200, 500]
+
+  - name: Exchange BRL to ARS
+    weight: 25
+    flow:
+      - post:
+          url: '/exchange?RUP=4'
+          headers:
+            Content-Type: 'application/json'
+          json:
+            baseCurrency: "BRL"
+            counterCurrency: "ARS"
+            baseAmount: 50
+            baseAccountId: 4
+            counterAccountId: 1
+          expect:
+            - statusCode: [200, 500]

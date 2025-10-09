@@ -14,12 +14,16 @@ if (exists) {
   process.exit(0);
 }
 
-const accounts = fs.readFileSync('./state/accounts.json', 'utf8');
-const log = fs.readFileSync('./state/log.json', 'utf8');
+const accounts = JSON.parse(fs.readFileSync('./state/accounts.json', 'utf8'));
+const log = JSON.parse(fs.readFileSync('./state/log.json', 'utf8'));
 const rates = fs.readFileSync('./state/rates.json', 'utf8');
 
-await client.set('accounts', accounts);
-await client.set('log', log);
+for (const account of accounts) {
+  await client.hSet('accounts', account.id, JSON.stringify(account));
+}
+for (const entry of log) {
+  await client.rPush('log', JSON.stringify(entry));
+}
 await client.set('rates', rates);
 
 await client.disconnect();

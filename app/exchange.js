@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 
-import { init as valkeyInit, getAccounts as valkeyAccounts, getRates as valkeyRates, getLog as valkeyLog, setAccounts as valkeySetAccounts, setRates as valkeySetRates, setLog as valkeySetLog } from "./valkey.js";
+import { init as valkeyInit, getAccounts as valkeyAccounts, getRates as valkeyRates, getLog as valkeyLog, setAccounts as valkeySetAccounts, setRates as valkeySetRates, setLog as valkeySetLog, appendLog, getAccount, setAccount } from "./valkey.js";
 
 //call to initialize the exchange service
 export async function init() {
@@ -14,12 +14,11 @@ export async function getAccounts() {
 
 //sets balance for an account
 export async function setAccountBalance(accountId, balance) {
-  const accounts = await valkeyAccounts();
-  const account = findAccountById(accountId, accounts);
+  const account = await getAccount(accountId);
 
   if (account != null) {
     account.balance = balance;
-    await valkeySetAccounts(accounts);
+    await setAccount(accountId, account);
   }
 }
 
@@ -88,7 +87,8 @@ export async function exchange(exchangeRequest) {
         //all good, update balances
         baseAccount.balance += baseAmount;
         counterAccount.balance -= counterAmount;
-        await valkeySetAccounts(accounts);
+        await setAccount(baseAccount.id, baseAccount);
+        await setAccount(counterAccount.id, counterAccount);
         exchangeResult.ok = true;
         exchangeResult.counterAmount = counterAmount;
       } else {
@@ -106,9 +106,7 @@ export async function exchange(exchangeRequest) {
   }
 
   //log the transaction and return it
-  const log = await valkeyLog();
-  log.push(exchangeResult);
-  await valkeySetLog(log);
+  await appendLog(exchangeResult);
 
   return exchangeResult;
 }

@@ -335,17 +335,17 @@ Para la prueba de carga alta (salidarates2.txt):
 
 *** Tactica aplicada
 
-La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Los datos se almacenan como claves en Redis:
+La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Para optimizar el rendimiento bajo carga alta, se cambió la estructura de almacenamiento:
 
-- ~accounts~: Almacena la lista de cuentas de usuario en formato JSON.
+- ~accounts~: Almacenadas como un hash Redis, donde cada campo es el ID de la cuenta y el valor es el objeto cuenta serializado en JSON. Esto permite actualizaciones individuales sin cargar todas las cuentas.
 
-- ~rates~: Contiene las tasas de cambio entre monedas.
+- ~rates~: Contiene las tasas de cambio entre monedas como un objeto JSON serializado.
 
-- ~log~: Registra el historial de transacciones realizadas.
+- ~log~: Registra el historial de transacciones como una lista Redis, donde cada elemento es una entrada de log serializada en JSON. Esto permite agregar nuevas entradas sin cargar el log completo.
 
-El módulo ~valkey.js~ proporciona funciones asíncronas para inicializar la conexión (~init()~), obtener datos (~getAccounts()~, ~getRates()~, ~getLog()~) y actualizarlos (~setAccounts()~, ~setRates()~, ~setLog()~). Estas funciones serializan/deserializan los datos a JSON para almacenarlos como strings en Redis.
+El módulo ~valkey.js~ proporciona funciones asíncronas para inicializar la conexión (~init()~), obtener datos (~getAccounts()~, ~getRates()~, ~getLog()~), actualizarlos (~setAccounts()~, ~setRates()~, ~setLog()~) y agregar logs (~appendLog()~). Para cuentas, se agregaron ~getAccount()~ y ~setAccount()~ para operaciones individuales.
 
-En ~exchange.js~, se importa y utiliza este módulo para todas las operaciones de persistencia, reemplazando las lecturas/escrituras directas a archivos. La inicialización se realiza al inicio de la aplicación con ~await valkeyInit()~.
+En ~exchange.js~, se optimizaron las operaciones: el log se appendea directamente sin cargar el historial completo, y las cuentas se actualizan individualmente en lugar de recargar todas. La inicialización se realiza al inicio de la aplicación con ~await valkeyInit()~.
 
 *** Configuracion
 
@@ -353,15 +353,17 @@ Se agregó un servicio ~valkey~ en el ~docker-compose.yml~ utilizando la imagen 
 
 *** Beneficios
 
-Al centralizar el estado en Valkey, múltiples instancias de la API pueden compartir el mismo almacén de datos. Esto elimina la dependencia de estado local en memoria o archivos, permitiendo:
+Al centralizar el estado en Valkey con estructuras optimizadas, múltiples instancias de la API pueden compartir el mismo almacén de datos. Esto elimina la dependencia de estado local en memoria o archivos, permitiendo:
 
 - Escalado horizontal sin pérdida de consistencia.
 
 - Persistencia real de los datos, sobreviviente a reinicios de contenedores.
 
+- Operaciones eficientes: append de logs sin cargar el historial completo, y actualizaciones de cuentas individuales sin recargar todas.
+
 - Operaciones atómicas en Redis para transacciones financieras.
 
-Esta táctica mejora significativamente la Disponibilidad y Escalabilidad, mitigando los puntos únicos de falla relacionados con la persistencia local.
+Esta táctica mejora significativamente la Disponibilidad, Escalabilidad y Performance bajo carga alta, mitigando los puntos únicos de falla relacionados con la persistencia local y reduciendo el uso de memoria/I/O para operaciones frecuentes.
 
 #+BEGIN_SRC plantuml :file assets/componentes-modificados.png :exports results
 @startuml

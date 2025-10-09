@@ -845,6 +845,13 @@ En conclusión, la solución basada en PostgreSQL y balanceo de carga mejora la 
 bajo alta concurrencia, a costa de un **mayor tiempo de respuesta promedio** (trade off), representando un compromiso razonable en favor
 de la estabilidad y la consistencia de los datos.
 
-* Trade-offs detectados.
-* Pedido Adicional (Volumen de transacciones por moneda)
+
 * Conclusiones
+
+En este trabajo práctico, se realizó un análisis exhaustivo de la arquitectura actual del servicio de cambio de divisas de arVault, identificando los atributos de calidad críticos (disponibilidad, escalabilidad, rendimiento y visibilidad) y evaluando el impacto de las decisiones de diseño en dichos atributos. A través de pruebas empíricas con escenarios de carga baja y alta, se evidenciaron limitaciones significativas en la arquitectura base, caracterizada por persistencia en archivos JSON locales, instancias únicas de servicios y falta de patrones arquitectónicos internos.
+
+Los resultados empíricos demostraron que bajo carga elevada, el sistema sufría degradaciones críticas en rendimiento y disponibilidad, con tiempos de respuesta que escalaban a más de 10 segundos y altas tasas de errores por timeouts y conexiones fallidas. Esto se debía principalmente a la persistencia stateful acoplada a una única instancia, problemas de concurrencia en el acceso a archivos y ausencia de mecanismos de escalado horizontal.
+
+Se propusieron e implementaron mejoras arquitectónicas clave: la migración a Valkey (Redis) como almacén centralizado y, posteriormente, a PostgreSQL con transacciones ACID, combinadas con balanceo de carga efectivo entre múltiples instancias de la API. Estas tácticas lograron reducir drásticamente la tasa de errores bajo carga alta, mejorando la disponibilidad y confiabilidad del sistema, aunque introduciendo un trade-off en los tiempos de respuesta promedio debido a la coordinación entre nodos y operaciones transaccionales.
+
+En conclusión, las mejoras propuestas permiten a arVault escalar horizontalmente sin pérdida de consistencia, mitigando puntos únicos de falla y fortaleciendo la confianza de usuarios e inversores. Se recomienda implementar estas soluciones en entornos de producción, complementadas con monitoreo continuo y pruebas automatizadas. Futuras extensiones podrían incluir optimizaciones adicionales en el rendimiento, como caching, para minimizar la latencia introducida por las transacciones.

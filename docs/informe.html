@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
 <head>
-<!-- 2025-10-09 Thu 19:49 -->
+<!-- 2025-10-09 Thu 19:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -24,99 +24,97 @@
 <h2>&Iacute;ndice</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org5152bdb">1. Introducción</a></li>
-<li><a href="#orge961291">2. Atributos de calidad (QA) claves identificados</a>
+<li><a href="#orgffdab33">1. Introducción</a></li>
+<li><a href="#org91a27a1">2. Atributos de calidad (QA) claves identificados</a>
 <ul>
-<li><a href="#org3d739e5">2.1. Disponibilidad</a></li>
-<li><a href="#org49c6417">2.2. Escalabilidad (Elasticidad)</a></li>
-<li><a href="#org761ec11">2.3. Performance</a></li>
-<li><a href="#orgce46a15">2.4. Visibilidad</a></li>
+<li><a href="#org73a4780">2.1. Disponibilidad</a></li>
+<li><a href="#org01e1e2c">2.2. Escalabilidad (Elasticidad)</a></li>
+<li><a href="#orgda5c93b">2.3. Performance</a></li>
+<li><a href="#org0d091bc">2.4. Visibilidad</a></li>
 </ul>
 </li>
-<li><a href="#org3bc59a3">3. Arquitectura base</a>
+<li><a href="#org3c44b7c">3. Arquitectura base</a>
 <ul>
-<li><a href="#orgf43b1d9">3.1. Análisis de la influencia de decisiones de diseño en los QA's</a></li>
-<li><a href="#org92f616e">3.2. Incorporación del stack de monitoreo cAdvisor + Artillery + StatsD + Graphite + Grafana</a>
+<li><a href="#org92a40fb">3.1. Análisis de la influencia de decisiones de diseño en los QA's</a></li>
+<li><a href="#org5218b69">3.2. Incorporación del stack de monitoreo cAdvisor + Artillery + StatsD + Graphite + Grafana</a>
 <ul>
-<li><a href="#org4331e13">3.2.1. Impactos identificados</a></li>
+<li><a href="#orga3c6839">3.2.1. Impactos identificados</a></li>
 </ul>
 </li>
-<li><a href="#orgf9cd51d">3.3. Impactos del modelo de persistencia elegido</a></li>
-<li><a href="#org9c79d70">3.4. Instancias únicas de cada servicio</a></li>
-<li><a href="#orgb1ec7df">3.5. Ausencia de un patrón de arquitectura interna</a></li>
-<li><a href="#orgcf0af54">3.6. Diagrama C&amp;C inicial.</a></li>
+<li><a href="#org7740544">3.3. Impactos del modelo de persistencia elegido</a></li>
+<li><a href="#orgd17604d">3.4. Instancias únicas de cada servicio</a></li>
+<li><a href="#org4b39576">3.5. Ausencia de un patrón de arquitectura interna</a></li>
+<li><a href="#orga8deea3">3.6. Diagrama C&amp;C inicial.</a></li>
 </ul>
 </li>
-<li><a href="#orgf2f5c3f">4. Metodología de pruebas</a>
+<li><a href="#org91c9c21">4. Metodología de pruebas</a>
 <ul>
-<li><a href="#org276b9f6">4.1. Set up para recolección y visualización de datos</a>
+<li><a href="#org690904f">4.1. Set up para recolección y visualización de datos</a>
 <ul>
-<li><a href="#orgfab0bb0">4.1.1. Graphite + Grafana + StatsD (métricas custom)</a></li>
-<li><a href="#org8fdb1c6">4.1.2. DataDog (logs + métricas etiquetadas)</a></li>
-<li><a href="#orge8011a6">4.1.3. DataDog (dashboard)</a></li>
+<li><a href="#org72dadbd">4.1.1. Graphite + Grafana + StatsD (métricas custom)</a></li>
+<li><a href="#orgd2a3155">4.1.2. DataDog (logs + métricas etiquetadas)</a></li>
+<li><a href="#orgab66905">4.1.3. DataDog (dashboard)</a></li>
 </ul>
 </li>
-<li><a href="#orge424b72">4.2. Generación de carga</a></li>
-<li><a href="#orgb9b5075">4.3. Graficos</a></li>
+<li><a href="#org9c4e17b">4.2. Generación de carga</a></li>
+<li><a href="#org243a4b8">4.3. Graficos</a></li>
 </ul>
 </li>
-<li><a href="#org3f98a11">5. Resultados empíricos – Caso base</a>
+<li><a href="#org57e45a0">5. Resultados empíricos – Caso base</a>
 <ul>
-<li><a href="#org415406a">5.1. Prueba con carga baja</a>
+<li><a href="#org8ad0169">5.1. Prueba con carga baja</a>
 <ul>
-<li><a href="#orgd9fa1fc">5.1.1. Análisis del endpoint GET Rates</a></li>
-<li><a href="#orgdc70d7f">5.1.2. Análisis del endpoint PUT rates</a></li>
-<li><a href="#org5e1709d">5.1.3. Análisis del endpoint POST exchange</a></li>
+<li><a href="#orgbe67e66">5.1.1. Análisis del endpoint GET Rates</a></li>
+<li><a href="#org467080c">5.1.2. Análisis del endpoint PUT rates</a></li>
+<li><a href="#orgda18129">5.1.3. Análisis del endpoint POST exchange</a></li>
 </ul>
 </li>
-<li><a href="#orgc7f8cb8">5.2. Prueba con carga alta</a>
+<li><a href="#org92cf887">5.2. Prueba con carga alta</a>
 <ul>
-<li><a href="#orgee935d4">5.2.1. Análisis del endpoint GET Rates</a></li>
-<li><a href="#org74904dd">5.2.2. Análisis del endpoint PUT rates</a></li>
-<li><a href="#org9054ddb">5.2.3. Análisis del endpoint POST exchange</a></li>
-<li><a href="#org7721bbe">5.2.4. Consumo de recursos del balanceador de carga</a></li>
+<li><a href="#org3a10f0c">5.2.1. Análisis del endpoint GET Rates</a></li>
+<li><a href="#org6614eed">5.2.2. Análisis del endpoint PUT rates</a></li>
+<li><a href="#orgaa71fa6">5.2.3. Análisis del endpoint POST exchange</a></li>
+<li><a href="#org083087d">5.2.4. Consumo de recursos del balanceador de carga</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org9d63f81">6. Propuestas de mejora</a>
+<li><a href="#org2ba86ea">6. Propuestas de mejora</a>
 <ul>
-<li><a href="#orgce2ad41">6.1. Implementación de Valkey como persistencia</a>
+<li><a href="#org9e9acb0">6.1. Implementación de Valkey como persistencia</a>
 <ul>
-<li><a href="#org82c1a58">6.1.1. Táctica aplicada</a></li>
-<li><a href="#org4436c34">6.1.2. Configuración</a></li>
-<li><a href="#org1c09206">6.1.3. Beneficios</a></li>
+<li><a href="#orgb2fb2b6">6.1.1. Táctica aplicada</a></li>
+<li><a href="#orgcf995e4">6.1.2. Configuración</a></li>
+<li><a href="#orge82e8f2">6.1.3. Beneficios</a></li>
 </ul>
 </li>
-<li><a href="#org47972bd">6.2. Implementación de PostgreSQL como persistencia</a>
+<li><a href="#orgca742c3">6.2. Implementación de PostgreSQL como persistencia</a>
 <ul>
-<li><a href="#org80a5ed9">6.2.1. Táctica aplicada</a></li>
-<li><a href="#org304984b">6.2.2. Configuración</a></li>
-<li><a href="#orgf2e5c6f">6.2.3. Beneficios</a></li>
+<li><a href="#org0e0467b">6.2.1. Táctica aplicada</a></li>
+<li><a href="#org188fd55">6.2.2. Configuración</a></li>
+<li><a href="#org244dda5">6.2.3. Beneficios</a></li>
 </ul>
 </li>
-<li><a href="#org9b110e7">6.3. Comparación de estados de requests</a></li>
+<li><a href="#org7599a9f">6.3. Comparación de estados de requests</a></li>
 </ul>
 </li>
-<li><a href="#orgcf49b20">7. Resultados empíricos- Propuestas de mejora</a>
+<li><a href="#org5d3ae39">7. Resultados empíricos- Propuestas de mejora</a>
 <ul>
-<li><a href="#orgca4d44f">7.1. Propuesta - Valkey/Redis</a>
+<li><a href="#orgf395d3a">7.1. Propuesta - Valkey/Redis</a>
 <ul>
-<li><a href="#org23083c3">7.1.1. Rates</a></li>
-<li><a href="#org15c30ee">7.1.2. Exchange</a></li>
+<li><a href="#org475e642">7.1.1. Rates</a></li>
+<li><a href="#org88e7385">7.1.2. Exchange</a></li>
 </ul>
 </li>
-<li><a href="#orga411173">7.2. Propuesta - PostgreSQL y balanceo de carga efectivo</a></li>
+<li><a href="#orgb484d26">7.2. Propuesta - PostgreSQL y balanceo de carga efectivo</a></li>
 </ul>
 </li>
-<li><a href="#org74cc1c5">8. Trade-offs detectados.</a></li>
-<li><a href="#org8d28d91">9. Pedido Adicional (Volumen de transacciones por moneda)</a></li>
-<li><a href="#orgb544381">10. Conclusiones</a></li>
+<li><a href="#org0bbfb15">8. Conclusiones</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org5152bdb" class="outline-2">
-<h2 id="org5152bdb"><span class="section-number-2">1.</span> Introducción</h2>
+<div id="outline-container-orgffdab33" class="outline-2">
+<h2 id="orgffdab33"><span class="section-number-2">1.</span> Introducción</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 arVault es una startup fintech que opera una billetera digital con un enfoque en ofrecer tasas de cambio competitivas para operaciones entre distintas monedas. En un contexto donde la confianza del usuario es fundamental, la empresa se enfrenta al desafío de mejorar su servicio de cambio de divisas tras recibir múltiples reclamos por problemas de rendimiento y disponibilidad.
@@ -147,12 +145,12 @@ Este informe documenta nuestro proceso de análisis, las decisiones tomadas y lo
 </p>
 </div>
 </div>
-<div id="outline-container-orge961291" class="outline-2">
-<h2 id="orge961291"><span class="section-number-2">2.</span> Atributos de calidad (QA) claves identificados</h2>
+<div id="outline-container-org91a27a1" class="outline-2">
+<h2 id="org91a27a1"><span class="section-number-2">2.</span> Atributos de calidad (QA) claves identificados</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org3d739e5" class="outline-3">
-<h3 id="org3d739e5"><span class="section-number-3">2.1.</span> Disponibilidad</h3>
+<div id="outline-container-org73a4780" class="outline-3">
+<h3 id="org73a4780"><span class="section-number-3">2.1.</span> Disponibilidad</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Al tratarse de un servicio de intercambio de monedas, se considera que su utilización se concentra principalmente durante los días hábiles y en horario cambiario. En consecuencia, es fundamental garantizar su disponibilidad en dichos períodos para evitar la pérdida de usuarios o transacciones.
@@ -163,8 +161,8 @@ Asimismo, teniendo en cuenta la necesidad de recuperar la confianza de los usuar
 </p>
 </div>
 </div>
-<div id="outline-container-org49c6417" class="outline-3">
-<h3 id="org49c6417"><span class="section-number-3">2.2.</span> Escalabilidad (Elasticidad)</h3>
+<div id="outline-container-org01e1e2c" class="outline-3">
+<h3 id="org01e1e2c"><span class="section-number-3">2.2.</span> Escalabilidad (Elasticidad)</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 La escalabilidad, y en particular la elasticidad, constituyen un atributo de calidad fundamental para el servicio de intercambio de divisas. Esto se debe a que la infraestructura del sistema debe poder adaptarse dinámicamente a las variaciones en la demanda de uso.
@@ -179,8 +177,8 @@ Si el sistema no contara con la capacidad de escalar de forma elástica, estos p
 </p>
 </div>
 </div>
-<div id="outline-container-org761ec11" class="outline-3">
-<h3 id="org761ec11"><span class="section-number-3">2.3.</span> Performance</h3>
+<div id="outline-container-orgda5c93b" class="outline-3">
+<h3 id="orgda5c93b"><span class="section-number-3">2.3.</span> Performance</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 El atributo de calidad <b><b>Rendimiento</b></b>, y en particular el <b><b>Rendimiento Percibido por el Usuario</b></b>, resulta de relevancia crítica para el servicio de intercambio de divisas. Esta afirmación se sustenta en el análisis del contexto y los antecedentes disponibles.
@@ -199,8 +197,8 @@ Por lo tanto, la optimización del Rendimiento Percibido por el Usuario se plant
 </p>
 </div>
 </div>
-<div id="outline-container-orgce46a15" class="outline-3">
-<h3 id="orgce46a15"><span class="section-number-3">2.4.</span> Visibilidad</h3>
+<div id="outline-container-org0d091bc" class="outline-3">
+<h3 id="org0d091bc"><span class="section-number-3">2.4.</span> Visibilidad</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 El valor de este atributo de calidad es más indirecto, pero estratégico, ya que permite comprender el comportamiento real del sistema, identificar cuellos de botella en el rendimiento, localizar errores en las operaciones de cambio y detectar patrones de saturación que puedan anticipar problemas de disponibilidad o escalabilidad. En otras palabras, aunque la visibilidad no impacta de manera inmediata en la experiencia del usuario, proporciona a los arquitectos y al equipo técnico la información necesaria para diagnosticar, mejorar y mantener otros atributos de calidad prioritarios del sistema.
@@ -208,20 +206,20 @@ El valor de este atributo de calidad es más indirecto, pero estratégico, ya qu
 </div>
 </div>
 </div>
-<div id="outline-container-org3bc59a3" class="outline-2">
-<h2 id="org3bc59a3"><span class="section-number-2">3.</span> Arquitectura base</h2>
+<div id="outline-container-org3c44b7c" class="outline-2">
+<h2 id="org3c44b7c"><span class="section-number-2">3.</span> Arquitectura base</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgf43b1d9" class="outline-3">
-<h3 id="orgf43b1d9"><span class="section-number-3">3.1.</span> Análisis de la influencia de decisiones de diseño en los QA's</h3>
+<div id="outline-container-org92a40fb" class="outline-3">
+<h3 id="org92a40fb"><span class="section-number-3">3.1.</span> Análisis de la influencia de decisiones de diseño en los QA's</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 En la presente sección se explorarán las decisiones de diseño identificadas en la arquitectura base y su impacto sobre los atributos de calidad estudiados.
 </p>
 </div>
 </div>
-<div id="outline-container-org92f616e" class="outline-3">
-<h3 id="org92f616e"><span class="section-number-3">3.2.</span> Incorporación del stack de monitoreo cAdvisor + Artillery + StatsD + Graphite + Grafana</h3>
+<div id="outline-container-org5218b69" class="outline-3">
+<h3 id="org5218b69"><span class="section-number-3">3.2.</span> Incorporación del stack de monitoreo cAdvisor + Artillery + StatsD + Graphite + Grafana</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 El sistema actual presenta un stack de observabilidad para medir, almacenar y visualizar métricas en tiempo real. En concreto:
@@ -237,8 +235,8 @@ El sistema actual presenta un stack de observabilidad para medir, almacenar y vi
 Esta decisión implicó agregar tres nuevos contenedores, configuraciones adicionales, puertos, conexiones en red internas de Docker y dependencias entre servicios, lo cual impactó de diferentes formas a distintos <b>stakeholders</b>.
 </p>
 </div>
-<div id="outline-container-org4331e13" class="outline-4">
-<h4 id="org4331e13"><span class="section-number-4">3.2.1.</span> Impactos identificados</h4>
+<div id="outline-container-orga3c6839" class="outline-4">
+<h4 id="orga3c6839"><span class="section-number-4">3.2.1.</span> Impactos identificados</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <ul class="org-ul">
 <li><b>Carga cognitiva alta:</b>
@@ -277,8 +275,8 @@ El uso de protocolos y herramientas estandarizadas (UDP, HTTP, Grafana, StatsD) 
 </div>
 </div>
 </div>
-<div id="outline-container-orgf9cd51d" class="outline-3">
-<h3 id="orgf9cd51d"><span class="section-number-3">3.3.</span> Impactos del modelo de persistencia elegido</h3>
+<div id="outline-container-org7740544" class="outline-3">
+<h3 id="org7740544"><span class="section-number-3">3.3.</span> Impactos del modelo de persistencia elegido</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 El modelo de persistencia implementado en el sistema consiste en mantener en memoria el estado de los datos y, periódicamente, volcar dicho estado a archivos JSON almacenados localmente en la carpeta <code>~/state/~</code>.
@@ -319,8 +317,8 @@ En conjunto, este modelo de persistencia afecta negativamente la <b>disponibilid
 </p>
 </div>
 </div>
-<div id="outline-container-org9c79d70" class="outline-3">
-<h3 id="org9c79d70"><span class="section-number-3">3.4.</span> Instancias únicas de cada servicio</h3>
+<div id="outline-container-orgd17604d" class="outline-3">
+<h3 id="orgd17604d"><span class="section-number-3">3.4.</span> Instancias únicas de cada servicio</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 El sistema fue diseñado de manera que cada servicio (API, proxy inverso Nginx, almacenamiento local, etc.) cuenta con una única instancia activa.
@@ -338,8 +336,8 @@ Esta configuración puede ser suficiente para entornos de desarrollo o demostrac
 </p>
 </div>
 </div>
-<div id="outline-container-orgb1ec7df" class="outline-3">
-<h3 id="orgb1ec7df"><span class="section-number-3">3.5.</span> Ausencia de un patrón de arquitectura interna</h3>
+<div id="outline-container-org4b39576" class="outline-3">
+<h3 id="org4b39576"><span class="section-number-3">3.5.</span> Ausencia de un patrón de arquitectura interna</h3>
 <div class="outline-text-3" id="text-3-5">
 <p>
 El sistema carece de un patrón de arquitectura claramente definido a nivel interno (por ejemplo, MVC, capas o microservicios), lo cual genera una estructura <b>monolítica y fuertemente acoplada</b>.
@@ -365,30 +363,30 @@ En conjunto, esta ausencia de estructura arquitectónica limita la <b>mantenibil
 </p>
 </div>
 </div>
-<div id="outline-container-orgcf0af54" class="outline-3">
-<h3 id="orgcf0af54"><span class="section-number-3">3.6.</span> Diagrama C&amp;C inicial.</h3>
+<div id="outline-container-orga8deea3" class="outline-3">
+<h3 id="orga8deea3"><span class="section-number-3">3.6.</span> Diagrama C&amp;C inicial.</h3>
 <div class="outline-text-3" id="text-3-6">
 
-<div id="org08d1e58" class="figure">
+<div id="orgaebc5e6" class="figure">
 <p><img src="assets/componentes.png" alt="componentes.png" />
 </p>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-orgf2f5c3f" class="outline-2">
-<h2 id="orgf2f5c3f"><span class="section-number-2">4.</span> Metodología de pruebas</h2>
+<div id="outline-container-org91c9c21" class="outline-2">
+<h2 id="org91c9c21"><span class="section-number-2">4.</span> Metodología de pruebas</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Con el propósito de realizar pruebas y tener una medición de los atributos de calidad relevantes del sistema, se realizaron pruebas de carga sobre la aplicación mediante la herramienta Artillery y junto con StatsD, Graphite, Grafana y Datadog, se realiza la recolección y visualización de los datos de desempeño, incluyendo métricas como tiempos de respuesta, errores y uso de recursos, lo que permite evaluar la capacidad del sistema para manejar diferentes niveles de carga y detectar posibles cuellos de botella.
 </p>
 </div>
-<div id="outline-container-org276b9f6" class="outline-3">
-<h3 id="org276b9f6"><span class="section-number-3">4.1.</span> Set up para recolección y visualización de datos</h3>
+<div id="outline-container-org690904f" class="outline-3">
+<h3 id="org690904f"><span class="section-number-3">4.1.</span> Set up para recolección y visualización de datos</h3>
 <div class="outline-text-3" id="text-4-1">
 </div>
-<div id="outline-container-orgfab0bb0" class="outline-4">
-<h4 id="orgfab0bb0"><span class="section-number-4">4.1.1.</span> Graphite + Grafana + StatsD (métricas custom)</h4>
+<div id="outline-container-org72dadbd" class="outline-4">
+<h4 id="org72dadbd"><span class="section-number-4">4.1.1.</span> Graphite + Grafana + StatsD (métricas custom)</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <p>
 En la app se agregaron métricas propias con <code>hot-shots</code> (cliente StatsD/DogStatsD) usando el prefijo <code>arvault.</code>. Se emiten en dos puntos: (a) middleware HTTP para latencia y throughput, y (b) lógica de negocio del exchange para volumen y estado de las operaciones.
@@ -427,8 +425,8 @@ Las métricas incluyen <b>tags</b> según el caso (p. ej., <code>endpoint</code>
 </p>
 </div>
 </div>
-<div id="outline-container-org8fdb1c6" class="outline-4">
-<h4 id="org8fdb1c6"><span class="section-number-4">4.1.2.</span> DataDog (logs + métricas etiquetadas)</h4>
+<div id="outline-container-orgd2a3155" class="outline-4">
+<h4 id="orgd2a3155"><span class="section-number-4">4.1.2.</span> DataDog (logs + métricas etiquetadas)</h4>
 <div class="outline-text-4" id="text-4-1-2">
 <p>
 Se habilitó <b><b>logging estructurado</b></b> y el envío de <b><b>métricas etiquetadas</b></b> compatibles con DogStatsD.
@@ -457,132 +455,132 @@ Se habilitó <b><b>logging estructurado</b></b> y el envío de <b><b>métricas e
 </ul>
 </div>
 </div>
-<div id="outline-container-orge8011a6" class="outline-4">
-<h4 id="orge8011a6"><span class="section-number-4">4.1.3.</span> DataDog (dashboard)</h4>
+<div id="outline-container-orgab66905" class="outline-4">
+<h4 id="orgab66905"><span class="section-number-4">4.1.3.</span> DataDog (dashboard)</h4>
 <div class="outline-text-4" id="text-4-1-3">
 <p>
 Armamos un dashboard simple para entender las fallas criticas del servicio y ademas entender el dominio del negocio. La idea es cubrir tres frentes a la vez: <b><b>Performance</b></b> (qué tan rápido respondemos), <b><b>Disponibilidad/Confiabilidad</b></b> (qué tan seguido falla) y <b><b>Visibilidad</b></b> (qué parte del negocio está más activa).
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org363d816"></a>Requests per endpoint<br />
+<li><a id="orgccbc13d"></a>Requests per endpoint<br />
 <div class="outline-text-5" id="text-4-1-3-1">
 <p>
 Cuántas llamadas recibe cada ruta. Con esto vemos cuáles son las más usadas y dónde conviene poner foco de capacidad.
 </p>
 
-<div id="org8617dc7" class="figure">
+<div id="org0904692" class="figure">
 <p><img src="assets/db-02-requests-by-endpoint.png" alt="db-02-requests-by-endpoint.png" />
 </p>
 <p><span class="figure-number">Figura 1: </span>Requests por endpoint</p>
 </div>
 </div>
 </li>
-<li><a id="orgfd66ee6"></a>Status Codes Distribution<br />
+<li><a id="orgf3dd933"></a>Status Codes Distribution<br />
 <div class="outline-text-5" id="text-4-1-3-2">
 <p>
 La mezcla de 200/4xx/5xx a lo largo del tiempo. Es nuestro termómetro de salud: muchos 5xx = algo se rompió del lado servidor; pico de 4xx = validaciones/UX para revisar.
 </p>
 
-<div id="orgd0a038c" class="figure">
+<div id="orgd9e53f0" class="figure">
 <p><img src="assets/db-03-status-codes.png" alt="db-03-status-codes.png" />
 </p>
 <p><span class="figure-number">Figura 2: </span>Distribución de status codes</p>
 </div>
 </div>
 </li>
-<li><a id="org1d160ca"></a>Exchange – Success rate<br />
+<li><a id="org9bf360d"></a>Exchange – Success rate<br />
 <div class="outline-text-5" id="text-4-1-3-3">
 <p>
 Porcentaje de transacciones que salen bien vs. fallan. Cuando baja, impacta directo al negocio y hay que mirar lógica y dependencias.
 </p>
 
-<div id="org4e6be2f" class="figure">
+<div id="orge256771" class="figure">
 <p><img src="assets/db-04-exchange-success-rate.png" alt="db-04-exchange-success-rate.png" />
 </p>
 <p><span class="figure-number">Figura 3: </span>Tasa de éxito de transacciones de exchange</p>
 </div>
 </div>
 </li>
-<li><a id="org5b6ac56"></a>Exchange – Total transactions<br />
+<li><a id="orga6cd0b6"></a>Exchange – Total transactions<br />
 <div class="outline-text-5" id="text-4-1-3-4">
 <p>
 Volumen bruto de operaciones. Útil para ver actividad, comparar días y estimar capacidad necesaria.
 </p>
 
-<div id="orgd753710" class="figure">
+<div id="orgdbaae5d" class="figure">
 <p><img src="assets/db-05-exchange-total.png" alt="db-05-exchange-total.png" />
 </p>
 <p><span class="figure-number">Figura 4: </span>Total de transacciones de exchange</p>
 </div>
 </div>
 </li>
-<li><a id="org7b7ba74"></a>Volume by currency<br />
+<li><a id="orga9dc3e0"></a>Volume by currency<br />
 <div class="outline-text-5" id="text-4-1-3-5">
 <p>
 Cuánta actividad concentra cada moneda (USD, ARS, EUR, …). Ayuda con liquidez y prioridades: dónde hay más movimiento, ahí hay más riesgo/atención.
 </p>
 
-<div id="org5a80779" class="figure">
+<div id="org096ef45" class="figure">
 <p><img src="assets/db-06-volume-by-currency.png" alt="db-06-volume-by-currency.png" />
 </p>
 <p><span class="figure-number">Figura 5: </span>Volumen por moneda</p>
 </div>
 </div>
 </li>
-<li><a id="orgfec5871"></a>Net volume by currency<br />
+<li><a id="orgf4b9df6"></a>Net volume by currency<br />
 <div class="outline-text-5" id="text-4-1-3-6">
 <p>
 Compras menos ventas por moneda. Si el neto de USD es muy negativo, estamos vendiendo más de lo que compramos: ojo con la posición.
 </p>
 
-<div id="org0840409" class="figure">
+<div id="orgf24e315" class="figure">
 <p><img src="assets/db-07-net-volume-by-currency.png" alt="db-07-net-volume-by-currency.png" />
 </p>
 <p><span class="figure-number">Figura 6: </span>Volumen neto por moneda</p>
 </div>
 </div>
 </li>
-<li><a id="orgfaeb8aa"></a>Exchange rates<br />
+<li><a id="orgf5bf21c"></a>Exchange rates<br />
 <div class="outline-text-5" id="text-4-1-3-7">
 <p>
 Las tasas vigentes por par. Sirve para chequear precios, detectar volatilidad y cuidar márgenes.
 </p>
 
-<div id="orgdd7760b" class="figure">
+<div id="org5e52633" class="figure">
 <p><img src="assets/db-08-exchange-rates.png" alt="db-08-exchange-rates.png" />
 </p>
 <p><span class="figure-number">Figura 7: </span>Tasas de cambio por par</p>
 </div>
 </div>
 </li>
-<li><a id="org55a1087"></a>Error count por tipo<br />
+<li><a id="orgcdb91fb"></a>Error count por tipo<br />
 <div class="outline-text-5" id="text-4-1-3-8">
 <p>
 Los errores agrupados por categoría (p. ej., <code>validation_error</code>, <code>exchange_failed</code>). Da pista rápida de dónde conviene atacar: UX/validaciones o lógica interna.
 </p>
 
-<div id="orgdd3702f" class="figure">
+<div id="org63ed8c9" class="figure">
 <p><img src="assets/db-10-error-count-by-type.png" alt="db-10-error-count-by-type.png" />
 </p>
 <p><span class="figure-number">Figura 8: </span>Conteo de errores por tipo</p>
 </div>
 </div>
 </li>
-<li><a id="org4709794"></a>KPIs de resumen<br />
+<li><a id="orgad73dba"></a>KPIs de resumen<br />
 <div class="outline-text-5" id="text-4-1-3-9">
 <p>
 Un par de tarjetas con lo esencial: throughput, total de transacciones y total de errores. Es la vista “de un vistazo” para status diario y alertas.
 </p>
 
-<div id="orged12c2b" class="figure">
+<div id="org31742fa" class="figure">
 <p><img src="assets/db-12-15-summary-kpis.png" alt="db-12-15-summary-kpis.png" />
 </p>
 <p><span class="figure-number">Figura 9: </span>KPIs de resumen (requests, transacciones, errores)</p>
 </div>
 </div>
 </li>
-<li><a id="org16d3fa5"></a>Escenario de prueba<br />
+<li><a id="org59ce43e"></a>Escenario de prueba<br />
 <div class="outline-text-5" id="text-4-1-3-10">
 <ul class="org-ul">
 <li><b>pool:</b> <code>50</code> conexiones HTTP en el <b>pool</b>.</li>
@@ -599,10 +597,10 @@ Un par de tarjetas con lo esencial: throughput, total de transacciones y total d
 </ul>
 </div>
 </li>
-<li><a id="orgdcb63b5"></a>Lectura del dashboard<br />
+<li><a id="orgdfb33d9"></a>Lectura del dashboard<br />
 <div class="outline-text-5" id="text-4-1-3-11">
 
-<div id="orga55f4be" class="figure">
+<div id="orgd3d1cad" class="figure">
 <p><img src="assets/dd-overview.png" alt="dd-overview.png" />
 </p>
 <p><span class="figure-number">Figura 10: </span>Resumen de la corrida (ventana analizada)</p>
@@ -616,7 +614,7 @@ En la ventana analizada se ejecutaron <code>662</code> requests de <b>transacci�
 <li><b>Status Codes Distribution</b> — <b>Disponibilidad / Confiabilidad</b></li>
 </ol>
 
-<div id="org25f83f8" class="figure">
+<div id="orgb2a0abc" class="figure">
 <p><img src="assets/dd-status-codes.png" alt="dd-status-codes.png" />
 </p>
 <p><span class="figure-number">Figura 11: </span>Distribución de códigos HTTP</p>
@@ -630,7 +628,7 @@ En este intervalo todas las respuestas graficadas fueron <code>200</code> (suma 
 <li><b>Exchange Transactions Success Rate</b> — <b>Confiabilidad de negocio</b></li>
 </ol>
 
-<div id="org5a11d49" class="figure">
+<div id="orge2e47de" class="figure">
 <p><img src="assets/dd-success-rate.png" alt="dd-success-rate.png" />
 </p>
 <p><span class="figure-number">Figura 12: </span>Tasa de transacciones exitosas por segundo</p>
@@ -644,7 +642,7 @@ Se observa un pico cercano a <code>218/s</code>, luego una caída casi a cero y 
 <li><b>Total Exchange Transactions</b> — <b>Actividad / Throughput de negocio</b></li>
 </ol>
 
-<div id="orged417b7" class="figure">
+<div id="org5ec673b" class="figure">
 <p><img src="assets/dd-total-exchange-transactions.png" alt="dd-total-exchange-transactions.png" />
 </p>
 <p><span class="figure-number">Figura 13: </span>Volumen total de transacciones por intervalo</p>
@@ -658,7 +656,7 @@ Se distinguen ráfagas claras: entre <code>23:07–23:08</code> aparecen dos pic
 <li><b>Volume by Currency</b> (barras) — <b>Visibilidad / Liquidez</b></li>
 </ol>
 
-<div id="orge8de0bc" class="figure">
+<div id="org72b5922" class="figure">
 <p><img src="assets/dd-volume-by-currency-bars.png" alt="dd-volume-by-currency-bars.png" />
 </p>
 <p><span class="figure-number">Figura 14: </span>Volumen por moneda (detalle por currency)</p>
@@ -669,7 +667,7 @@ El movimiento se concentra casi por completo en <code>ARS</code>: suma <code>112
 </p>
 
 
-<div id="org238a2e5" class="figure">
+<div id="orge5a41de" class="figure">
 <p><img src="assets/dd-volume-by-currency-stacked.png" alt="dd-volume-by-currency-stacked.png" />
 </p>
 <p><span class="figure-number">Figura 15: </span>Volumen por moneda (vista apilada para contraste)</p>
@@ -683,7 +681,7 @@ La vista apilada resalta la escala de <code>USD/EUR/BRL</code> frente a <code>AR
 <li><b>Net Volume by Currency</b> (líneas) — <b>Visibilidad / Exposición</b></li>
 </ol>
 
-<div id="org81ad0b5" class="figure">
+<div id="orgbd8e0fd" class="figure">
 <p><img src="assets/dd-net-volume.png" alt="dd-net-volume.png" />
 </p>
 <p><span class="figure-number">Figura 16: </span>Volumen neto por moneda (positivo = buy / negativo = sell)</p>
@@ -697,8 +695,8 @@ El signo importa: positivo cuando se <b>compra</b> la moneda y negativo cuando s
 </ol>
 </div>
 </div>
-<div id="outline-container-orge424b72" class="outline-3">
-<h3 id="orge424b72"><span class="section-number-3">4.2.</span> Generación de carga</h3>
+<div id="outline-container-org9c4e17b" class="outline-3">
+<h3 id="org9c4e17b"><span class="section-number-3">4.2.</span> Generación de carga</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Con propósito de observar la aplicación se generaron diferentes escenarios de carga, uno de baja carga con el propósito de observar el comportamiento de la API en un momento de uso con baja intensidad y otro de uso con alta intensidad representando los posibles escenarios en los que se encuentre la aplicación en producción.
@@ -750,8 +748,8 @@ Por lo tanto ambas cargas serán aplicadas a los endpoints considerando la varia
 </p>
 </div>
 </div>
-<div id="outline-container-orgb9b5075" class="outline-3">
-<h3 id="orgb9b5075"><span class="section-number-3">4.3.</span> Graficos</h3>
+<div id="outline-container-org243a4b8" class="outline-3">
+<h3 id="org243a4b8"><span class="section-number-3">4.3.</span> Graficos</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 En líneas generales se presentan 4 gráficos:
@@ -770,22 +768,22 @@ Estos gráficos no permiten tener una visibilidad amplia y global sobre el funci
 </div>
 </div>
 </div>
-<div id="outline-container-org3f98a11" class="outline-2">
-<h2 id="org3f98a11"><span class="section-number-2">5.</span> Resultados empíricos – Caso base</h2>
+<div id="outline-container-org57e45a0" class="outline-2">
+<h2 id="org57e45a0"><span class="section-number-2">5.</span> Resultados empíricos – Caso base</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org415406a" class="outline-3">
-<h3 id="org415406a"><span class="section-number-3">5.1.</span> Prueba con carga baja</h3>
+<div id="outline-container-org8ad0169" class="outline-3">
+<h3 id="org8ad0169"><span class="section-number-3">5.1.</span> Prueba con carga baja</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 Se procede a presentar los datos de pruebas recolectados en un escenario de baja carga
 </p>
 </div>
-<div id="outline-container-orgd9fa1fc" class="outline-4">
-<h4 id="orgd9fa1fc"><span class="section-number-4">5.1.1.</span> Análisis del endpoint GET Rates</h4>
+<div id="outline-container-orgbe67e66" class="outline-4">
+<h4 id="orgbe67e66"><span class="section-number-4">5.1.1.</span> Análisis del endpoint GET Rates</h4>
 <div class="outline-text-4" id="text-5-1-1">
 
-<div id="org6cd67d7" class="figure">
+<div id="orgc734f47" class="figure">
 <p><img src="./assets/ratesscenarios.png" alt="ratesscenarios.png" />
 </p>
 </div>
@@ -795,7 +793,7 @@ Por la simplicidad del endpoint y dada la falta de parámetros que tiene el mism
 </p>
 
 
-<div id="org7e1a849" class="figure">
+<div id="org82370cc" class="figure">
 <p><img src="./assets/ratesstate.png" alt="ratesstate.png" />
 </p>
 </div>
@@ -805,7 +803,7 @@ De los datos se puede extraer que en un escenario de baja carga de la API, se ob
 </p>
 
 
-<div id="org4ef9ce3" class="figure">
+<div id="org38a7a4d" class="figure">
 <p><img src="./assets/ratesresponsetime.png" alt="ratesresponsetime.png" />
 </p>
 </div>
@@ -815,7 +813,7 @@ De este gráfico se puede extraer información sobre el tiempo de procesamiento 
 </p>
 
 
-<div id="org33c26a4" class="figure">
+<div id="orgdc8fda9" class="figure">
 <p><img src="./assets/ratesresources.png" alt="ratesresources.png" />
 </p>
 </div>
@@ -825,11 +823,11 @@ Finalmente la cantidad de recursos del ordenador usadas para procesar las consul
 </p>
 </div>
 </div>
-<div id="outline-container-orgdc70d7f" class="outline-4">
-<h4 id="orgdc70d7f"><span class="section-number-4">5.1.2.</span> Análisis del endpoint PUT rates</h4>
+<div id="outline-container-org467080c" class="outline-4">
+<h4 id="org467080c"><span class="section-number-4">5.1.2.</span> Análisis del endpoint PUT rates</h4>
 <div class="outline-text-4" id="text-5-1-2">
 
-<div id="orgd25db46" class="figure">
+<div id="orgda5bf07" class="figure">
 <p><img src="./assets/putratesscenarios.png" alt="putratesscenarios.png" />
 </p>
 </div>
@@ -839,7 +837,7 @@ Al tratarse de un método PUT, la variabilidad entre los diferentes tipos de mon
 </p>
 
 
-<div id="orgbb5ccf9" class="figure">
+<div id="org6d8a89d" class="figure">
 <p><img src="./assets/putratesstate.png" alt="putratesstate.png" />
 </p>
 </div>
@@ -849,7 +847,7 @@ Como en el caso anterior, todas las peticiones al servidor respondieron de maner
 </p>
 
 
-<div id="org59fd9da" class="figure">
+<div id="org0855d91" class="figure">
 <p><img src="./assets/putratesresponsetime.png" alt="putratesresponsetime.png" />
 </p>
 </div>
@@ -859,7 +857,7 @@ Una vez más se puede apreciar la tendencia a que el uso de recursos (en este ca
 </p>
 
 
-<div id="orgc89c606" class="figure">
+<div id="org7ee08a6" class="figure">
 <p><img src="./assets/putratesresources.png" alt="putratesresources.png" />
 </p>
 </div>
@@ -869,11 +867,11 @@ Nuevamente se observa que no existe un uso excesivo de los recursos del ordenado
 </p>
 </div>
 </div>
-<div id="outline-container-org5e1709d" class="outline-4">
-<h4 id="org5e1709d"><span class="section-number-4">5.1.3.</span> Análisis del endpoint POST exchange</h4>
+<div id="outline-container-orgda18129" class="outline-4">
+<h4 id="orgda18129"><span class="section-number-4">5.1.3.</span> Análisis del endpoint POST exchange</h4>
 <div class="outline-text-4" id="text-5-1-3">
 
-<div id="org94380fd" class="figure">
+<div id="org8b3bc5d" class="figure">
 <p><img src="./assets/exchangescenario.png" alt="exchangescenario.png" />
 </p>
 </div>
@@ -883,7 +881,7 @@ Como en el caso del endpoint anterior, se agrega variabilidad en los escenarios 
 </p>
 
 
-<div id="orge7676dc" class="figure">
+<div id="org1e35726" class="figure">
 <p><img src="./assets/exchangestatus.png" alt="exchangestatus.png" />
 </p>
 </div>
@@ -893,7 +891,7 @@ Todos los POST fueron realizados de manera exitosa sin presentar ningún problem
 </p>
 
 
-<div id="orgcb7c429" class="figure">
+<div id="orga3d8812" class="figure">
 <p><img src="./assets/exchangeresponsetime.png" alt="exchangeresponsetime.png" />
 </p>
 </div>
@@ -903,7 +901,7 @@ A comparación de los otros endpoints analizados, es evidente que la finalizaci�
 </p>
 
 
-<div id="org1c2eed2" class="figure">
+<div id="org7ac7773" class="figure">
 <p><img src="./assets/exchangeresources.png" alt="exchangeresources.png" />
 </p>
 </div>
@@ -918,22 +916,22 @@ Además de la información anteriormente recolectada, para evitar la repetición
 </div>
 </div>
 </div>
-<div id="outline-container-orgc7f8cb8" class="outline-3">
-<h3 id="orgc7f8cb8"><span class="section-number-3">5.2.</span> Prueba con carga alta</h3>
+<div id="outline-container-org92cf887" class="outline-3">
+<h3 id="org92cf887"><span class="section-number-3">5.2.</span> Prueba con carga alta</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 Se presentan los datos de pruebas recolectados en un escenario de alta carga de la aplicación.
 </p>
 </div>
-<div id="outline-container-orgee935d4" class="outline-4">
-<h4 id="orgee935d4"><span class="section-number-4">5.2.1.</span> Análisis del endpoint GET Rates</h4>
+<div id="outline-container-org3a10f0c" class="outline-4">
+<h4 id="org3a10f0c"><span class="section-number-4">5.2.1.</span> Análisis del endpoint GET Rates</h4>
 <div class="outline-text-4" id="text-5-2-1">
 <p>
 Las mediciones del comportamiento del sistema (scenarios launched, requests state, request time y resources) en un escenario de alta carga haciendo uso específicamente del endpoint GET rates son las siguientes:
 </p>
 
 
-<div id="orgd2faf88" class="figure">
+<div id="orgfe272e1" class="figure">
 <p><img src="./assets/ratesfscenarios.png" alt="ratesfscenarios.png" />
 </p>
 </div>
@@ -943,7 +941,7 @@ Como en el caso de baja carga y debido a la simplicidad del endpoint en el grafi
 </p>
 
 
-<div id="org8f63464" class="figure">
+<div id="org9149b9e" class="figure">
 <p><img src="./assets/ratesfstate.png" alt="ratesfstate.png" />
 </p>
 </div>
@@ -953,7 +951,7 @@ Observando el resultado de la prueba se observa que a medida que la carga va cre
 </p>
 
 
-<div id="org864c416" class="figure">
+<div id="org3842cb4" class="figure">
 <p><img src="./assets/ratesfresponsetime.png" alt="ratesfresponsetime.png" />
 </p>
 </div>
@@ -963,7 +961,7 @@ Tambien se aprecia que a medida que aparecen casos de error los tiempos de respu
 </p>
 
 
-<div id="org74fe5a3" class="figure">
+<div id="orgb044d24" class="figure">
 <p><img src="./assets/ratesfresources.png" alt="ratesfresources.png" />
 </p>
 </div>
@@ -973,15 +971,15 @@ Se observa que el modulo de la api no presenta uso excesivo de los recursos del 
 </p>
 </div>
 </div>
-<div id="outline-container-org74904dd" class="outline-4">
-<h4 id="org74904dd"><span class="section-number-4">5.2.2.</span> Análisis del endpoint PUT rates</h4>
+<div id="outline-container-org6614eed" class="outline-4">
+<h4 id="org6614eed"><span class="section-number-4">5.2.2.</span> Análisis del endpoint PUT rates</h4>
 <div class="outline-text-4" id="text-5-2-2">
 <p>
 Ahora se analiza el endpoint que realiza put de los rates a la API
 </p>
 
 
-<div id="org34e0869" class="figure">
+<div id="orgd241713" class="figure">
 <p><img src="./assets/putratesfscenarios.png" alt="putratesfscenarios.png" />
 </p>
 </div>
@@ -991,7 +989,7 @@ En este gráfico se aprecia la variabilidad de los casos de prueba que se realiz
 </p>
 
 
-<div id="org281ff67" class="figure">
+<div id="org7645646" class="figure">
 <p><img src="./assets/putratesfstate.png" alt="putratesfstate.png" />
 </p>
 </div>
@@ -1001,7 +999,7 @@ Bajo carga alta, se observa que inicialmente todas las requests son procesadas c
 </p>
 
 
-<div id="orgabafca7" class="figure">
+<div id="orgde61930" class="figure">
 <p><img src="./assets/putratesfresponsetime.png" alt="putratesfresponsetime.png" />
 </p>
 </div>
@@ -1011,7 +1009,7 @@ Similar al endpoint analizado anteriormente nuevamente el tiempo promedio y el t
 </p>
 
 
-<div id="org052f8a7" class="figure">
+<div id="orgeee7a90" class="figure">
 <p><img src="./assets/putratesfresources.png" alt="putratesfresources.png" />
 </p>
 </div>
@@ -1021,11 +1019,11 @@ Como en el caso anterior no se observa un uso excesivo de los recursos para el n
 </p>
 </div>
 </div>
-<div id="outline-container-org9054ddb" class="outline-4">
-<h4 id="org9054ddb"><span class="section-number-4">5.2.3.</span> Análisis del endpoint POST exchange</h4>
+<div id="outline-container-orgaa71fa6" class="outline-4">
+<h4 id="orgaa71fa6"><span class="section-number-4">5.2.3.</span> Análisis del endpoint POST exchange</h4>
 <div class="outline-text-4" id="text-5-2-3">
 
-<div id="org294f55b" class="figure">
+<div id="org93bd62d" class="figure">
 <p><img src="./assets/exchangefscenario.png" alt="exchangefscenario.png" />
 </p>
 </div>
@@ -1035,7 +1033,7 @@ Se observa la simulación de casos variados de pruebas para el endpoint POST exc
 </p>
 
 
-<div id="org5a94755" class="figure">
+<div id="org9b6c264" class="figure">
 <p><img src="./assets/exchangefstatus.png" alt="exchangefstatus.png" />
 </p>
 </div>
@@ -1045,7 +1043,7 @@ De acuerdo con los datos recolectados, era evidente que para este caso ocurrirí
 </p>
 
 
-<div id="orgbe7bfd6" class="figure">
+<div id="org2ee9bf2" class="figure">
 <p><img src="./assets/exchangefresponsetime.png" alt="exchangefresponsetime.png" />
 </p>
 </div>
@@ -1055,7 +1053,7 @@ Una vez más, la performance y la disponibilidad del servicio se ven comprometid
 </p>
 
 
-<div id="org79d973d" class="figure">
+<div id="orgb7a1fb0" class="figure">
 <p><img src="./assets/exchangefresources.png" alt="exchangefresources.png" />
 </p>
 </div>
@@ -1065,8 +1063,8 @@ En este caso, sí se aprecia considerablemente el crecimiento en el uso de los r
 </p>
 </div>
 </div>
-<div id="outline-container-org7721bbe" class="outline-4">
-<h4 id="org7721bbe"><span class="section-number-4">5.2.4.</span> Consumo de recursos del balanceador de carga</h4>
+<div id="outline-container-org083087d" class="outline-4">
+<h4 id="org083087d"><span class="section-number-4">5.2.4.</span> Consumo de recursos del balanceador de carga</h4>
 <div class="outline-text-4" id="text-5-2-4">
 <p>
 Adicionalmente, es interesante observar el consumo de recursos del balanceador de carga que trabaja en conjunto con la API, esto para cada uno de los escenarios intensivos.
@@ -1074,21 +1072,21 @@ Se presenta entonces la recolección de datos sobre el uso de los recursos del c
 </p>
 
 
-<div id="org8b63eb7" class="figure">
+<div id="org45556c3" class="figure">
 <p><img src="./assets/lbexchangefresources.png" alt="lbexchangefresources.png" />
 </p>
 <p><span class="figure-number">Figura 17: </span>Carga del load balancer para GET Rates</p>
 </div>
 
 
-<div id="org2ea9510" class="figure">
+<div id="org5db1a12" class="figure">
 <p><img src="./assets/lbputratesfresources.png" alt="lbputratesfresources.png" />
 </p>
 <p><span class="figure-number">Figura 18: </span>Carga del load balancer para PUT Rates</p>
 </div>
 
 
-<div id="org4e089fb" class="figure">
+<div id="orge233f67" class="figure">
 <p><img src="./assets/lbexchangefresources.png" alt="lbexchangefresources.png" />
 </p>
 <p><span class="figure-number">Figura 19: </span>Carga del load balancer para POST Exchange</p>
@@ -1101,16 +1099,16 @@ Finalmente, es fácil concluir que el sistema base no posee la capacidad de sopo
 </div>
 </div>
 </div>
-<div id="outline-container-org9d63f81" class="outline-2">
-<h2 id="org9d63f81"><span class="section-number-2">6.</span> Propuestas de mejora</h2>
+<div id="outline-container-org2ba86ea" class="outline-2">
+<h2 id="org2ba86ea"><span class="section-number-2">6.</span> Propuestas de mejora</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-orgce2ad41" class="outline-3">
-<h3 id="orgce2ad41"><span class="section-number-3">6.1.</span> Implementación de Valkey como persistencia</h3>
+<div id="outline-container-org9e9acb0" class="outline-3">
+<h3 id="org9e9acb0"><span class="section-number-3">6.1.</span> Implementación de Valkey como persistencia</h3>
 <div class="outline-text-3" id="text-6-1">
 </div>
-<div id="outline-container-org82c1a58" class="outline-4">
-<h4 id="org82c1a58"><span class="section-number-4">6.1.1.</span> Táctica aplicada</h4>
+<div id="outline-container-orgb2fb2b6" class="outline-4">
+<h4 id="orgb2fb2b6"><span class="section-number-4">6.1.1.</span> Táctica aplicada</h4>
 <div class="outline-text-4" id="text-6-1-1">
 <p>
 La implementación utiliza Valkey como almacén de datos centralizado, reemplazando la persistencia en archivos JSON. Los datos se almacenan como claves en Redis:
@@ -1131,16 +1129,16 @@ En <code>exchange.js</code>, se importa y utiliza este módulo para todas las op
 </p>
 </div>
 </div>
-<div id="outline-container-org4436c34" class="outline-4">
-<h4 id="org4436c34"><span class="section-number-4">6.1.2.</span> Configuración</h4>
+<div id="outline-container-orgcf995e4" class="outline-4">
+<h4 id="orgcf995e4"><span class="section-number-4">6.1.2.</span> Configuración</h4>
 <div class="outline-text-4" id="text-6-1-2">
 <p>
 Se agregó un servicio <code>valkey</code> en el <code>docker-compose.yml</code> utilizando la imagen <code>valkey/valkey:8.1.4-alpine</code>, expuesto en el puerto 6379. La aplicación se conecta mediante la variable de entorno <code>VALKEY_URL=redis://valkey:6379</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org1c09206" class="outline-4">
-<h4 id="org1c09206"><span class="section-number-4">6.1.3.</span> Beneficios</h4>
+<div id="outline-container-orge82e8f2" class="outline-4">
+<h4 id="orge82e8f2"><span class="section-number-4">6.1.3.</span> Beneficios</h4>
 <div class="outline-text-4" id="text-6-1-3">
 <p>
 Al centralizar el estado en Valkey, múltiples instancias de la API pueden compartir el mismo almacén de datos. Esto elimina la dependencia de estado local en memoria o archivos, permitiendo:
@@ -1157,19 +1155,19 @@ Esta táctica mejora significativamente la disponibilidad y escalabilidad, mitig
 </p>
 
 
-<div id="org8c671be" class="figure">
+<div id="orgc4161d6" class="figure">
 <p><img src="assets/componentes-modificados.png" alt="componentes-modificados.png" />
 </p>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-org47972bd" class="outline-3">
-<h3 id="org47972bd"><span class="section-number-3">6.2.</span> Implementación de PostgreSQL como persistencia</h3>
+<div id="outline-container-orgca742c3" class="outline-3">
+<h3 id="orgca742c3"><span class="section-number-3">6.2.</span> Implementación de PostgreSQL como persistencia</h3>
 <div class="outline-text-3" id="text-6-2">
 </div>
-<div id="outline-container-org80a5ed9" class="outline-4">
-<h4 id="org80a5ed9"><span class="section-number-4">6.2.1.</span> Táctica aplicada</h4>
+<div id="outline-container-org0e0467b" class="outline-4">
+<h4 id="org0e0467b"><span class="section-number-4">6.2.1.</span> Táctica aplicada</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <p>
 La implementación utiliza PostgreSQL como almacén de datos relacional, reemplazando la persistencia en archivos JSON y Valkey. Las tablas creadas son:
@@ -1190,8 +1188,8 @@ En <code>exchange.js</code>, se utilizan estos modelos para todas las operacione
 </p>
 </div>
 </div>
-<div id="outline-container-org304984b" class="outline-4">
-<h4 id="org304984b"><span class="section-number-4">6.2.2.</span> Configuración</h4>
+<div id="outline-container-org188fd55" class="outline-4">
+<h4 id="org188fd55"><span class="section-number-4">6.2.2.</span> Configuración</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <p>
 Se agregó un servicio <code>postgres</code> en el <code>docker-compose.yml</code> utilizando la imagen <code>postgres:15-alpine</code>, con inicialización de la base de datos mediante el script <code>01-init.sql</code> que crea las tablas, índices y datos iniciales.
@@ -1206,8 +1204,8 @@ Se actualizó <code>nginx_reverse_proxy.conf</code> para balancear la carga entr
 </p>
 </div>
 </div>
-<div id="outline-container-orgf2e5c6f" class="outline-4">
-<h4 id="orgf2e5c6f"><span class="section-number-4">6.2.3.</span> Beneficios</h4>
+<div id="outline-container-org244dda5" class="outline-4">
+<h4 id="org244dda5"><span class="section-number-4">6.2.3.</span> Beneficios</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <p>
 Al centralizar el estado en PostgreSQL con transacciones ACID, múltiples instancias pueden compartir el mismo almacén de datos de forma consistente y atómica. Esto elimina dependencias de estado local, permite escalado horizontal sin pérdida de consistencia y asegura atomicidad en operaciones financieras críticas, mejorando la integridad de los datos.
@@ -1218,18 +1216,18 @@ Esta táctica mejora significativamente la disponibilidad (reduciendo puntos ún
 </p>
 
 
-<div id="orgc52c0b4" class="figure">
+<div id="org4e00eed" class="figure">
 <p><img src="assets/componentes-postgresql.png" alt="componentes-postgresql.png" />
 </p>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-org9b110e7" class="outline-3">
-<h3 id="org9b110e7"><span class="section-number-3">6.3.</span> Comparación de estados de requests</h3>
+<div id="outline-container-org7599a9f" class="outline-3">
+<h3 id="org7599a9f"><span class="section-number-3">6.3.</span> Comparación de estados de requests</h3>
 <div class="outline-text-3" id="text-6-3">
 
-<div id="org2c83e7b" class="figure">
+<div id="org5407881" class="figure">
 <p><img src="assets/request-state-base.png" alt="request-state-base.png" />
 </p>
 <p><span class="figure-number">Figura 20: </span>Estado de requests en la arquitectura base</p>
@@ -1240,7 +1238,7 @@ En la arquitectura base, se observa una alta tasa de errores debido a la sobreca
 </p>
 
 
-<div id="org254c558" class="figure">
+<div id="org3d2eba8" class="figure">
 <p><img src="assets/request-state-postgresql.png" alt="request-state-postgresql.png" />
 </p>
 <p><span class="figure-number">Figura 21: </span>Estado de requests con la propuesta de mejora (PostgreSQL y balanceo de carga)</p>
@@ -1252,12 +1250,12 @@ Con la propuesta de mejora que incluye balanceo de carga entre tres nodos y Post
 </div>
 </div>
 </div>
-<div id="outline-container-orgcf49b20" class="outline-2">
-<h2 id="orgcf49b20"><span class="section-number-2">7.</span> Resultados empíricos- Propuestas de mejora</h2>
+<div id="outline-container-org5d3ae39" class="outline-2">
+<h2 id="org5d3ae39"><span class="section-number-2">7.</span> Resultados empíricos- Propuestas de mejora</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-orgca4d44f" class="outline-3">
-<h3 id="orgca4d44f"><span class="section-number-3">7.1.</span> Propuesta - Valkey/Redis</h3>
+<div id="outline-container-orgf395d3a" class="outline-3">
+<h3 id="orgf395d3a"><span class="section-number-3">7.1.</span> Propuesta - Valkey/Redis</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 En las propuestas de mejoras se busca principalmente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicación, dadas las conclusiones resultantes de la sección 5, se analizarán la evolución de las propuestas únicamente en escenarios de alta carga para la aplicación.
@@ -1267,8 +1265,8 @@ En las propuestas de mejoras se busca principalmente mejorar la experiencia de l
 Se presentan los resultados de haber integrado Valkey en la aplicación:
 </p>
 </div>
-<div id="outline-container-org23083c3" class="outline-4">
-<h4 id="org23083c3"><span class="section-number-4">7.1.1.</span> Rates</h4>
+<div id="outline-container-org475e642" class="outline-4">
+<h4 id="org475e642"><span class="section-number-4">7.1.1.</span> Rates</h4>
 <div class="outline-text-4" id="text-7-1-1">
 <p>
 <img src="./assets/valkey-ratessources.png" alt="valkey-ratessources.png" />
@@ -1278,8 +1276,8 @@ Se presentan los resultados de haber integrado Valkey en la aplicación:
 </p>
 </div>
 </div>
-<div id="outline-container-org15c30ee" class="outline-4">
-<h4 id="org15c30ee"><span class="section-number-4">7.1.2.</span> Exchange</h4>
+<div id="outline-container-org88e7385" class="outline-4">
+<h4 id="org88e7385"><span class="section-number-4">7.1.2.</span> Exchange</h4>
 <div class="outline-text-4" id="text-7-1-2">
 <p>
 <img src="./assets/valkey-exchangesources.png" alt="valkey-exchangesources.png" />
@@ -1290,17 +1288,17 @@ Se presentan los resultados de haber integrado Valkey en la aplicación:
 </div>
 </div>
 </div>
-<div id="outline-container-orga411173" class="outline-3">
-<h3 id="orga411173"><span class="section-number-3">7.2.</span> Propuesta - PostgreSQL y balanceo de carga efectivo</h3>
+<div id="outline-container-orgb484d26" class="outline-3">
+<h3 id="orgb484d26"><span class="section-number-3">7.2.</span> Propuesta - PostgreSQL y balanceo de carga efectivo</h3>
 <div class="outline-text-3" id="text-7-2">
 
-<div id="orgd526073" class="figure">
+<div id="orgbc3a876" class="figure">
 <p><img src="./assets/postgres-get-rates-scenarios-launched.png" alt="postgres-get-rates-scenarios-launched.png" />
 </p>
 </div>
 
 
-<div id="org86881b5" class="figure">
+<div id="org3b7d4db" class="figure">
 <p><img src="./assets/postgres-requests-state.png" alt="postgres-requests-state.png" />
 </p>
 </div>
@@ -1318,7 +1316,7 @@ completan con éxito, eliminando los fallos frecuentes de conexión y timeout ob
 </p>
 
 
-<div id="orgdff93cd" class="figure">
+<div id="org1e9ec9f" class="figure">
 <p><img src="./assets/postgres-response-time.png" alt="postgres-response-time.png" />
 </p>
 </div>
@@ -1337,18 +1335,29 @@ de la estabilidad y la consistencia de los datos.
 </div>
 </div>
 </div>
-<div id="outline-container-org74cc1c5" class="outline-2">
-<h2 id="org74cc1c5"><span class="section-number-2">8.</span> Trade-offs detectados.</h2>
+<div id="outline-container-org0bbfb15" class="outline-2">
+<h2 id="org0bbfb15"><span class="section-number-2">8.</span> Conclusiones</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+En este trabajo práctico, se realizó un análisis exhaustivo de la arquitectura actual del servicio de cambio de divisas de arVault, identificando los atributos de calidad críticos (disponibilidad, escalabilidad, rendimiento y visibilidad) y evaluando el impacto de las decisiones de diseño en dichos atributos. A través de pruebas empíricas con escenarios de carga baja y alta, se evidenciaron limitaciones significativas en la arquitectura base, caracterizada por persistencia en archivos JSON locales, instancias únicas de servicios y falta de patrones arquitectónicos internos.
+</p>
+
+<p>
+Los resultados empíricos demostraron que bajo carga elevada, el sistema sufría degradaciones críticas en rendimiento y disponibilidad, con tiempos de respuesta que escalaban a más de 10 segundos y altas tasas de errores por timeouts y conexiones fallidas. Esto se debía principalmente a la persistencia stateful acoplada a una única instancia, problemas de concurrencia en el acceso a archivos y ausencia de mecanismos de escalado horizontal.
+</p>
+
+<p>
+Se propusieron e implementaron mejoras arquitectónicas clave: la migración a Valkey (Redis) como almacén centralizado y, posteriormente, a PostgreSQL con transacciones ACID, combinadas con balanceo de carga efectivo entre múltiples instancias de la API. Estas tácticas lograron reducir drásticamente la tasa de errores bajo carga alta, mejorando la disponibilidad y confiabilidad del sistema, aunque introduciendo un trade-off en los tiempos de respuesta promedio debido a la coordinación entre nodos y operaciones transaccionales.
+</p>
+
+<p>
+En conclusión, las mejoras propuestas permiten a arVault escalar horizontalmente sin pérdida de consistencia, mitigando puntos únicos de falla y fortaleciendo la confianza de usuarios e inversores. Se recomienda implementar estas soluciones en entornos de producción, complementadas con monitoreo continuo y pruebas automatizadas. Futuras extensiones podrían incluir optimizaciones adicionales en el rendimiento, como caching, para minimizar la latencia introducida por las transacciones.
+</p>
 </div>
-<div id="outline-container-org8d28d91" class="outline-2">
-<h2 id="org8d28d91"><span class="section-number-2">9.</span> Pedido Adicional (Volumen de transacciones por moneda)</h2>
-</div>
-<div id="outline-container-orgb544381" class="outline-2">
-<h2 id="orgb544381"><span class="section-number-2">10.</span> Conclusiones</h2>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-10-09 Thu 19:49</p>
+<p class="date">Created: 2025-10-09 Thu 19:57</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

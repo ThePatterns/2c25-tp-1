@@ -342,6 +342,8 @@ A comparacion de los otros endpoints analizados, es evidente que la finalizacion
 
 Finalmente observando el uso de los recursos del ordenador, se destaca el uso del CPU, para llevar a cabo este conjunto de operaciones el uso del CPU escalo a casi el 1% de su uso. Con este resultado y el anterior es facil identificar a este endpoint como uno de los posibles casos a considerar para aplicar estrategias en busca de mejorar la performance, esto, pensando a futuro en escenarios de uso intensivo de la aplicacion
 
+Ademas de la informacion anteriormente recolectada, para evitar la repeticion sobre la evidencia se descarta la presentacion de las pruebas para los otros endpoints, puesto que, la informacion recolectada fue similar y no fue concluyente a la hora de determinar nuevas estrategias arquitectonicas que no puedan ser deducidas de los problemas que fueron encontrados anteriormente en el resto de endpoints
+
 ** Prueba con carga alta
 
 *** Análisis del endpoint Rates
@@ -374,6 +376,14 @@ Adicionalmente es interesante observar el consumo de recursos del balanceador de
 [[file:./assets/lbexchangefresources.png]]
 [[file:./assets/lbputratesfresources.png]]
 [[file:./assets/lbexchangefresources.png]]
+
+
+<Revisar en donde iria esto>
+
+* Propuesta de mejora - Evidencias - Valkey/Redis
+
+En las propuestas de mejoras se busca principalemn
+
 
 * Propuestas de mejora
 

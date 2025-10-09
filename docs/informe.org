@@ -380,10 +380,25 @@ Adicionalmente es interesante observar el consumo de recursos del balanceador de
 
 <Revisar en donde iria esto>
 
-* Propuesta de mejora - Evidencias - Valkey/Redis
+* Resultados - Valkey/Redis
 
-En las propuestas de mejoras se busca principalemn
+En las propuestas de mejoras se busca principalemente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicacion, dadas las conclusiones resultantes de la seccion 5, se analizaran la evolucion de las propuestas unicamente en escenearios de alta carga para la aplicacion. 
 
+Se presentan los resultados de haber integrado valkey en la aplicacion: 
+
+** Rates
+
+[[file:./assets/valkey-ratessources.png]]
+[[file:./assets/valkey-ratesstatus.png]]
+[[file:./assets/valkey-ratesresponsetime.png]]
+[[file:./assets/valkey-ratesresources.png]]
+
+** Exchange
+
+[[file:./assets/valkey-exchangesources.png]]
+[[file:./assets/valkey-exchangestatus.png]]
+[[file:./assets/valkey-exchangeresponsetime.png]]
+[[file:./assets/valkey-exchangeresources.png]]
 
 * Propuestas de mejora
 

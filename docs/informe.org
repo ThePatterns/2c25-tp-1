@@ -260,8 +260,8 @@ p_cadvisor_host --> p_cadvisor_docker
 ** Crítica a arquitectura base.
 
 * Metodología de pruebas
-
 Con el propósito de realizar pruebas y tener una medición de los atributos de calidad relevantes del sistema, se realizaron pruebas de carga sobre la aplicación mediante la herramienta Artillery y junto con StatsD, Graphite, Grafana y Datadog, se realiza la recolección y visualización de los datos de desempeño, incluyendo métricas como tiempos de respuesta, errores y uso de recursos, lo que permite evaluar la capacidad del sistema para manejar diferentes niveles de carga y detectar posibles cuellos de botella.
+** Set up para recolección y visualización de datos
 
 *** Graphit + Grafana
 
@@ -406,13 +406,13 @@ En líneas generales se presentan 4 gráficos:
 
 Estos gráficos no permiten tener una visibilidad amplia y global sobre el funcionamiento de la aplicación como también entender el comportamiento de los *Atributos de calidad* claves de la aplicación
 
-* Resultados – Caso base
+* Resultados empíricos – Caso base
 
 ** Prueba con carga baja
 
 Se procede a presentar los datos de pruebas recolectados en un escenario de baja carga 
 
-*** Análisis del endpoint Rates
+*** Análisis del endpoint GET Rates
 
 [[file:./assets/ratesscenarios.png]]
 
@@ -430,7 +430,7 @@ De este gráfico se puede extraer información sobre el tiempo de procesamiento 
 
 Finalmente la cantidad de recursos del ordenador usadas para procesar las consultas no parece ser representativa, se puede concluir que en escenarios de baja intensidad la API responde de manera eficiente y tanto la performance percibida por el usuario como la disponibilidad no se ven afectados en estos escenarios 
 
-*** Análisis del endpoint putrates 
+*** Análisis del endpoint PUT rates 
 
 [[file:./assets/putratesscenarios.png]]
 
@@ -448,7 +448,7 @@ Una vez más se puede apreciar la tendencia a que el uso de recursos (en este ca
 
 Nuevamente se observa que no existe un uso excesivo de los recursos del ordenador, por lo tanto, en escenarios de baja intensidad el endpoint contesta de manera satisfactoria a las transacciones 
 
-*** Análisis del endpoint exchange
+*** Análisis del endpoint POST exchange
 
 [[file:./assets/exchangescenario.png]]
 
@@ -469,60 +469,38 @@ Finalmente observando el uso de los recursos del ordenador, se destaca el uso de
 Además de la información anteriormente recolectada, para evitar la repetición sobre la evidencia se descarta la presentación de las pruebas para los otros endpoints, puesto que la información recolectada fue similar y no fue concluyente a la hora de determinar nuevas estrategias arquitectónicas que no puedan ser deducidas de los problemas que fueron encontrados anteriormente en el resto de endpoints
 
 ** Prueba con carga alta
-
-*** Análisis del endpoint Rates
-
 Se presentan los datos de pruebas recolectados en un escenario de uso intensivo de la aplicación
+
+*** Análisis del endpoint GET Rates
+Las mediciones del comportamiento del sistema (scenarios launched, requests state, request time y resources) en un escenario de alta carga haciendo uso específicamente del endpoint GET rates son las siguientes:
 
 [[file:./assets/ratesfscenarios.png]]
 [[file:./assets/ratesfstate.png]]
 [[file:./assets/ratesfresponsetime.png]]
 [[file:./assets/ratesfresources.png]]
 
-*** Análisis del endpoint putrates 
+*** Análisis del endpoint PUT rates 
 
 [[file:./assets/putratesfscenarios.png]]
 [[file:./assets/putratesfstate.png]]
 [[file:./assets/putratesfresponsetime.png]]
 [[file:./assets/putratesfresources.png]]
 
-*** Análisis del endpoint exchange
+*** Análisis del endpoint POST exchange
 
 [[file:./assets/exchangefscenario.png]]
 [[file:./assets/exchangefstatus.png]]
 [[file:./assets/exchangefresponsetime.png]]
 [[file:./assets/exchangefresources.png]]
 
-*** Balanceador de carga
+*** Consumo de recursos del Balanceador de carga
 
-Adicionalmente es interesante observar el consumo de recursos del balanceador de carga que se encuentra trabajando en conjunto con la api. Para cada uno de los escenarios intensivos se agrega la recoleccion de datos sobre el uso de los recursos del computador por parte del balanceador de carga 
+Adicionalmente es interesante observar el consumo de recursos del balanceador de carga que se encuentra trabajando en conjunto con la api, esto para cada uno de los escenarios *intensivos*.
+Se presenta entonces la recoleccion de datos sobre el uso de los recursos del computador por parte del balanceador de carga: 
 
 [[file:./assets/lbexchangefresources.png]]
 [[file:./assets/lbputratesfresources.png]]
 [[file:./assets/lbexchangefresources.png]]
-
-
-<Revisar en donde iria esto>
-
-* Resultados de propuesta - Valkey/Redis
-
-En las propuestas de mejoras se busca principalmente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicación, dadas las conclusiones resultantes de la sección 5, se analizarán la evolución de las propuestas únicamente en escenarios de alta carga para la aplicación. 
-
-Se presentan los resultados de haber integrado Valkey en la aplicación: 
-
-** Rates
-
-[[file:./assets/valkey-ratessources.png]]
-[[file:./assets/valkey-ratesstatus.png]]
-[[file:./assets/valkey-ratesresponsetime.png]]
-[[file:./assets/valkey-ratesresources.png]]
-
-** Exchange
-
-[[file:./assets/valkey-exchangesources.png]]
-[[file:./assets/valkey-exchangestatus.png]]
-[[file:./assets/valkey-exchangeresponsetime.png]]
-[[file:./assets/valkey-exchangeresources.png]]
 
 * Propuestas de mejora
 
@@ -740,6 +718,29 @@ En la arquitectura base, se observa una alta tasa de errores debido a la sobreca
 [[file:assets/request-state-postgresql.png]]
 
 Con la propuesta de mejora que incluye balanceo de carga entre tres nodos y PostgreSQL como persistencia, la tasa de errores se reduce significativamente. El balanceo de carga distribuye la carga uniformemente entre los nodos, evitando la saturación de un solo punto, mientras que PostgreSQL maneja mejor la concurrencia mediante transacciones ACID y acceso controlado a la base de datos, minimizando errores por conflictos de acceso a datos y mejorando la estabilidad general del sistema.
+
+* Resultados empíricos- Propuestas de mejora
+** Propuesta - Valkey/Redis
+
+En las propuestas de mejoras se busca principalmente mejorar la experiencia de los usuarios en escenarios de alta carga sobre la aplicación, dadas las conclusiones resultantes de la sección 5, se analizarán la evolución de las propuestas únicamente en escenarios de alta carga para la aplicación. 
+
+Se presentan los resultados de haber integrado Valkey en la aplicación: 
+
+*** Rates
+
+[[file:./assets/valkey-ratessources.png]]
+[[file:./assets/valkey-ratesstatus.png]]
+[[file:./assets/valkey-ratesresponsetime.png]]
+[[file:./assets/valkey-ratesresources.png]]
+
+*** Exchange
+
+[[file:./assets/valkey-exchangesources.png]]
+[[file:./assets/valkey-exchangestatus.png]]
+[[file:./assets/valkey-exchangeresponsetime.png]]
+[[file:./assets/valkey-exchangeresources.png]]
+
+** Propuesta - PostgreSQL y balanceo de carga efectivo
 
 * Trade-offs detectados.
 

@@ -286,28 +286,61 @@ Estos graficos no permiten tener una visibilidad amplia y global sobre el funcio
 
 ** Prueba con carga baja
 
-*** Análisis del endpoint Rates
-
 Se procede a presentar los datos de pruebas recolectados en un escenario de baja carga 
 
+*** Análisis del endpoint Rates
+
 [[file:./assets/ratesscenarios.png]]
+
+Por la simplicidad del endpoint y dada la falta de parametros que tiene el mismo, el grafico representa la evolucion a traves del tiempo de la cantidad de consultas que son realizadas al endpoint
+
 [[file:./assets/ratesstate.png]]
+
+De los datos se puede extraer que en un escenario de baja carga de la api, se observa que la totalidad de las consultas fue contestada de manera satisfactoria 
+
 [[file:./assets/ratesresponsetime.png]]
+
+Del este grafico se puede extraer informacion sobre el tiempo de procesamiento y la latencia existente entre el cliente y la aplicacion debido a ser un escenario de pruebas en este caso la latencia es un valor despreciable, mientras que, el se puede apreciar la evolucion del tiempo de procesamiento y se podria considerar la relacion existente entre este y la cantidad de request que se encuentra procesando el servidor en el momento
+
 [[file:./assets/ratesresources.png]]
 
-*** Analisis del enpoint putrates 
+Finalmente la cantidad de recursos del ordenador usadas para procesar las consultas no parece ser representativa, se puede concluir que en escenarios de baja intensidad la api responde de manera eficiente y tanto la performance percibida por el usuario como la disponibilidad no se ven afectados en estos escenarios 
+
+*** Analisis del endpoint putrates 
 
 [[file:./assets/putratesscenarios.png]]
+
+Al tratarse de un metodo put, la variabilidad entre los diferentes tipos de monedas utilizadas se puede usar para ejemplificar el funcionamiento en el test, por lo tanto, se puede apreciar que hay una tendencia a realizar cuatro tipos de transacciones diferentes considerando las distintas monedas
+
 [[file:./assets/putratesstate.png]]
+
+Como en el caso anterior, todos las peticiones al servidor respondieron de manera satisfactoria a los clientes 
+
 [[file:./assets/putratesresponsetime.png]]
+
+Una vez mas se puede apreciar la tendencia a que el uso de recursos (en este caso del CPU) sea mas intensivo en el periodo mas temprano en que se realiza el test, es importante aclarar que la recta verde representa los maximos registrados, un valor mas parecido al real percibido por el cliente es la media del tiempo de respuesta que tambien se encuentra en el grafico
+
 [[file:./assets/putratesresources.png]]
 
-*** Analisis del enpoint exchange
+Nuevamente se observa que no existe un uso excesivo de los recursos del ordenador, por lo tanto, en escenarios de baja intensidad el endpoint contesta de manera satisfactoria a las transacciones 
+
+*** Analisis del endpoint exchange
 
 [[file:./assets/exchangescenario.png]]
+
+Como en el caso del endpoint anterior, se agrega variabilidad en los escenarios de prueba para simular de manera mas realista el escenario de la aplicacion que se encuentra productiva, los escenarios estan dispuestos que ocurran de manera equiprobable 
+
 [[file:./assets/exchangestatus.png]]
+
+Todos los post fueron realizados de manera exitosa sin presentar ningun problema en la aplicacion 
+
 [[file:./assets/exchangeresponsetime.png]]
+
+A comparacion de los otros endpoints analizados, es evidente que la finalizacion de esta tarea tiene un orden de magnitud superior a los otros casos, vease que en las pruebas anteriores el maximo de los tiempos de ejecución se encontraba al rededor de los 30 ms mientras que la media se encontraba al rededor de los 20 ms, para este endpoint los tiempos de ejecución se van hasta el rango de los 600 - 800 ms. Esta prueba permite identificar que este endpoint puede ser un posible cuello de botella en un caso de alto volumen de transacciones 
+
 [[file:./assets/exchangeresources.png]]
+
+Finalmente observando el uso de los recursos del ordenador, se destaca el uso del CPU, para llevar a cabo este conjunto de operaciones el uso del CPU escalo a casi el 1% de su uso. Con este resultado y el anterior es facil identificar a este endpoint como uno de los posibles casos a considerar para aplicar estrategias en busca de mejorar la performance, esto, pensando a futuro en escenarios de uso intensivo de la aplicacion
 
 ** Prueba con carga alta
 

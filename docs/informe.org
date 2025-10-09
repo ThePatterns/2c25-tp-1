@@ -334,6 +334,14 @@ Se presentan los datos de pruebas recolectados en un escenario de uso intensivo 
 [[file:./assets/exchangefresponsetime.png]]
 [[file:./assets/exchangefresources.png]]
 
+*** Balanceador de carga
+
+Adicionalmente es interesante observar el consumo de recursos del balanceador de carga que se encuentra trabajando en conjunto con la api. Para cada uno de los escenarios intensivos se agrega la recoleccion de datos sobre el uso de los recursos del computador por parte del balanceador de carga 
+
+[[file:./assets/lbexchangefresources.png]]
+[[file:./assets/lbputratesfresources.png]]
+[[file:./assets/lbexchangefresources.png]]
+
 * Propuestas de mejora
 
 ** Implementacion de Valkey como persistencia

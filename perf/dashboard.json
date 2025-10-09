@@ -399,7 +399,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "asPercent(stats.gauges.cadvisor.exchange-api-1.memory_usage, 34359738368)",
+          "alias": "asPercent(stats.gauges.cadvisor.exchange-api1-1.memory_usage, 34359738368)",
           "yaxis": 1
         }
       ],
@@ -497,8 +497,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "exchange-api-1",
-          "value": "exchange-api-1"
+          "text": "exchange-api1-1",
+          "value": "exchange-api1-1"
         },
         "error": null,
         "hide": 0,
@@ -509,8 +509,8 @@
         "options": [
           {
             "selected": true,
-            "text": "exchange-api-1",
-            "value": "exchange-api-1"
+            "text": "exchange-api1-1",
+            "value": "exchange-api1-1"
           },
           {
             "selected": false,
@@ -543,7 +543,7 @@
             "value": "exchange-nginx-1"
           }
         ],
-        "query": "exchange-api-1, exchange-api-2, exchange-api-3, exchange-cadvisor-1, exchange-grafana-1, exchange-graphite-1,  exchange-nginx-1, exchange_bbox_1",
+        "query": "exchange-api1-1, exchange-api-2, exchange-api-3, exchange-cadvisor-1, exchange-grafana-1, exchange-graphite-1,  exchange-nginx-1, exchange_bbox_1",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"

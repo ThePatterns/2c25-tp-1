@@ -9,6 +9,7 @@ import {
   getLog,
   exchange,
 } from "./exchange.js";
+import { withTransaction } from './utils/database/databaseAdapter.js';
 
 await exchangeInit();
 
@@ -19,76 +20,68 @@ app.use(express.json());
 
 // ACCOUNT endpoints
 
-app.get("/accounts", (req, res) => {
-  res.json(getAccounts());
+app.get("/accounts", async (req, res) => {
+  res.json(await getAccounts());
 });
 
-app.put("/accounts/:id/balance", (req, res) => {
+app.put("/accounts/:id/balance", async (req, res) => {
   const accountId = req.params.id;
   const { balance } = req.body;
 
   if (!accountId || !balance) {
     return res.status(400).json({ error: "Malformed request" });
   } else {
-    setAccountBalance(accountId, balance);
-
-    res.json(getAccounts());
+    await setAccountBalance(accountId, balance);
+    res.json(await getAccounts());
   }
 });
 
 // RATE endpoints
 
-app.get("/rates", (req, res) => {
-  res.json(getRates());
+app.get("/rates", async (req, res) => {
+  let rates = await getRates();
+  res.json(rates);
 });
 
-app.put("/rates", (req, res) => {
+app.put("/rates", async (req, res) => {
   const { baseCurrency, counterCurrency, rate } = req.body;
 
   if (!baseCurrency || !counterCurrency || !rate) {
     return res.status(400).json({ error: "Malformed request" });
   }
 
-  const newRateRequest = { ...req.body };
-  setRate(newRateRequest);
+  await withTransaction(async (client) => {
+    await setRate(req.body, client);
+  });
 
-  res.json(getRates());
+  let rates = await getRates();
+
+  res.json(rates);
+  console.log("Resquets responsed");
 });
 
 // LOG endpoint
 
-app.get("/log", (req, res) => {
-  res.json(getLog());
+app.get("/log", async (req, res) => {
+  let log = await getLog();
+  res.json(log);
 });
 
 // EXCHANGE endpoint
 
 app.post("/exchange", async (req, res) => {
-  const {
-    baseCurrency,
-    counterCurrency,
-    baseAccountId,
-    counterAccountId,
-    baseAmount,
-  } = req.body;
+  const exchangeRequest = req.body;
 
-  if (
-    !baseCurrency ||
-    !counterCurrency ||
-    !baseAccountId ||
-    !counterAccountId ||
-    !baseAmount
-  ) {
-    return res.status(400).json({ error: "Malformed request" });
-  }
-
-  const exchangeRequest = { ...req.body };
-  const exchangeResult = await exchange(exchangeRequest);
-
-  if (exchangeResult.ok) {
-    res.status(200).json(exchangeResult);
-  } else {
-    res.status(500).json(exchangeResult);
+  try {
+    // Wrap the exchange operation in a transaction
+    const exchangeResult = await withTransaction(async (client) => {
+      return await exchange(exchangeRequest, client);
+    });
+    
+    res.json(exchangeResult);
+  } catch (error) {
+    console.error('Exchange error:', error);
+    res.status(400).json({ error: error.message || 'Exchange failed' });
   }
 });
 

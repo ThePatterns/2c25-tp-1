@@ -1,6 +1,69 @@
 services:
-    api:
-      build: ./app
+    postgres:
+        image: postgres:15-alpine
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: exchange_db
+        hostname: postgres
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./db/init:/docker-entrypoint-initdb.d
+        ports:
+            - "9999:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres -d exchange_db"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+    api1:
+        build: 
+            context: ./app
+            dockerfile: Dockerfile
+        environment:
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_NAME=exchange_db
+            - DB_HOST=postgres
+            - DB_PORT=5432
+        depends_on:
+            postgres:
+                condition: service_healthy
+        ports:
+            - "3001:3000"
+
+    api2:
+        build: 
+            context: ./app
+            dockerfile: Dockerfile
+        environment:
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_NAME=exchange_db
+            - DB_HOST=postgres
+            - DB_PORT=5432
+        depends_on:
+            postgres:
+                condition: service_healthy
+        ports:
+            - "3002:3000"
+
+    api3:
+        build: 
+            context: ./app
+            dockerfile: Dockerfile
+        environment:
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_NAME=exchange_db
+            - DB_HOST=postgres
+            - DB_PORT=5432
+        depends_on:
+            postgres:
+                condition: service_healthy
+        ports:
+            - "3000:3000"
 
     nginx:
         image: nginx:1.27.4
@@ -10,7 +73,9 @@ services:
             - ./nginx_reverse_proxy.conf:/etc/nginx/conf.d/default.conf:ro
             - ./store/static/files:/static:ro
         links:
-            - api
+            - api1
+            - api2
+            - api3
 
     graphite:
         image: graphiteapp/graphite-statsd:1.1.10-5
@@ -25,7 +90,7 @@ services:
     grafana:
         image: grafana/grafana:11.5.2
         ports:
-            - "80:3000"
+            - "9090:3000"
         volumes:
             - "grafana_config:/var/lib/grafana"
 
@@ -44,4 +109,6 @@ services:
 
 volumes:
     grafana_config:
+        driver: local
+    postgres_data:
         driver: local

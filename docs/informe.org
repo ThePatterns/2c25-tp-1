@@ -469,21 +469,45 @@ Finalmente observando el uso de los recursos del ordenador, se destaca el uso de
 Además de la información anteriormente recolectada, para evitar la repetición sobre la evidencia se descarta la presentación de las pruebas para los otros endpoints, puesto que la información recolectada fue similar y no fue concluyente a la hora de determinar nuevas estrategias arquitectónicas que no puedan ser deducidas de los problemas que fueron encontrados anteriormente en el resto de endpoints
 
 ** Prueba con carga alta
+
 Se presentan los datos de pruebas recolectados en un escenario de uso intensivo de la aplicación
 
 *** Análisis del endpoint GET Rates
+
 Las mediciones del comportamiento del sistema (scenarios launched, requests state, request time y resources) en un escenario de alta carga haciendo uso específicamente del endpoint GET rates son las siguientes:
 
 [[file:./assets/ratesfscenarios.png]]
+
+Como en el caso de baja carga y debido a la simplicidad del endpoint en el grafico se aprecian la cantidad de request realizadas por segundo
+
 [[file:./assets/ratesfstate.png]]
+
+Observando el resultado de la prueba se observa que a medida que la carga va creciendo el servidor responde de manera correcta a las consultas realizadas, pero una vez que la cantidad de consultas que van llegando se estabiliza se puede apreciar el inicio del fallo del servidor en la capacidad de contestar a los clientes, estos casos de error que se muestran son tanto errores por timeout como cierre de conexiones inesperadas
+
 [[file:./assets/ratesfresponsetime.png]]
+
+Tambien se aprecia que a medida que aparecen casos de error los tiempos de respuestas en los clientes empiezan a escalar llegando a alcanzar un pico de casi 10 segundos para conseguir responder a una consulta. Esto es un claro indicio de problemas de performance y de disponibilidad de la aplicacion, atributos que han sido establecidos como clave para esta arquitectura 
+
 [[file:./assets/ratesfresources.png]]
+
+Se observa que el modulo de la api no presenta uso excesivo de los recursos del ordenador dada la cantidad de clientes que intentan realizar consultas
 
 *** Análisis del endpoint PUT rates 
 
+Ahora se analiza el endpoint que realiza put de los rates a la API
+
 [[file:./assets/putratesfscenarios.png]]
+
+En este gráfico se aprecia la variabilidad de los casos de prueba que se realizaron, ya que el endpoint PUT permite modificar tasas para diferentes pares de monedas. 
+
 [[file:./assets/putratesfstate.png]]
+
+Bajo carga alta, se observa que inicialmente todas las requests son procesadas correctamente, pero a medida que aumenta la intensidad, comienzan a aparecer errores de tipo timeout y cierre inesperado de conexiones, similar a lo observado en el endpoint GET. Esto evidencia que el sistema, en su arquitectura base, no logra sostener la disponibilidad y performance cuando la concurrencia crece. 
+
 [[file:./assets/putratesfresponsetime.png]]
+
+Similar al endpoint analizado anteriormente nuevamente el tiempo promedio y el tiempo maximo escalan a casi los 10 segundos y los 4 segundos respectivamente, siendo clara evidencia que la disponibilidad y la performance la arquitectura no son capaces de soportar escenarios de carga muy alta por parte de los usuarios
+
 [[file:./assets/putratesfresources.png]]
 
 *** Análisis del endpoint POST exchange

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "nanoid": "^5.1.6",
+    "node-dogstatsd": "^0.0.7"
+  },
+  "devDependencies": {
+    "artillery-plugin-publish-metrics": "^2.31.0"
+  }
+}
